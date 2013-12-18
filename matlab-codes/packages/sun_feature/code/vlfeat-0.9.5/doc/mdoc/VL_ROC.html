@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">   
+ <meta>
+  <!-- Stylesheets -->
+  <link href="../web.css" type="text/css" rel="stylesheet"></link>
+  <title>VLFeat - Documentation - Matlab API - PLOTOP - VL_ROC</title>
+   
+  
+  <!-- Scripts-->
+  
+ </meta>
+ 
+ <!-- Body Start -->
+ <body>
+  <div id="header">
+   <!-- Google CSE Search Box Begins -->
+   <form action="http://www.vlfeat.org/search.html" method="get" id="cse-search-box" enctype="application/x-www-form-urlencoded">
+    <div>
+     <input type="hidden" name="cx" value="003215582122030917471:oq23albfeam"></input>
+     <input type="hidden" name="cof" value="FORID:11"></input>
+     <input type="hidden" name="ie" value="UTF-8"></input>
+     <input type="text" name="q" size="31"></input>
+     <input type="submit" name="sa" value="Search"></input>
+    </div>
+   </form>
+   <script src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en" xml:space="preserve" type="text/javascript"></script>
+   <!-- Google CSE Search Box Ends -->
+   <h1>VLFeat.org</h1>
+  </div>
+  <div id="headbanner">
+   Documentation - Matlab API - PLOTOP - VL_ROC
+  </div>
+  <div id="pagebody">
+   <div id="sidebar"> <!-- Navigation Start -->
+    <ul>
+<li><a href="../index.html">Home</a>
+</li>
+<li><a href="../download.html">Download</a>
+</li>
+<li><a href="../doc.html">Documentation</a>
+<ul>
+<li><a href="mdoc.html">Matlab API</a>
+</li>
+<li><a href="../api/index.html">C API</a>
+</li>
+<li><a href="../man/man.html">Man pages</a>
+</li>
+</ul></li>
+<li><a href="../overview/tut.html">Tutorials</a>
+</li>
+</ul>
+
+   </div> <!-- sidebar -->
+   <div id="content">
+    <div class="mdoc">
+<ul class="breadcrumb"><li><a href="mdoc.html">Index</a></li><li><a href="VL_PRINTSIZE.html">Prev</a></li><li><a href="VL_TIGHTSUBPLOT.html">Next</a></li></ul><div class="documentation"><p>
+[TP,TN] = <a href="VL_ROC.html">VL_ROC</a>(Y, SCORE) computes the ROC curve for the specified
+data. Y are the ground thruth labels (+1 or -1) and SCORE is the
+discriminant score assigned to them by a classifier (higher scores
+correspond to positive labels).
+</p><p>
+[TP,TN] are the true positive and true negative rates for
+incereasing values of the decision threshold.
+</p><p>
+[TP,TN,INFO] = <a href="VL_ROC.html">VL_ROC</a>(...) returns the following additional
+information:
+</p><dl><dt>
+INFO.EER
+</dt><dd><p>
+       Equal error rate.
+</p></dd><dt>
+INFO.AUC
+</dt><dd><p>
+       Area under the VL_ROC (AUC).
+</p></dd><dt>
+INFO.UR
+</dt><dd><p>
+        Uniform prior best op point rate.
+</p></dd><dt>
+INFO.UT
+</dt><dd><p>
+        Uniform prior best op point threhsold.
+</p></dd><dt>
+INFO.NR
+</dt><dd><p>
+        Natural prior best op point rate.
+</p></dd><dt>
+INFO.NT
+</dt><dd><p>
+        Natural prior best op point threshold.
+</p></dd></dl><p>
+<a href="VL_ROC.html">VL_ROC</a>(...) plots the VL_ROC diagram in the current axis.
+</p><dl><dt>
+About the ROC curve
+</dt><dd><p>
+Consider a classifier that predicts as positive all lables Y
+whose SCORE is not smaller than a threshold R. The ROC curve
+represents the performance of such classifier as the threshold R
+is varied. Let:
+</p><pre>
+  #P   = num of positive samples
+  #N   = num of negative samples
+  #TP = num of samples that are correctly classified as positive
+  #TN = num of samples that are correctly classified as negative
+  #FP = num of samples that are incorrectly classified as positive
+  #FN = num of samples that are incorrectly classified as negative
+</pre><p>
+Consider also the rates:
+</p><pre>
+            TP = #TP / #P,      FN = #FN / #P,
+            TN = #TN / #N,      FP = #FP / #N.
+</pre><p>
+Notice that:
+</p><pre>
+             P = #TP + #FN ,    N = #TN + #FP,
+             1 = TP + FN,       1 = TN + FP.
+</pre><p>
+The ROC curve is the parametric curve (TP, TN) obtained as the
+classifier threshold R is varied.
+</p><p>
+The ROC curve is contained in the square with vertices (0,0) The
+(average) ROC curve of a random classifier is a line which
+connects (1,0) and (0,1).
+</p><p>
+The ROC curve is independent of the prior probability of the
+labels Y (i.e. of #P/(#P+#N) and #N/(#P+#N)).
+</p><p>
+An OPERATING POINT is a point on the ROC curve, corresponding to
+a certain threshold R. Each operating point corresponds to
+minimizing the empirical 01 error of the classifier for given
+prior probabilty of the labels Y. <a href="VL_ROC.html">VL_ROC</a>() computes the following
+operating points:
+</p><pre>
+ Natural operating point
+ Uniform operating point
+</pre></dd></dl><pre>
+ Options:
+
+ Plot
+   'truenegative' plots the true positives vs. the true negatives.
+   'falsenegative' plots the true positives vs. the false
+   negatives.
+</pre><dl><dt>
+See also
+</dt><dd><p>
+ <a href="VL_HELP.html">VL_HELP</a>().
+</p></dd></dl></div></div>
+   </div>
+   <div class="clear">&nbsp;</div>
+  </div> <!-- pagebody -->
+  <div id="footer">
+   &copy; 2005-09 Andrea Vedaldi and Brian Fulkerson
+  </div> <!-- footer -->
+  
+  <!-- Google Analytics Begins -->
+  <script xml:space="preserve" type="text/javascript">
+   //<![CDATA[
+    var localre = /vlfeat.org/;
+    if(document.location.host.search(localre) != -1)
+    {
+   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+   document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+   }
+   //]]>
+  </script>
+  <script xml:space="preserve" type="text/javascript">
+    //<![CDATA[
+    var localre = /vlfeat.org/;
+    if(document.location.host.search(localre) != -1)
+    {
+
+   try {
+   var pageTracker = _gat._getTracker("UA-4936091-2");
+   pageTracker._trackPageview();
+   } catch(err) {}
+
+   }
+   //]]>
+  </script>
+  <!-- Google Analytics Ends -->
+ </body>
+</html>
+
+ 

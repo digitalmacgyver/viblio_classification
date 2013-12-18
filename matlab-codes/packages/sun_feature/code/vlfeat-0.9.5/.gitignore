@@ -2,28 +2,32 @@
 .DS_Store
 
 # MEX files
-*.mexglx
-*.mexmac
-*.mexmaci
-*.mexa64
+# Arash: commented the following lines to upload all files
+#*.mexglx
+#*.mexmac
+#*.mexmaci
+#*.mexa64
+# Arash: end
 
 # Python complied files
 *.pyc
 
 # Other generated files and directories
-VERSION
-docsrc/version.html
-bin
-results
-doc
-build
-toolbox/mexw32
-toolbox/mexmaci
-toolbox/mexmac
-toolbox/mexglx
-toolbox/mexa64
-toolbox/mexw64
-toolbox/noprefix
+# Arash: commented the following lines to upload all files
+#VERSION
+#docsrc/version.html
+#bin
+#results
+#doc
+#build
+#toolbox/mexw32
+#toolbox/mexmaci
+#toolbox/mexmac
+#toolbox/mexglx
+#toolbox/mexa64
+#toolbox/mexw64
+#toolbox/noprefix
+# Arash: end
 
 vlfeat.xcodeproj/*.mode1v3
 vlfeat.xcodeproj/*.pbxuser

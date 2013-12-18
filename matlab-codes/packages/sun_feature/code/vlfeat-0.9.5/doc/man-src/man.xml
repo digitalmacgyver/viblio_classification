@@ -1,0 +1,11 @@
+<group>
+<page id='man.mser' name='mser' title='mser'>
+<include src='doc/man-src/mser.1.html'/>
+</page>
+<page id='man.sift' name='sift' title='sift'>
+<include src='doc/man-src/sift.1.html'/>
+</page>
+<page id='man.vlfeat' name='vlfeat' title='vlfeat'>
+<include src='doc/man-src/vlfeat.7.html'/>
+</page>
+</group>

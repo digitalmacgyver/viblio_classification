@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">   
+ <meta>
+  <!-- Stylesheets -->
+  <link href="web.css" type="text/css" rel="stylesheet"></link>
+  <title>VLFeat - Download - Shell install</title>
+   
+  
+  <!-- Scripts-->
+  
+ </meta>
+ 
+ <!-- Body Start -->
+ <body>
+  <div id="header">
+   <!-- Google CSE Search Box Begins -->
+   <form action="http://www.vlfeat.org/search.html" method="get" id="cse-search-box" enctype="application/x-www-form-urlencoded">
+    <div>
+     <input type="hidden" name="cx" value="003215582122030917471:oq23albfeam"></input>
+     <input type="hidden" name="cof" value="FORID:11"></input>
+     <input type="hidden" name="ie" value="UTF-8"></input>
+     <input type="text" name="q" size="31"></input>
+     <input type="submit" name="sa" value="Search"></input>
+    </div>
+   </form>
+   <script src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en" xml:space="preserve" type="text/javascript"></script>
+   <!-- Google CSE Search Box Ends -->
+   <h1>VLFeat.org</h1>
+  </div>
+  <div id="headbanner">
+   Download - Shell install
+  </div>
+  <div id="pagebody">
+   <div id="sidebar"> <!-- Navigation Start -->
+    <ul>
+<li><a href="index.html">Home</a>
+</li>
+<li><a href="download.html">Download</a>
+<ul>
+<li><a href="install-matlab.html">Matlab install</a>
+</li>
+<li><a href="install-shell.html" class='active' >Shell install</a>
+</li>
+<li><a href="install-c.html">C library install</a>
+</li>
+<li><a href="compiling.html">Compiling</a>
+</li>
+</ul></li>
+<li><a href="doc.html">Documentation</a>
+</li>
+<li><a href="overview/tut.html">Tutorials</a>
+</li>
+</ul>
+
+   </div> <!-- sidebar -->
+   <div id="content">
+    
+   
+
+<p>These instructions explain how to use VLFeat from the command line
+(shell).</p>
+
+<p><a shape="rect" href="download.html">Download</a> and unpack the latest
+VLFeat binary distribution in a directory of your choice
+(e.g. <code>~/src/vlfeat</code>). Let <code>VLFEATROOT</code> denote
+this directory.</p>
+
+<p>The command line tools are located
+in <code>VLFEATROOT/bin/ARCH</code>. Here <code>ARCH</code> denotes
+the subdirectory relative to your architecture (e.g. <code>mac</code>
+for Mac OS X PPC, <code>maci</code> for Mac OS X
+Intel, <code>glx</code> for Linux, and so on). For instance, to run
+the SIFT feature extraction code type</p>
+
+<table class="checker">
+<tr>
+<th colspan="1" rowspan="1">Platform</th>
+<th colspan="1" rowspan="1"><code>ARCH</code></th>
+<th colspan="1" rowspan="1">Example</th>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Windows 32</td>
+<td colspan="1" rowspan="1"><code>w32</code></td>
+<td colspan="1" rowspan="1"><code>VLFEATROOT\bin\w32\sift.exe</code></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Windows 64</td>
+<td colspan="1" rowspan="1"><code>w64</code></td>
+<td colspan="1" rowspan="1"><code>VLFEATROOT\bin\w64\sift.exe</code></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Mac Intel</td>
+<td colspan="1" rowspan="1"><code>maci</code></td>
+<td colspan="1" rowspan="1"><code>VLFEATROOT/bin/maci/sift</code></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Mac PPC</td>
+<td colspan="1" rowspan="1"><code>mac</code></td>
+<td colspan="1" rowspan="1"><code>VLFEATROOT/bin/mac/sift</code></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Linux 32</td>
+<td colspan="1" rowspan="1"><code>glx</code></td>
+<td colspan="1" rowspan="1"><code>VLFEATROOT/bin/glx/sift</code></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Linux 64</td>
+<td colspan="1" rowspan="1"><code>g64</code></td>
+<td colspan="1" rowspan="1"><code>VLFEATROOT/bin/g64/sift</code></td>
+</tr>
+</table>
+
+<p>All commands have a corresponding man page found
+in <code>VLFEATROOT/src</code>.  For UNIX based systems, the man pages
+can be viewed with the <code>man</code> utility. For instance
+</p>
+
+<pre xml:space="preserve">
+&gt; man VLFEATROOT/src/sift.1
+</pre>
+
+
+<p>It might be convenient to add VLFeat to the system search paths. In
+Linux and Mac OS X this involves modifying the <code>PATH</code>
+and <code>MANPATH</code> environment variables. The exact details may
+vary, but it should be enough to add the following to your
+<code>~/.bash_profile</code>:</p>
+
+<pre xml:space="preserve">
+export PATH=VLFEATROOT/bin/ARCH:$PATH
+export MANPATH=VLFEATROOT/src:$MANPATH
+</pre>
+
+<p>Alternatively, you can copy the executables and man pages to
+appropriate system-wide directories.</p>
+
+
+  
+   </div>
+   <div class="clear">&nbsp;</div>
+  </div> <!-- pagebody -->
+  <div id="footer">
+   &copy; 2005-09 Andrea Vedaldi and Brian Fulkerson
+  </div> <!-- footer -->
+  
+  <!-- Google Analytics Begins -->
+  <script xml:space="preserve" type="text/javascript">
+   //<![CDATA[
+    var localre = /vlfeat.org/;
+    if(document.location.host.search(localre) != -1)
+    {
+   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+   document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+   }
+   //]]>
+  </script>
+  <script xml:space="preserve" type="text/javascript">
+    //<![CDATA[
+    var localre = /vlfeat.org/;
+    if(document.location.host.search(localre) != -1)
+    {
+
+   try {
+   var pageTracker = _gat._getTracker("UA-4936091-2");
+   pageTracker._trackPageview();
+   } catch(err) {}
+
+   }
+   //]]>
+  </script>
+  <!-- Google Analytics Ends -->
+ </body>
+</html>
+
+ 

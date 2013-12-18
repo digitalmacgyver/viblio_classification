@@ -1,0 +1,211 @@
+\form#0:$x$
+\form#1:$c$
+\form#2:$I(x,c)$
+\form#3:$O(N^2)$
+\form#4:$O(C N^3)$
+\form#5:$O(N)$
+\form#6:$O(C N^2)$
+\form#7:$x \in \mathcal{X} = \{x_1,\dots,x_N\}$
+\form#8:$c = 1,\dots,C$
+\form#9:$p(x,c)$
+\form#10:$[x]_{ij}$
+\form#11:$x_i$
+\form#12:$x_j$
+\form#13:$ij$
+\form#14:\[ D_{ij} = I(x,c) - I([x]_{ij},c) = \sum_c p(x_i) \log \frac{p(x_i,c)}{p(x_i)p(c)} + \sum_c p(x_i) \log \frac{p(x_i,c)}{p(x_i)p(c)} - \sum_c (p(x_i)+p(x_j)) \log \frac {p(x_i,c)+p(x_i,c)}{(p(x_i)+p(x_j))p(c)} \]
+\form#15:$D_{ij}$
+\form#16:$O(C)$
+\form#17:$O(CN^2)$
+\form#18:$N$
+\form#19:$O(N^3 C)$
+\form#20:$O(1)$
+\form#21:$D = [ D_{ij} ]$
+\form#22:$O(NC)$
+\form#23:$x_{ij}$
+\form#24:$O(N^2C + N^3)$
+\form#25:$(q_i, D_i)$
+\form#26:$(q_i,D_i)$
+\form#27:$(q_j,D_j)$
+\form#28:$(q_{ij},D_{ij})$
+\form#29:$O(CN)$
+\form#30:$(q_{k},D_{k})$
+\form#31:$x_k$
+\form#32:$x_{q_k}$
+\form#33:$D_k$
+\form#34:$q_k \not = i$
+\form#35:$q_k \not = j$
+\form#36:$D_{k,ij} \geq D_k$
+\form#37:$q_k$
+\form#38:$D_{k,ij} < D_k$
+\form#39:$q_k = i$
+\form#40:$q_k = j$
+\form#41:$O(\gamma(N) C N^2)$
+\form#42:$\gamma(N)$
+\form#43:$\gamma(N) \approx \mathrm{const.}$
+\form#44:\begin{eqnarray*} \mathbf{x} &=& m \sigma \hat \mathbf{x} + T,\\ h(t,i,j) &=& m \sigma \int g_{\sigma_\mathrm{win}}(\mathbf{x} - T)\, w_\mathrm{ang}(\angle J(\mathbf{x}) - \theta_t)\, w\left(\frac{x - T_x}{m\sigma} - \hat{x}_i\right)\, w\left(\frac{y - T_y}{m\sigma} - \hat{y}_j\right)\, |J(\mathbf{x})|\, d\mathbf{x}. \end{eqnarray*}
+\form#45:$ \mathbf{x}_{ij} = m\sigma(\hat x_i,\ \hat y_i)^\top $
+\form#46:\begin{eqnarray*} h(t,i,j) &=& m \sigma \int g_{\sigma_\mathrm{win}}(T' - \mathbf{x} - \mathbf{x}_{ij})\, w_\mathrm{ang}(\angle J(\mathbf{x}) - \theta_t)\, w\left(\frac{T'_x - x}{m\sigma}\right)\, w\left(\frac{T'_y - y}{m\sigma}\right)\, |J(\mathbf{x})|\, d\mathbf{x}, \\ T' &=& T + m\sigma \left[\begin{array}{cc} x_i \\ y_j \end{array}\right]. \end{eqnarray*}
+\form#47:\begin{eqnarray*} k_i(x) &=& \frac{1}{\sqrt{2\pi} \sigma_{\mathrm{win}}} \exp\left( -\frac{1}{2} \frac{(x-x_i)^2}{\sigma_{\mathrm{win}}^2} \right) w\left(\frac{x}{m\sigma}\right), \\ k_j(y) &=& \frac{1}{\sqrt{2\pi} \sigma_{\mathrm{win}}} \exp\left( -\frac{1}{2} \frac{(y-y_j)^2}{\sigma_{\mathrm{win}}^2} \right) w\left(\frac{y}{m\sigma}\right), \end{eqnarray*}
+\form#48:\begin{eqnarray*} h(t,i,j) &=& (k_ik_j * \bar J_t)\left( T + m\sigma \left[\begin{array}{cc} x_i \\ y_j \end{array}\right] \right), \\ \bar J_t(\mathbf{x}) &=& w_\mathrm{ang}(\angle J(\mathbf{x}) - \theta_t)\,|J(\mathbf{x})|. \end{eqnarray*}
+\form#49:\begin{eqnarray*} k(z) &=& \frac{1}{\sigma_{\mathrm{win}}} w\left(\frac{z}{m\sigma}\right), \\ h(t,i,j) &=& (k(x)k(y) * \bar J_t)\left( T + m\sigma \left[\begin{array}{cc} x_i \\ y_j \end{array}\right] \right), \end{eqnarray*}
+\form#50:$ \sigma_\mathrm{win} $
+\form#51:$ k(z) $
+\form#52:$ T + m\sigma (x_i,\ y_j) $
+\form#53:\[ \{0,\dots, W-1\} \ni T_x + m\sigma x_i = T_x + m\sigma i - \frac{N_x-1}{2} = \bar T_x + m\sigma i, \qquad i = 0,\dots,N_x-1. \]
+\form#54:$ T_x $
+\form#55:$ N_x $
+\form#56:$ \bar T $
+\form#57:\[ \left[\begin{array}{cc} 0 \\ 0 \end{array}\right] \leq \bar T = \left[\begin{array}{cc} \bar T_x^{\min} + p \Delta_x \\ \bar T_y^{\min} + q \Delta_y \\ \end{array}\right] \leq \left[\begin{array}{cc} W - 1 - m\sigma N_x \\ H - 1 - m\sigma N_y \end{array}\right], \quad \bar T = \left[\begin{array}{cc} T_x - \frac{N_x - 1}{2} \\ T_y - \frac{N_y - 1}{2} \\ \end{array}\right] \]
+\form#58:$ m \sigma $
+\form#59:$(A_{11}, A_{21}, \dots, A_{12}, \dots)$
+\form#60:$(A_{11}, A_{12}, \dots, A_{21}, \dots)$
+\form#61:$x_1,\dots,x_N\in R^d$
+\form#62:$K$
+\form#63:$a_i\in\{1,\dots,K\},$
+\form#64:$c_1,\dots,c_K\in R^d$
+\form#65:\[ E(\{a_{i}, c_j\}) = \frac{1}{N} \sum_{i=1}^N d(x_i, c_{a_i}) \]
+\form#66:$d(x_i, c_{a_i})$
+\form#67:$ x_i $
+\form#68:$ c_{a_i} $
+\form#69:$d(x,y)=\|x-y\|^2_2$
+\form#70:$c_1,\dots,c_K$
+\form#71:$O(dNKT)$
+\form#72:\[ \mathrm{dst} [x,y] = \sum_{p=y-\mathrm{filt\_end}}^{y-\mathrm{filt\_begin}} \mathrm{src}[x,y] \mathrm{filt}[y - p - \mathrm{filt\_begin}] \]
+\form#73:$\mathrm{dst}[x,y]$
+\form#74:\[ k(t) = \frac{1}{\Delta^2} \max\{ \Delta - |t|, 0 \}, \quad t \in \mathbb{Z} \]
+\form#75:$ \Delta $
+\form#76:\[ \sum_{t=-\infty}^{+\infty} k(t) = 1 \]
+\form#77:$ \Delta \in \mathbb{Z}_+ $
+\form#78:$ k(x) $
+\form#79:$ (-\Delta,\Delta) $
+\form#80:$ 2\Delta $
+\form#81:$ [-\Delta + 1, \Delta-1] $
+\form#82:$ 2 \Delta - 1 $
+\form#83:$ x_1,\dots,x_n \in \mathbb{R}^d $
+\form#84:$ \mathbb{R}^d $
+\form#85:$ x_q \in \mathbb{R}^d $
+\form#86:$ 2^{-23} $
+\form#87:$ 2^{-52} $
+\form#88:$ f(r)=atan((1-r)/(1+r)) $
+\form#89:$ r \in [-1,1] $
+\form#90:$ f(r)=c_0 + c_1 r + c_2 r^2 + c_3 r^3 $
+\form#91:\begin{eqnarray*} f(+1) &=& c_0 + c_1 + c_2 + c_3 = atan(0) = 0,\\ f(-1) &=& c_0 - c_1 + c_2 - c_3 = atan(\infty) = \pi/2,\\ f(0) &=& c_0 = atan(1) = \pi/4. \end{eqnarray*}
+\form#92:$ l^{\infty} $
+\form#93:\[ c_0=\pi/4, \quad c_1=-0.9675, \quad c_2=0, \quad c_3=0.1821, \]
+\form#94:$ x^{-1/2} $
+\form#95:$ y = x^{-1/2} $
+\form#96:$ 0 = f(y) = y^{-2} - x$
+\form#97:\[ y \leftarrow y - \frac{f(y)}{\dot f(y)} = y + \frac{1}{2} (y-xy^3) = \frac{y}{2} \left( 3 - xy^2 \right) \]
+\form#98:$ y \approx x^{-1/2} $
+\form#99:$ y^2 \leq x $
+\form#100:$ y = w + b_k 2^k + z $
+\form#101:\[ x = \sum_{i=0}^{n-1} 2^i a_i, \qquad w = \sum_{i=k+1}^{m-1} 2^i b_i, \qquad z = \sum_{i=0}^{k-1} 2^i b_i. \]
+\form#102:$ b_k^2=b_k $
+\form#103:$ b_k $
+\form#104:\[ x - w^2 \geq 2^k ( 2 w + 2^k ) b_k + z (z + 2wz + 2^{k+1}z b_k) \]
+\form#105:$ b_k = 1 $
+\form#106:$ z = 0 $
+\form#107:$ m = n / 2 $
+\form#108:$ w = 0 $
+\form#109:$ k = m - 1 = n/2 - 1 $
+\form#110:$ b_{m-1}, b_{m-2}, ... $
+\form#111:$R_l$
+\form#112:$S_l = \{ x : I(x) \leq l \}$
+\form#113:$l$
+\form#114:$S_l$
+\form#115:$\mathcal{L}=\{0,\dots,M-1\}$
+\form#116:$R_{l+1}$
+\form#117:$R_l\subset R_{l+1}$
+\form#118:$B(R_l)=(R_l,R_{l+1},\dots,R_{l+\Delta})$
+\form#119:\[ v(R_l) = \frac{|R_{l+\Delta} - R_l|}{|R_l|}. \]
+\form#120:$R_{l+\Delta/2}$
+\form#121:$B(R_{l})$
+\form#122:$B(R_{l+1}):R_{l+1}\supset R_l$
+\form#123:$v(R_l)<v(R_{l+1})$
+\form#124:$v(R_l)>v(R_{l+1})$
+\form#125:$R_{l}$
+\form#126:$a_- \leq |R_{l}|/|R_{\infty}| \leq a_+$
+\form#127:$|R_{\infty}|$
+\form#128:$v(R_{l}) < v_+$
+\form#129:$R_{l'}$
+\form#130:$|R_{l'} - R_l|/|R_l'| < d_+$
+\form#131:$\Delta$
+\form#132:$a_+$
+\form#133:$a_-$
+\form#134:$|R_\infty|$
+\form#135:$v_+$
+\form#136:$d_+$
+\form#137:\[ \mu_l = \frac{1}{|R_l|}\sum_{x\in R_l}x, \qquad \Sigma_l = \frac{1}{|R_l|}\sum_{x\in R_l} (x-\mu_l)^\top(x-\mu_l) \]
+\form#138:$x=(x_1,...,x_n)$
+\form#139:$R_q$
+\form#140:$q\leq l+1$
+\form#141:$ (x,y,I(x,y)) $
+\form#142:$ \sigma $
+\form#143:\[ E(x,y) = P(x,y,I(x,y)) = \sum_{x'y'} \frac{1}{(2\pi\sigma)^{d+2}} \exp \left( -\frac{1}{2\sigma^2} \left[ \begin{array}{c} x - x' \\ y - y' \\ I(x,y) - I(x',y') \\ \end{array} \right] \right) \]
+\form#144:$ (x',y') >_P (x,y) $
+\form#145:\[ P(x',y',I(x',y')) > P(x,y,I(x,y))}. \]
+\form#146:\[ \mathrm{dist}(x,y) = \mathrm{min}_{(x',y') > P(x,y)} \left( (x - x')^2 + (y - y')^2 + \| I(x,y) - I(x',y') \|_2^2 \right). \]
+\form#147:$ 8 \times 4 \times 4 = 128 $
+\form#148:$I_0(\mathbf{x})$
+\form#149:\[ g_{\sigma}(\mathbf{x}) = \frac{1}{2\pi\sigma^2} \exp \left( -\frac{1}{2} \frac{\mathbf{x}^\top\mathbf{x}}{\sigma^2} \right) \]
+\form#150:\[ I_\sigma = g_\sigma * I, \quad \sigma \geq 0. \]
+\form#151:$ I_0 $
+\form#152:$ I_{\sigma_n} $
+\form#153:$ \sigma_n = 0.5 $
+\form#154:\[ I_\sigma = g_{\sqrt{\sigma^2 - \sigma_n^2}} * I_{\sigma_n}, \quad \sigma \geq \sigma_n. \]
+\form#155:\[ \sigma = \sigma_0 2^{o+s/S}, \quad s = 0,\dots,S-1, \quad o = o_{\min}, \dots, o_{\min}+O-1, \]
+\form#156:$ \sigma_0 = 1.6 $
+\form#157:$ o_{\min} $
+\form#158:\[ \mathrm{DoG}_{\sigma(o,s)} = I_{\sigma(o,s+1)} - I_{\sigma(o,s)} \]
+\form#159:$\sigma$
+\form#160:\[ s = -1, \dots, S+2 \]
+\form#161:$ 3 \times 3 \times 3 $
+\form#162:$t_p$
+\form#163:$x,y,\sigma$
+\form#164:\[ \frac{(\mathrm{tr}\,D(x,y,\sigma))^2}{\det D(x,y,\sigma)}, \quad D = \left[ \begin{array}{cc} \frac{\partial^2 \mathrm{DoG}}{\partial x^2} & \frac{\partial^2 \mathrm{DoG}}{\partial x\partial y} \\ \frac{\partial^2 \mathrm{DoG}}{\partial x\partial y} & \frac{\partial^2 \mathrm{DoG}}{\partial y^2} \end{array} \right]. \]
+\form#165:$(t_e+1)(t_e+1)/t_e$
+\form#166:$t_e$
+\form#167:$t_e=1$
+\form#168:$[1,\infty)$
+\form#169:\[ J(x,y) = \nalba I_\sigma(x,y) = \left[\begin{array}{cc} \frac{\partial I_\sigma}{\partial x} & \frac{\partial I_\sigma}{\partial y} & \end{array}\right] \]
+\form#170:$ J(x,y) $
+\form#171:$ N_\theta \times N_x \times N_y $
+\form#172:$ 8 \times 4 \times 4 $
+\form#173:\begin{eqnarray*} \theta_t &=& \frac{2\pi}{N_\theta} t, \quad t = 0,\dots,N_{\theta}-1, \\ x_i &=& i - \frac{N_x -1}{2}, \quad i = 0,\dots,N_x-1, \\ y_j &=& j - \frac{N_x -1}{2}, \quad j = 0,\dots,N_y-1. \\ \end{eqnarray*}
+\form#174:\begin{eqnarray*} \displaystyle w(z) &=& \mathrm{max}(0, 1 - |z|), \\ \displaystyle w_\mathrm{ang}(z) &=& \sum_{k=-\infty}^{+\infty} w\left( \frac{N_\theta}{2\pi} z + N_\theta k \right). \end{eqnarray*}
+\form#175:\[ f(\theta, x, y) = |J(x,y)| \delta(\theta - \angle J(x,y)) \]
+\form#176:$ \sigma_{\mathrm{win}} $
+\form#177:\begin{eqnarray*} h(t,i,j) &=& \int g_{\sigma_\mathrm{win}}(x,y) w_\mathrm{ang}(\theta - \theta_t) w(x-x_i) w(y-y_j) f(\theta,x,y) d\theta\,dx\,dy \\ &=& \int g_{\sigma_\mathrm{win}}(x,y) w_\mathrm{ang}(\angle J(x,y) - \theta_t) w(x-x_i) w(y-y_j) |J(x,y)|\,dx\,dy \end{eqnarray*}
+\form#178:$ l^2 $
+\form#179:$ \hat x $
+\form#180:$ x $
+\form#181:\[ \mathbf{x} = A \hat\mathbf{x} + T, \qquad \mathbf{x} = \left[\begin{array}{cc} x \\ y \end{arraty}\right], \quad \hat\mathbf{x} = \left[\begin{array}{cc} \hat x \\ \hat y \end{arraty}\right]. \]
+\form#182:\[ \hat I_0(\hat\mathbf{x}) = I_0(\mathbf{x}), \qquad \mathbf{x} = A \hat\mathbf{x} + T. \]
+\form#183:$ \hat \sigma $
+\form#184:\[ \hat I_{\hat{\sigma}}(\hat\mathbf{x}) = I_{A\hat{\sigma}}(\mathbf{x}), \qquad \mathbf{x} = A \hat\mathbf{x} + T \]
+\form#185:\[ I_{A\hat \sigma}(\mathbf{x}) = (g_{A\hat\sigma} * I_0)(\mathbf{x}), \quad g_{A\hat\sigma}(\mathbf{x}) = \frac{1}{2\pi|A|\hat \sigma^2} \exp \left( -\frac{1}{2} \frac{\mathbf{x}^\top A^{-\top}A^{-1}\mathbf{x}}{\hat \sigma^2} \right) \]
+\form#186:\[ \hat J(\hat \mathbf{x}) = J(\mathbf{x}) A, \quad J(\mathbf{x}) = (\nabla I_{A\hat\sigma})(\mathbf{x}), \qquad \mathbf{x} = A \hat\mathbf{x} + T. \]
+\form#187:\begin{eqnarray*} h(t,i,j) &=& \int g_{\hat \sigma_\mathrm{win}}(\hat \mathbf{x})\, w_\mathrm{ang}(\angle \hat J(\hat\mathbf{x}) - \theta_t)\, w_{ij}(\hat\mathbf{x})\, |\hat J(\hat \mathbf{x})|\, d\hat \mathbf{x} \\ &=& \int g_{A \hat \sigma_\mathrm{win}}(\mathbf{x} - T)\, w_\mathrm{ang}(\angle J(\mathbf{x})A - \theta_t)\, w_{ij}(A^{-1}(\mathbf{x} - T))\, |J(\mathbf{x})A|\, d\mathbf{x}. \end{eqnarray*}
+\form#188:\[ w_{ij}(\hat\mathbf{x}) = w(\hat x - \hat x_i) w(\hat y - \hat y_j) \]
+\form#189:$m/2\sqrt{2} (N_x+1,N_y+1)$
+\form#190:$ T $
+\form#191:$ \theta $
+\form#192:$ (A,T) $
+\form#193:\[ \mathbf{x} = m \sigma R(\theta) \hat \mathbf{x} + T \]
+\form#194:$ R(\theta) $
+\form#195:$ m \mathcal{\sigma} $
+\form#196:$ \hat \sigma = 1/m $
+\form#197:$ \hat \sigma_\mathrm{win} = 2 $
+\form#198:\begin{eqnarray*} h(t,i,j) &=& m \sigma \int g_{\sigma_\mathrm{win}}(\mathbf{x} - T)\, w_\mathrm{ang}(\angle J(\mathbf{x}) - \theta - \theta_t)\, w_{ij}\left(\frac{R(\theta)^\top \mathbf{x} - T}{m\sigma}\right)\, |J(\mathbf{x})|\, d\mathbf{x}, \\ \sigma_{\mathrm{win}} &=& m\sigma\hat \sigma_{\mathrm{win}}, \\ J(\mathbf{x}) &=& \nabla (g_{m \sigma \hat \sigma} * I)(\mathbf{x}) = \nabla (g_{\sigma} * I)(\mathbf{x}) = \nabla I_{\sigma} (\mathbf{x}). \end{eqnarray*}
+\form#199:$exp(-x)$
+\form#200:$ 2\pi $
+\form#201:\[ \sigma(o,s) = \sigma_0 2^{o+s/S} \]
+\form#202:$ [o_\mathrm{min}, o_{\mathrm{min}}+O-1] $
+\form#203:$ [s_\mathrm{min}+1, s_\mathrm{max}-2] $
+\form#204:$ |s - is| < 0.5 $
+\form#205:$ \{ \sigma(o, s) : s \in [s_\mathrm{min}+1-.5, s_\mathrm{max}-2+.5] \} $
+\form#206:\[ o(\sigma) = \max \{ o \in \mathbb{Z} : \sigma_0 2^{\frac{s_\mathrm{min}+1-.5}{S}} \leq \sigma \} = \mathrm{floor}\,\left[ \log_2(\sigma / \sigma_0) - \frac{s_\mathrm{min}+1-.5}{S}\right] \]
+\form#207:\[ s(\sigma) = S \left[\log_2(\sigma / \sigma_0) - o(\sigma)\right], \quad is(\sigma) = \mathrm{round}\,(s(\sigma)) \]
+\form#208:$ o(\sigma) $
+\form#209:$ is(\sigma) $
+\form#210:$ \hat \sigma_{\text{win}} $

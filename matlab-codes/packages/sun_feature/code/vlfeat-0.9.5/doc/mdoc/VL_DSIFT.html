@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">   
+ <meta>
+  <!-- Stylesheets -->
+  <link href="../web.css" type="text/css" rel="stylesheet"></link>
+  <title>VLFeat - Documentation - Matlab API - SIFT - VL_DSIFT</title>
+   
+  
+  <!-- Scripts-->
+  
+ </meta>
+ 
+ <!-- Body Start -->
+ <body>
+  <div id="header">
+   <!-- Google CSE Search Box Begins -->
+   <form action="http://www.vlfeat.org/search.html" method="get" id="cse-search-box" enctype="application/x-www-form-urlencoded">
+    <div>
+     <input type="hidden" name="cx" value="003215582122030917471:oq23albfeam"></input>
+     <input type="hidden" name="cof" value="FORID:11"></input>
+     <input type="hidden" name="ie" value="UTF-8"></input>
+     <input type="text" name="q" size="31"></input>
+     <input type="submit" name="sa" value="Search"></input>
+    </div>
+   </form>
+   <script src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en" xml:space="preserve" type="text/javascript"></script>
+   <!-- Google CSE Search Box Ends -->
+   <h1>VLFeat.org</h1>
+  </div>
+  <div id="headbanner">
+   Documentation - Matlab API - SIFT - VL_DSIFT
+  </div>
+  <div id="pagebody">
+   <div id="sidebar"> <!-- Navigation Start -->
+    <ul>
+<li><a href="../index.html">Home</a>
+</li>
+<li><a href="../download.html">Download</a>
+</li>
+<li><a href="../doc.html">Documentation</a>
+<ul>
+<li><a href="mdoc.html">Matlab API</a>
+</li>
+<li><a href="../api/index.html">C API</a>
+</li>
+<li><a href="../man/man.html">Man pages</a>
+</li>
+</ul></li>
+<li><a href="../overview/tut.html">Tutorials</a>
+</li>
+</ul>
+
+   </div> <!-- sidebar -->
+   <div id="content">
+    <div class="mdoc">
+<ul class="breadcrumb"><li><a href="mdoc.html">Index</a></li><li><a href="VL_QUICKVIS.html">Prev</a></li><li><a href="VL_PLOTSIFTDESCRIPTOR.html">Next</a></li></ul><div class="documentation"><p>
+[F,D] = <a href="VL_DSIFT.html">VL_DSIFT</a>(I) calculates the Dense Histogram of Gradients
+(DSIFT) descriptors for the image I. I must be grayscale in SINGLE
+format.
+</p><p>
+In this implementation, a DSIFT descriptor is equivalent to a SIFT
+descriptor (see <a href="VL_SIFT.html">VL_SIFT</a>()). This function calculates quickly a
+large number of such descriptors, for a dense covering of the image
+with features of the same size and orientation.
+</p><p>
+The function returns the frames F and the descriptors D. Since all
+frames have identical size and orientation, F has only two rows
+(for the X and Y center coordinates). The orientation is fixed to
+zero. The scale is related to the SIZE of the spatial bins, which
+by default is equal to 3 pixels (see below). If NS is the number of
+bins in each spatial direction (by default 4), then a DSIFT keypoint
+covers a square patch of NS by SIZE pixels.
+</p><dl><dt>
+Remark
+</dt><dd><p>
+ The size of a SIFT bin is equal to the magnification
+factor MAGNIF (usually 3) by the scale of the SIFT
+keypoint. This means that the scale of the SIFT keypoints
+corresponding to the DSIFT descriptors is SIZE / MAGNIF.
+</p></dd><dt>
+Remark
+</dt><dd><p>
+ Although related, DSIFT is not the same as the HOG
+descriptor used in [1]. This descriptor is equivalent to
+SIFT instead.
+</p></dd></dl><p>
+<a href="VL_DSIFT.html">VL_DSIFT</a>() accepts the following options:
+</p><dl><dt>
+Step STEP [1]
+</dt><dd><p>
+Extract a descriptor each STEP pixels.
+</p></dd><dt>
+Size SIZE [3]
+</dt><dd><p>
+A spatial bin covers SIZE pixels.
+</p></dd><dt>
+Norm
+</dt><dd><p>
+Append the frames with the normalization factor applied to each
+descriptor. In this case, F has 3 rows and this value is the 3rd
+row. This information can be used to suppress descriptors
+with low contrast.
+</p></dd><dt>
+Fast
+</dt><dd><p>
+Use a flat rather than Gaussian window. Much faster.
+</p></dd><dt>
+Verbose
+</dt><dd><p>
+Be verbose.
+</p></dd></dl></div></div>
+   </div>
+   <div class="clear">&nbsp;</div>
+  </div> <!-- pagebody -->
+  <div id="footer">
+   &copy; 2005-09 Andrea Vedaldi and Brian Fulkerson
+  </div> <!-- footer -->
+  
+  <!-- Google Analytics Begins -->
+  <script xml:space="preserve" type="text/javascript">
+   //<![CDATA[
+    var localre = /vlfeat.org/;
+    if(document.location.host.search(localre) != -1)
+    {
+   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+   document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+   }
+   //]]>
+  </script>
+  <script xml:space="preserve" type="text/javascript">
+    //<![CDATA[
+    var localre = /vlfeat.org/;
+    if(document.location.host.search(localre) != -1)
+    {
+
+   try {
+   var pageTracker = _gat._getTracker("UA-4936091-2");
+   pageTracker._trackPageview();
+   } catch(err) {}
+
+   }
+   //]]>
+  </script>
+  <!-- Google Analytics Ends -->
+ </body>
+</html>
+
+ 

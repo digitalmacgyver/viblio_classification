@@ -1,18 +1,18 @@
 % this script runs feature extractor on a directory of videos.
 
 % indicate the input directory that contains videos
-inputDir = '/cs/vml3/avahdat/data/viblio/videos/test';
+inputDir = '/home/vmladmin/data/viblio_test/video';
 
 % indicate the target directory that will be used to store features
 % each feature will be stored in subdirectory named with the feature name.
-ftrDir = '/cs/vml3/avahdat/data/viblio/feature/test';
+ftrDir = '/home/vmladmin/data/viblio_test/feature';
 
 % indicate a path for temporary files
-op.tmpAddress = '/local-scratch/avahdat_vib';
+op.tmpAddress = '/home/vmladmin/tmp';
 
 % indicate the directory containing code and data that is provided by SFU.
-op.codeDir    = '/cs/vml3/avahdat/code/viblio/code';
-op.dataDir   = '/cs/vml3/avahdat/code/viblio/data';
+op.codeDir    = '/home/vmladmin/code/viblio/classification/matlab-codes';
+op.dataDir   = '/home/vmladmin/code/viblio/classification/data';
 
 % list of features to extract:
 % hog2x2:               2D HOG

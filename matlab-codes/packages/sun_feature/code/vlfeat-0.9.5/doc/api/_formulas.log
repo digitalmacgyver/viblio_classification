@@ -1,0 +1,358 @@
+This is pdfTeX, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=latex 2008.4.11)  25 SEP 2009 21:42
+entering extended mode
+**_formulas.tex
+(./_formulas.tex
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, arabic, basque, bulgarian, coptic, welsh, czech, slovak, german, ng
+erman, danish, esperanto, spanish, catalan, galician, estonian, farsi, finnish,
+ french, greek, monogreek, ancientgreek, croatian, hungarian, interlingua, ibyc
+us, indonesian, icelandic, italian, latin, mongolian, dutch, norsk, polish, por
+tuguese, pinyin, romanian, russian, slovenian, uppersorbian, serbian, swedish, 
+turkish, ukenglish, ukrainian, loaded.
+
+(/opt/local/share/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2005/09/16 v1.4f Standard LaTeX document class
+(/opt/local/share/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (/opt/local/share/texmf-dist/tex/latex/graphics/epsfig.sty
+Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
+(/opt/local/share/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+(/opt/local/share/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+) (/opt/local/share/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2006/02/20 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+(/opt/local/share/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+) (/opt/local/share/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: dvips.def on input line 90.
+(/opt/local/share/texmf-dist/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+\epsfxsize=\dimen105
+\epsfysize=\dimen106
+)
+No file _formulas.aux.
+\openout1 = `_formulas.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 6.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 6.
+[1
+
+] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14]
+Overfull \hbox (153.9907pt too wide) detected at line 48
+\OML/cmm/m/it/10 D[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 I\OT1/cmr/m/n/10 (\OML/
+cmm/m/it/10 x; c\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 I\OT1/c
+mr/m/n/10 ([\OML/cmm/m/it/10 x\OT1/cmr/m/n/10 ][]\OML/cmm/m/it/10 ; c\OT1/cmr/m
+/n/10 ) = [] \OML/cmm/m/it/10 p\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 x[]\OT1/cmr/m/
+n/10 ) [] [] + [] \OML/cmm/m/it/10 p\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 x[]\OT1/c
+mr/m/n/10 ) [] [] \OMS/cmsy/m/n/10 ^^@ []\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p\OT
+1/cmr/m/n/10 (\OML/cmm/m/it/10 x[]\OT1/cmr/m/n/10 ) + \OML/cmm/m/it/10 p\OT1/cm
+r/m/n/10 (\OML/cmm/m/it/10 x[]\OT1/cmr/m/n/10 )) [] []
+ []
+
+[15] [16] [17] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29] [30]
+[31] [32] [33] [34] [35] [36] [37] [38] [39] [40] [41] [42] [43] [44]
+Overfull \hbox (78.11678pt too wide) in alignment at lines 138--138
+ [][][] []
+ []
+
+[45] [46]
+Overfull \hbox (65.31815pt too wide) in alignment at lines 144--144
+ [][][] []
+ []
+
+[47] [48] [49] [50] [51] [52] [53]
+Overfull \hbox (8.7239pt too wide) detected at line 165
+\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 ; [] ; W \OMS/cmsy/m/n/10 ^
+^@ \OT1/cmr/m/n/10 1\OMS/cmsy/m/n/10 g 3 \OML/cmm/m/it/10 T[] \OT1/cmr/m/n/10 +
+ \OML/cmm/m/it/10 m^^[x[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 T[] \OT1/cmr/m/n/1
+0 + \OML/cmm/m/it/10 m^^[i \OMS/cmsy/m/n/10 ^^@ [] \OT1/cmr/m/n/10 = [] + \OML/
+cmm/m/it/10 m^^[i;  i \OT1/cmr/m/n/10 = 0\OML/cmm/m/it/10 ; [] ; N[] \OMS/cmsy/
+m/n/10 ^^@ \OT1/cmr/m/n/10 1\OML/cmm/m/it/10 :
+ []
+
+[54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65] [66] [67] [68] [69]
+[70] [71] [72] [73] [74]
+! Undefined control sequence.
+l.228 ...{ \Delta - |t|, 0 \}, \quad t \in \mathbb
+                                                  {Z} \]
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[75] [76] [77]
+! Undefined control sequence.
+l.237 $ \Delta \in \mathbb
+                          {Z}_+ $
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[78] [79] [80] [81] [82] [83]
+! Undefined control sequence.
+l.255 $ x_1,\dots,x_n \in \mathbb
+                                 {R}^d $
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[84]
+! Undefined control sequence.
+l.258 $ \mathbb
+               {R}^d $
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[85]
+! Undefined control sequence.
+l.261 $ x_q \in \mathbb
+                       {R}^d $
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[86] [87] [88] [89] [90] [91] [92] [93] [94] [95] [96] [97] [98] [99] [100] [10
+1] [102] [103] [104] [105] [106] [107] [108] [109] [110] [111] [112] [113] [114
+] [115] [116] [117] [118] [119] [120] [121] [122] [123] [124] [125] [126] [127]
+[128] [129] [130] [131] [132] [133] [134] [135] [136] [137] [138] [139] [140] [
+141] [142] [143] [144] [145]
+! Extra }, or forgotten $.
+l.441 \[ P(x',y',I(x',y')) > P(x,y,I(x,y))}
+                                           . \]
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+[146] [147] [148] [149] [150] [151] [152] [153] [154] [155] [156] [157] [158] [
+159] [160] [161] [162] [163] [164] [165] [166] [167] [168] [169]
+! Undefined control sequence.
+l.513 \[ J(x,y) = \nalba
+                         I_\sigma(x,y) = \left[\begin{array}{cc} \frac{\part...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Extra alignment tab has been changed to \cr.
+<recently read> \endtemplate 
+                             
+l.513 ... & \frac{\partial I_\sigma}{\partial y} &
+                                                   \end{array}\right] \]
+You have given more \span or & marks than there were
+in the preamble to the \halign or \valign now in progress.
+So I'll assume that you meant to type \cr instead.
+
+[170] [171] [172] [173] [174] [175] [176] [177]
+Overfull \hbox (1.20386pt too wide) in alignment at lines 537--537
+ [][][] []
+ []
+
+[178] [179] [180] [181]
+
+! LaTeX Error: \begin{array} on input line 549 ended by \end{arraty}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.549 ...eft[\begin{array}{cc} x \\ y \end{arraty}
+                                                  \right], \quad \hat\mathbf...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.549 ...eft[\begin{array}{cc} x \\ y \end{arraty}
+                                                  \right], \quad \hat\mathbf...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.549 ...eft[\begin{array}{cc} x \\ y \end{arraty}
+                                                  \right], \quad \hat\mathbf...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.549 ...eft[\begin{array}{cc} x \\ y \end{arraty}
+                                                  \right], \quad \hat\mathbf...
+I'm guessing that you meant to end an alignment here.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.549 ...eft[\begin{array}{cc} x \\ y \end{arraty}
+                                                  \right], \quad \hat\mathbf...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.549 ...eft[\begin{array}{cc} x \\ y \end{arraty}
+                                                  \right], \quad \hat\mathbf...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+
+! LaTeX Error: \begin{array} on input line 549 ended by \end{arraty}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.549 ...{array}{cc} \hat x \\ \hat y \end{arraty}
+                                                  \right]. \]
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.549 ...{array}{cc} \hat x \\ \hat y \end{arraty}
+                                                  \right]. \]
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.549 ...{array}{cc} \hat x \\ \hat y \end{arraty}
+                                                  \right]. \]
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.549 ...{array}{cc} \hat x \\ \hat y \end{arraty}
+                                                  \right]. \]
+I'm guessing that you meant to end an alignment here.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.549 ...{array}{cc} \hat x \\ \hat y \end{arraty}
+                                                  \right]. \]
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.549 ...{array}{cc} \hat x \\ \hat y \end{arraty}
+                                                  \right]. \]
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+[182] [183] [184] [185] [186] [187] [188] [189] [190] [191] [192] [193] [194] [
+195] [196] [197] [198]
+Overfull \hbox (27.34018pt too wide) in alignment at lines 600--600
+ [][][] []
+ []
+
+[199] [200] [201] [202] [203] [204] [205] [206]
+! Undefined control sequence.
+l.624 \[ o(\sigma) = \max \{ o \in \mathbb
+                                          {Z} : \sigma_0 2^{\frac{s_\mathrm{...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[207] [208] [209] [210]
+! Undefined control sequence.
+l.636 $ \hat \sigma_{\text
+                          {win}} $
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[211] (./_formulas.aux) ) 
+Here is how much of TeX's memory you used:
+ 548 strings out of 94074
+ 6582 string characters out of 1164802
+ 54820 words of memory out of 1500000
+ 3896 multiletter control sequences out of 10000+50000
+ 4567 words of font info for 17 fonts, out of 1200000 for 2000
+ 645 hyphenation exceptions out of 8191
+ 32i,13n,21p,495b,124s stack positions out of 5000i,500n,6000p,200000b,5000s
+
+Output written on _formulas.dvi (211 pages, 34912 bytes).

@@ -1,0 +1,639 @@
+\batchmode
+\documentclass{article}
+\usepackage{epsfig}
+\pagestyle{empty}
+\begin{document}
+$x$
+\pagebreak
+
+$c$
+\pagebreak
+
+$I(x,c)$
+\pagebreak
+
+$O(N^2)$
+\pagebreak
+
+$O(C N^3)$
+\pagebreak
+
+$O(N)$
+\pagebreak
+
+$O(C N^2)$
+\pagebreak
+
+$x \in \mathcal{X} = \{x_1,\dots,x_N\}$
+\pagebreak
+
+$c = 1,\dots,C$
+\pagebreak
+
+$p(x,c)$
+\pagebreak
+
+$[x]_{ij}$
+\pagebreak
+
+$x_i$
+\pagebreak
+
+$x_j$
+\pagebreak
+
+$ij$
+\pagebreak
+
+\[ D_{ij} = I(x,c) - I([x]_{ij},c) = \sum_c p(x_i) \log \frac{p(x_i,c)}{p(x_i)p(c)} + \sum_c p(x_i) \log \frac{p(x_i,c)}{p(x_i)p(c)} - \sum_c (p(x_i)+p(x_j)) \log \frac {p(x_i,c)+p(x_i,c)}{(p(x_i)+p(x_j))p(c)} \]
+\pagebreak
+
+$D_{ij}$
+\pagebreak
+
+$O(C)$
+\pagebreak
+
+$O(CN^2)$
+\pagebreak
+
+$N$
+\pagebreak
+
+$O(N^3 C)$
+\pagebreak
+
+$O(1)$
+\pagebreak
+
+$D = [ D_{ij} ]$
+\pagebreak
+
+$O(NC)$
+\pagebreak
+
+$x_{ij}$
+\pagebreak
+
+$O(N^2C + N^3)$
+\pagebreak
+
+$(q_i, D_i)$
+\pagebreak
+
+$(q_i,D_i)$
+\pagebreak
+
+$(q_j,D_j)$
+\pagebreak
+
+$(q_{ij},D_{ij})$
+\pagebreak
+
+$O(CN)$
+\pagebreak
+
+$(q_{k},D_{k})$
+\pagebreak
+
+$x_k$
+\pagebreak
+
+$x_{q_k}$
+\pagebreak
+
+$D_k$
+\pagebreak
+
+$q_k \not = i$
+\pagebreak
+
+$q_k \not = j$
+\pagebreak
+
+$D_{k,ij} \geq D_k$
+\pagebreak
+
+$q_k$
+\pagebreak
+
+$D_{k,ij} < D_k$
+\pagebreak
+
+$q_k = i$
+\pagebreak
+
+$q_k = j$
+\pagebreak
+
+$O(\gamma(N) C N^2)$
+\pagebreak
+
+$\gamma(N)$
+\pagebreak
+
+$\gamma(N) \approx \mathrm{const.}$
+\pagebreak
+
+\begin{eqnarray*} \mathbf{x} &=& m \sigma \hat \mathbf{x} + T,\\ h(t,i,j) &=& m \sigma \int g_{\sigma_\mathrm{win}}(\mathbf{x} - T)\, w_\mathrm{ang}(\angle J(\mathbf{x}) - \theta_t)\, w\left(\frac{x - T_x}{m\sigma} - \hat{x}_i\right)\, w\left(\frac{y - T_y}{m\sigma} - \hat{y}_j\right)\, |J(\mathbf{x})|\, d\mathbf{x}. \end{eqnarray*}
+\pagebreak
+
+$ \mathbf{x}_{ij} = m\sigma(\hat x_i,\ \hat y_i)^\top $
+\pagebreak
+
+\begin{eqnarray*} h(t,i,j) &=& m \sigma \int g_{\sigma_\mathrm{win}}(T' - \mathbf{x} - \mathbf{x}_{ij})\, w_\mathrm{ang}(\angle J(\mathbf{x}) - \theta_t)\, w\left(\frac{T'_x - x}{m\sigma}\right)\, w\left(\frac{T'_y - y}{m\sigma}\right)\, |J(\mathbf{x})|\, d\mathbf{x}, \\ T' &=& T + m\sigma \left[\begin{array}{cc} x_i \\ y_j \end{array}\right]. \end{eqnarray*}
+\pagebreak
+
+\begin{eqnarray*} k_i(x) &=& \frac{1}{\sqrt{2\pi} \sigma_{\mathrm{win}}} \exp\left( -\frac{1}{2} \frac{(x-x_i)^2}{\sigma_{\mathrm{win}}^2} \right) w\left(\frac{x}{m\sigma}\right), \\ k_j(y) &=& \frac{1}{\sqrt{2\pi} \sigma_{\mathrm{win}}} \exp\left( -\frac{1}{2} \frac{(y-y_j)^2}{\sigma_{\mathrm{win}}^2} \right) w\left(\frac{y}{m\sigma}\right), \end{eqnarray*}
+\pagebreak
+
+\begin{eqnarray*} h(t,i,j) &=& (k_ik_j * \bar J_t)\left( T + m\sigma \left[\begin{array}{cc} x_i \\ y_j \end{array}\right] \right), \\ \bar J_t(\mathbf{x}) &=& w_\mathrm{ang}(\angle J(\mathbf{x}) - \theta_t)\,|J(\mathbf{x})|. \end{eqnarray*}
+\pagebreak
+
+\begin{eqnarray*} k(z) &=& \frac{1}{\sigma_{\mathrm{win}}} w\left(\frac{z}{m\sigma}\right), \\ h(t,i,j) &=& (k(x)k(y) * \bar J_t)\left( T + m\sigma \left[\begin{array}{cc} x_i \\ y_j \end{array}\right] \right), \end{eqnarray*}
+\pagebreak
+
+$ \sigma_\mathrm{win} $
+\pagebreak
+
+$ k(z) $
+\pagebreak
+
+$ T + m\sigma (x_i,\ y_j) $
+\pagebreak
+
+\[ \{0,\dots, W-1\} \ni T_x + m\sigma x_i = T_x + m\sigma i - \frac{N_x-1}{2} = \bar T_x + m\sigma i, \qquad i = 0,\dots,N_x-1. \]
+\pagebreak
+
+$ T_x $
+\pagebreak
+
+$ N_x $
+\pagebreak
+
+$ \bar T $
+\pagebreak
+
+\[ \left[\begin{array}{cc} 0 \\ 0 \end{array}\right] \leq \bar T = \left[\begin{array}{cc} \bar T_x^{\min} + p \Delta_x \\ \bar T_y^{\min} + q \Delta_y \\ \end{array}\right] \leq \left[\begin{array}{cc} W - 1 - m\sigma N_x \\ H - 1 - m\sigma N_y \end{array}\right], \quad \bar T = \left[\begin{array}{cc} T_x - \frac{N_x - 1}{2} \\ T_y - \frac{N_y - 1}{2} \\ \end{array}\right] \]
+\pagebreak
+
+$ m \sigma $
+\pagebreak
+
+$(A_{11}, A_{21}, \dots, A_{12}, \dots)$
+\pagebreak
+
+$(A_{11}, A_{12}, \dots, A_{21}, \dots)$
+\pagebreak
+
+$x_1,\dots,x_N\in R^d$
+\pagebreak
+
+$K$
+\pagebreak
+
+$a_i\in\{1,\dots,K\},$
+\pagebreak
+
+$c_1,\dots,c_K\in R^d$
+\pagebreak
+
+\[ E(\{a_{i}, c_j\}) = \frac{1}{N} \sum_{i=1}^N d(x_i, c_{a_i}) \]
+\pagebreak
+
+$d(x_i, c_{a_i})$
+\pagebreak
+
+$ x_i $
+\pagebreak
+
+$ c_{a_i} $
+\pagebreak
+
+$d(x,y)=\|x-y\|^2_2$
+\pagebreak
+
+$c_1,\dots,c_K$
+\pagebreak
+
+$O(dNKT)$
+\pagebreak
+
+\[ \mathrm{dst} [x,y] = \sum_{p=y-\mathrm{filt\_end}}^{y-\mathrm{filt\_begin}} \mathrm{src}[x,y] \mathrm{filt}[y - p - \mathrm{filt\_begin}] \]
+\pagebreak
+
+$\mathrm{dst}[x,y]$
+\pagebreak
+
+\[ k(t) = \frac{1}{\Delta^2} \max\{ \Delta - |t|, 0 \}, \quad t \in \mathbb{Z} \]
+\pagebreak
+
+$ \Delta $
+\pagebreak
+
+\[ \sum_{t=-\infty}^{+\infty} k(t) = 1 \]
+\pagebreak
+
+$ \Delta \in \mathbb{Z}_+ $
+\pagebreak
+
+$ k(x) $
+\pagebreak
+
+$ (-\Delta,\Delta) $
+\pagebreak
+
+$ 2\Delta $
+\pagebreak
+
+$ [-\Delta + 1, \Delta-1] $
+\pagebreak
+
+$ 2 \Delta - 1 $
+\pagebreak
+
+$ x_1,\dots,x_n \in \mathbb{R}^d $
+\pagebreak
+
+$ \mathbb{R}^d $
+\pagebreak
+
+$ x_q \in \mathbb{R}^d $
+\pagebreak
+
+$ 2^{-23} $
+\pagebreak
+
+$ 2^{-52} $
+\pagebreak
+
+$ f(r)=atan((1-r)/(1+r)) $
+\pagebreak
+
+$ r \in [-1,1] $
+\pagebreak
+
+$ f(r)=c_0 + c_1 r + c_2 r^2 + c_3 r^3 $
+\pagebreak
+
+\begin{eqnarray*} f(+1) &=& c_0 + c_1 + c_2 + c_3 = atan(0) = 0,\\ f(-1) &=& c_0 - c_1 + c_2 - c_3 = atan(\infty) = \pi/2,\\ f(0) &=& c_0 = atan(1) = \pi/4. \end{eqnarray*}
+\pagebreak
+
+$ l^{\infty} $
+\pagebreak
+
+\[ c_0=\pi/4, \quad c_1=-0.9675, \quad c_2=0, \quad c_3=0.1821, \]
+\pagebreak
+
+$ x^{-1/2} $
+\pagebreak
+
+$ y = x^{-1/2} $
+\pagebreak
+
+$ 0 = f(y) = y^{-2} - x$
+\pagebreak
+
+\[ y \leftarrow y - \frac{f(y)}{\dot f(y)} = y + \frac{1}{2} (y-xy^3) = \frac{y}{2} \left( 3 - xy^2 \right) \]
+\pagebreak
+
+$ y \approx x^{-1/2} $
+\pagebreak
+
+$ y^2 \leq x $
+\pagebreak
+
+$ y = w + b_k 2^k + z $
+\pagebreak
+
+\[ x = \sum_{i=0}^{n-1} 2^i a_i, \qquad w = \sum_{i=k+1}^{m-1} 2^i b_i, \qquad z = \sum_{i=0}^{k-1} 2^i b_i. \]
+\pagebreak
+
+$ b_k^2=b_k $
+\pagebreak
+
+$ b_k $
+\pagebreak
+
+\[ x - w^2 \geq 2^k ( 2 w + 2^k ) b_k + z (z + 2wz + 2^{k+1}z b_k) \]
+\pagebreak
+
+$ b_k = 1 $
+\pagebreak
+
+$ z = 0 $
+\pagebreak
+
+$ m = n / 2 $
+\pagebreak
+
+$ w = 0 $
+\pagebreak
+
+$ k = m - 1 = n/2 - 1 $
+\pagebreak
+
+$ b_{m-1}, b_{m-2}, ... $
+\pagebreak
+
+$R_l$
+\pagebreak
+
+$S_l = \{ x : I(x) \leq l \}$
+\pagebreak
+
+$l$
+\pagebreak
+
+$S_l$
+\pagebreak
+
+$\mathcal{L}=\{0,\dots,M-1\}$
+\pagebreak
+
+$R_{l+1}$
+\pagebreak
+
+$R_l\subset R_{l+1}$
+\pagebreak
+
+$B(R_l)=(R_l,R_{l+1},\dots,R_{l+\Delta})$
+\pagebreak
+
+\[ v(R_l) = \frac{|R_{l+\Delta} - R_l|}{|R_l|}. \]
+\pagebreak
+
+$R_{l+\Delta/2}$
+\pagebreak
+
+$B(R_{l})$
+\pagebreak
+
+$B(R_{l+1}):R_{l+1}\supset R_l$
+\pagebreak
+
+$v(R_l)<v(R_{l+1})$
+\pagebreak
+
+$v(R_l)>v(R_{l+1})$
+\pagebreak
+
+$R_{l}$
+\pagebreak
+
+$a_- \leq |R_{l}|/|R_{\infty}| \leq a_+$
+\pagebreak
+
+$|R_{\infty}|$
+\pagebreak
+
+$v(R_{l}) < v_+$
+\pagebreak
+
+$R_{l'}$
+\pagebreak
+
+$|R_{l'} - R_l|/|R_l'| < d_+$
+\pagebreak
+
+$\Delta$
+\pagebreak
+
+$a_+$
+\pagebreak
+
+$a_-$
+\pagebreak
+
+$|R_\infty|$
+\pagebreak
+
+$v_+$
+\pagebreak
+
+$d_+$
+\pagebreak
+
+\[ \mu_l = \frac{1}{|R_l|}\sum_{x\in R_l}x, \qquad \Sigma_l = \frac{1}{|R_l|}\sum_{x\in R_l} (x-\mu_l)^\top(x-\mu_l) \]
+\pagebreak
+
+$x=(x_1,...,x_n)$
+\pagebreak
+
+$R_q$
+\pagebreak
+
+$q\leq l+1$
+\pagebreak
+
+$ (x,y,I(x,y)) $
+\pagebreak
+
+$ \sigma $
+\pagebreak
+
+\[ E(x,y) = P(x,y,I(x,y)) = \sum_{x'y'} \frac{1}{(2\pi\sigma)^{d+2}} \exp \left( -\frac{1}{2\sigma^2} \left[ \begin{array}{c} x - x' \\ y - y' \\ I(x,y) - I(x',y') \\ \end{array} \right] \right) \]
+\pagebreak
+
+$ (x',y') >_P (x,y) $
+\pagebreak
+
+\[ P(x',y',I(x',y')) > P(x,y,I(x,y))}. \]
+\pagebreak
+
+\[ \mathrm{dist}(x,y) = \mathrm{min}_{(x',y') > P(x,y)} \left( (x - x')^2 + (y - y')^2 + \| I(x,y) - I(x',y') \|_2^2 \right). \]
+\pagebreak
+
+$ 8 \times 4 \times 4 = 128 $
+\pagebreak
+
+$I_0(\mathbf{x})$
+\pagebreak
+
+\[ g_{\sigma}(\mathbf{x}) = \frac{1}{2\pi\sigma^2} \exp \left( -\frac{1}{2} \frac{\mathbf{x}^\top\mathbf{x}}{\sigma^2} \right) \]
+\pagebreak
+
+\[ I_\sigma = g_\sigma * I, \quad \sigma \geq 0. \]
+\pagebreak
+
+$ I_0 $
+\pagebreak
+
+$ I_{\sigma_n} $
+\pagebreak
+
+$ \sigma_n = 0.5 $
+\pagebreak
+
+\[ I_\sigma = g_{\sqrt{\sigma^2 - \sigma_n^2}} * I_{\sigma_n}, \quad \sigma \geq \sigma_n. \]
+\pagebreak
+
+\[ \sigma = \sigma_0 2^{o+s/S}, \quad s = 0,\dots,S-1, \quad o = o_{\min}, \dots, o_{\min}+O-1, \]
+\pagebreak
+
+$ \sigma_0 = 1.6 $
+\pagebreak
+
+$ o_{\min} $
+\pagebreak
+
+\[ \mathrm{DoG}_{\sigma(o,s)} = I_{\sigma(o,s+1)} - I_{\sigma(o,s)} \]
+\pagebreak
+
+$\sigma$
+\pagebreak
+
+\[ s = -1, \dots, S+2 \]
+\pagebreak
+
+$ 3 \times 3 \times 3 $
+\pagebreak
+
+$t_p$
+\pagebreak
+
+$x,y,\sigma$
+\pagebreak
+
+\[ \frac{(\mathrm{tr}\,D(x,y,\sigma))^2}{\det D(x,y,\sigma)}, \quad D = \left[ \begin{array}{cc} \frac{\partial^2 \mathrm{DoG}}{\partial x^2} & \frac{\partial^2 \mathrm{DoG}}{\partial x\partial y} \\ \frac{\partial^2 \mathrm{DoG}}{\partial x\partial y} & \frac{\partial^2 \mathrm{DoG}}{\partial y^2} \end{array} \right]. \]
+\pagebreak
+
+$(t_e+1)(t_e+1)/t_e$
+\pagebreak
+
+$t_e$
+\pagebreak
+
+$t_e=1$
+\pagebreak
+
+$[1,\infty)$
+\pagebreak
+
+\[ J(x,y) = \nalba I_\sigma(x,y) = \left[\begin{array}{cc} \frac{\partial I_\sigma}{\partial x} & \frac{\partial I_\sigma}{\partial y} & \end{array}\right] \]
+\pagebreak
+
+$ J(x,y) $
+\pagebreak
+
+$ N_\theta \times N_x \times N_y $
+\pagebreak
+
+$ 8 \times 4 \times 4 $
+\pagebreak
+
+\begin{eqnarray*} \theta_t &=& \frac{2\pi}{N_\theta} t, \quad t = 0,\dots,N_{\theta}-1, \\ x_i &=& i - \frac{N_x -1}{2}, \quad i = 0,\dots,N_x-1, \\ y_j &=& j - \frac{N_x -1}{2}, \quad j = 0,\dots,N_y-1. \\ \end{eqnarray*}
+\pagebreak
+
+\begin{eqnarray*} \displaystyle w(z) &=& \mathrm{max}(0, 1 - |z|), \\ \displaystyle w_\mathrm{ang}(z) &=& \sum_{k=-\infty}^{+\infty} w\left( \frac{N_\theta}{2\pi} z + N_\theta k \right). \end{eqnarray*}
+\pagebreak
+
+\[ f(\theta, x, y) = |J(x,y)| \delta(\theta - \angle J(x,y)) \]
+\pagebreak
+
+$ \sigma_{\mathrm{win}} $
+\pagebreak
+
+\begin{eqnarray*} h(t,i,j) &=& \int g_{\sigma_\mathrm{win}}(x,y) w_\mathrm{ang}(\theta - \theta_t) w(x-x_i) w(y-y_j) f(\theta,x,y) d\theta\,dx\,dy \\ &=& \int g_{\sigma_\mathrm{win}}(x,y) w_\mathrm{ang}(\angle J(x,y) - \theta_t) w(x-x_i) w(y-y_j) |J(x,y)|\,dx\,dy \end{eqnarray*}
+\pagebreak
+
+$ l^2 $
+\pagebreak
+
+$ \hat x $
+\pagebreak
+
+$ x $
+\pagebreak
+
+\[ \mathbf{x} = A \hat\mathbf{x} + T, \qquad \mathbf{x} = \left[\begin{array}{cc} x \\ y \end{arraty}\right], \quad \hat\mathbf{x} = \left[\begin{array}{cc} \hat x \\ \hat y \end{arraty}\right]. \]
+\pagebreak
+
+\[ \hat I_0(\hat\mathbf{x}) = I_0(\mathbf{x}), \qquad \mathbf{x} = A \hat\mathbf{x} + T. \]
+\pagebreak
+
+$ \hat \sigma $
+\pagebreak
+
+\[ \hat I_{\hat{\sigma}}(\hat\mathbf{x}) = I_{A\hat{\sigma}}(\mathbf{x}), \qquad \mathbf{x} = A \hat\mathbf{x} + T \]
+\pagebreak
+
+\[ I_{A\hat \sigma}(\mathbf{x}) = (g_{A\hat\sigma} * I_0)(\mathbf{x}), \quad g_{A\hat\sigma}(\mathbf{x}) = \frac{1}{2\pi|A|\hat \sigma^2} \exp \left( -\frac{1}{2} \frac{\mathbf{x}^\top A^{-\top}A^{-1}\mathbf{x}}{\hat \sigma^2} \right) \]
+\pagebreak
+
+\[ \hat J(\hat \mathbf{x}) = J(\mathbf{x}) A, \quad J(\mathbf{x}) = (\nabla I_{A\hat\sigma})(\mathbf{x}), \qquad \mathbf{x} = A \hat\mathbf{x} + T. \]
+\pagebreak
+
+\begin{eqnarray*} h(t,i,j) &=& \int g_{\hat \sigma_\mathrm{win}}(\hat \mathbf{x})\, w_\mathrm{ang}(\angle \hat J(\hat\mathbf{x}) - \theta_t)\, w_{ij}(\hat\mathbf{x})\, |\hat J(\hat \mathbf{x})|\, d\hat \mathbf{x} \\ &=& \int g_{A \hat \sigma_\mathrm{win}}(\mathbf{x} - T)\, w_\mathrm{ang}(\angle J(\mathbf{x})A - \theta_t)\, w_{ij}(A^{-1}(\mathbf{x} - T))\, |J(\mathbf{x})A|\, d\mathbf{x}. \end{eqnarray*}
+\pagebreak
+
+\[ w_{ij}(\hat\mathbf{x}) = w(\hat x - \hat x_i) w(\hat y - \hat y_j) \]
+\pagebreak
+
+$m/2\sqrt{2} (N_x+1,N_y+1)$
+\pagebreak
+
+$ T $
+\pagebreak
+
+$ \theta $
+\pagebreak
+
+$ (A,T) $
+\pagebreak
+
+\[ \mathbf{x} = m \sigma R(\theta) \hat \mathbf{x} + T \]
+\pagebreak
+
+$ R(\theta) $
+\pagebreak
+
+$ m \mathcal{\sigma} $
+\pagebreak
+
+$ \hat \sigma = 1/m $
+\pagebreak
+
+$ \hat \sigma_\mathrm{win} = 2 $
+\pagebreak
+
+\begin{eqnarray*} h(t,i,j) &=& m \sigma \int g_{\sigma_\mathrm{win}}(\mathbf{x} - T)\, w_\mathrm{ang}(\angle J(\mathbf{x}) - \theta - \theta_t)\, w_{ij}\left(\frac{R(\theta)^\top \mathbf{x} - T}{m\sigma}\right)\, |J(\mathbf{x})|\, d\mathbf{x}, \\ \sigma_{\mathrm{win}} &=& m\sigma\hat \sigma_{\mathrm{win}}, \\ J(\mathbf{x}) &=& \nabla (g_{m \sigma \hat \sigma} * I)(\mathbf{x}) = \nabla (g_{\sigma} * I)(\mathbf{x}) = \nabla I_{\sigma} (\mathbf{x}). \end{eqnarray*}
+\pagebreak
+
+$exp(-x)$
+\pagebreak
+
+$ 2\pi $
+\pagebreak
+
+\[ \sigma(o,s) = \sigma_0 2^{o+s/S} \]
+\pagebreak
+
+$ [o_\mathrm{min}, o_{\mathrm{min}}+O-1] $
+\pagebreak
+
+$ [s_\mathrm{min}+1, s_\mathrm{max}-2] $
+\pagebreak
+
+$ |s - is| < 0.5 $
+\pagebreak
+
+$ \{ \sigma(o, s) : s \in [s_\mathrm{min}+1-.5, s_\mathrm{max}-2+.5] \} $
+\pagebreak
+
+\[ o(\sigma) = \max \{ o \in \mathbb{Z} : \sigma_0 2^{\frac{s_\mathrm{min}+1-.5}{S}} \leq \sigma \} = \mathrm{floor}\,\left[ \log_2(\sigma / \sigma_0) - \frac{s_\mathrm{min}+1-.5}{S}\right] \]
+\pagebreak
+
+\[ s(\sigma) = S \left[\log_2(\sigma / \sigma_0) - o(\sigma)\right], \quad is(\sigma) = \mathrm{round}\,(s(\sigma)) \]
+\pagebreak
+
+$ o(\sigma) $
+\pagebreak
+
+$ is(\sigma) $
+\pagebreak
+
+$ \hat \sigma_{\text{win}} $
+\pagebreak
+
+\end{document}
