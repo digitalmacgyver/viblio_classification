@@ -1,18 +1,25 @@
-% this script runs feature extractor on a directory of videos.
+function run_image_ftr_extractor(inputDir, ftrDir, tempAddress, codeDir, dataDir)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% the function extracts image based features on a directory of videos.
+% input:
+%   inputDir : indicates the input directory that contains videos
+%   ftrDir: indicates the target directory that will be used to store features
+%           each feature will be stored in subdirectory named with the feature name.
+%   tempAddress: indicate a path for temporary files
+%   codeDir: indicates the directory containing code (the location of matlab-codes)
+%   dataDir: indicates the directory containing provided by SFU.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% indicate the input directory that contains videos
-inputDir = '/home/vmladmin/data/viblio_test/video';
+% inputDir = '/home/vmladmin/data/viblio_test/video';
+% ftrDir = '/home/vmladmin/data/viblio_test/feature';
+% tempAddress = '/home/vmladmin/tmp';
+% codeDir = '/home/vmladmin/code/viblio/classification/matlab-codes';
+% dataDir = '/home/vmladmin/code/viblio/classification/data';
 
-% indicate the target directory that will be used to store features
-% each feature will be stored in subdirectory named with the feature name.
-ftrDir = '/home/vmladmin/data/viblio_test/feature';
 
-% indicate a path for temporary files
-op.tmpAddress = '/home/vmladmin/tmp';
-
-% indicate the directory containing code and data that is provided by SFU.
-op.codeDir    = '/home/vmladmin/code/viblio/classification/matlab-codes';
-op.dataDir   = '/home/vmladmin/code/viblio/classification/data';
+op.tmpAddress = tempAddress;
+op.codeDir    = codeDir;
+op.dataDir    = dataDir;
 
 % list of features to extract:
 % hog2x2:               2D HOG
@@ -28,6 +35,7 @@ op.dataDir   = '/home/vmladmin/code/viblio/classification/data';
 % OBD_Avg:              Average response of OB.
 % OBD_Max_Temporal_2:   Max response of OB extracted on first and second half of video.
 % OBD_Max_Level_3_Horz: Max response of OB extracted on spatial bins.
+
 sunFeatNames = {'hog2x2', 'DenseSIFT', 'ssim', 'spsift_hesaff', 'spsift_mser', 'geo_color'};
 OBDFeatNames = {'OBDScale', 'OBD_Max_Temporal_2', 'OBD_Max_Level_3_Horz', 'OBD_Avg'};
 
@@ -42,9 +50,9 @@ for f = 1:length(fileList)
     end
     
     if ~isempty(OBDFeatNames)
-        vilbio_objectBankDenseCall(videoPath, ftrDir, OBDFeatNames, op)
+        vilbio_objectBankDenseCall(videoPath, ftrDir, OBDFeatNames, op);
     end
 end
 
 
-%system(sprintf('rm -rf %s/', op.tmpAddress));
+system(sprintf('rm -rf %s/', op.tmpAddress));

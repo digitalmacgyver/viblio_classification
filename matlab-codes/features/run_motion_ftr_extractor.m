@@ -1,18 +1,25 @@
-% this script runs feature extractor on a directory of videos.
+function run_motion_ftr_extractor(inputDir, ftrDir, tempAddress, codeDir, dataDir)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% the function extracts motion based features on a directory of videos.
+% input:
+%   inputDir : indicates the input directory that contains videos
+%   ftrDir: indicates the target directory that will be used to store features
+%           each feature will be stored in subdirectory named with the feature name.
+%   tempAddress: indicate a path for temporary files
+%   codeDir: indicates the directory containing code (the location of matlab-codes)
+%   dataDir: indicates the directory containing provided by SFU.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% indicate the input directory that contains videos
-inputDir = '/home/vmladmin/data/viblio_test/video';
+% inputDir = '/home/vmladmin/data/viblio_test/video';
+% ftrDir = '/home/vmladmin/data/viblio_test/feature';
+% tempAddress = '/home/vmladmin/tmp';
+% codeDir = '/home/vmladmin/code/viblio/classification/matlab-codes';
+% dataDir = '/home/vmladmin/code/viblio/classification/data';
 
-% indicate the target directory that will be used to store features
-% each feature will be stored in subdirectory named with the feature name.
-ftrDir = '/home/vmladmin/data/viblio_test/feature';
 
-% indicate a path for temporary files
-op.tmpAddress = '/home/vmladmin/tmp';
-
-% indicate the directory containing code and data that is provided by SFU.
-op.codeDir    = '/home/vmladmin/code/viblio/classification/matlab-codes';
-op.dataDir   = '/home/vmladmin/code/viblio/classification/data';
+op.tmpAddress = tempAddress;
+op.codeDir    = codeDir;
+op.dataDir    = dataDir;
 
 
 %**************************************************************************
@@ -26,7 +33,7 @@ for f = 1:length(fileList)
     viblio_ComputeCodeWord_DTFaster(videoPath, ftrDir, op);
     
     % this function call HOG3D features and computes BOW features.
-    viblio_ComputeCodeWord_FasterKMeans(videoPath, ftrDir, op)
+    viblio_ComputeCodeWord_FasterKMeans(videoPath, ftrDir, op);
 end
 
 

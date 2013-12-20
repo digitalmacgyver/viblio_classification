@@ -1,4 +1,4 @@
-This package contains SFU’s event recognition system as well as third party codes and softwares used in the system. In this submission, codes for extracting image and video based features are released. Classification modules will be released in the next submission.
+This package contains SFU’s event recognition system as well as third party codes and softwares used in the system. In this submission, codes for extracting image and video based features are released.
 
 *** Content ***
 
@@ -22,12 +22,15 @@ Matlab: the source code is mainly in Matlab.
 ffmpeg: in several modules ffmpeg is used to extract frames or to resize the input video.
 ffprobe (part of ffmpeg): may be used to extract the properties of input video (e.g. video size).
 Dense Trajectory package: this package requires OpenCV compiled with ffmpeg.
-Other third party softwares: most of the third party codes are compiled for a 64 bit Linux machines, and can be used without need for re-compile. If ffmpeg and Matlab are both available, all features except Dense Trajectories can be used.
+Other third party softwares: most of the third party codes are compiled for a 64 bit Linux machines, and can be used without need for re-compile. If ffmpeg and Matlab are both available, all features except Dense Trajectories and HOG3D can be used. Dense Trajectories and HOG3D can be used on a linux 64 bit machine.
 
 
-*** Running Code ***
-In order to run feature extraction modules, you will need to run the following scripts in the features directory:
-run_image_ftr_extractor.m: which extracts image based features.
-run_motion_ftr_extractor.m: which extracts motion based features.
-Both scripts have comments that describe few variables that should be set when the code is ported. The only assumption of these scripts is that you videos are located in a directory. Features on all videos in the directory will be computed and they will be all stored in a target directory, more specifically in a subdirectory of target directory named with the feature name.
 
+*** Running Code ***
+run the following command for the first time on the ubuntu 12.04 64 bit:
+sudo apt-get install libjpeg62
+
+In order to run feature extraction modules, you will need to run the following python script in the features directory:
+run_matlab_code.py
+
+The script has comments that describe few variables that should be set when the code is ported. The only assumption of these scripts is that you videos are located in a directory. Features will be computed for all the videos in the directory and they will be all stored in a target directory defined in the script.

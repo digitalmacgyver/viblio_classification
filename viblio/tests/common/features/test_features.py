@@ -1,6 +1,6 @@
 import unittest
-from Viblio.common.features import features
-from Viblio.common import config
+from viblio.common.features import features
+from viblio.common import config
 import cv2
 import numpy
 
@@ -32,4 +32,4 @@ class TestFeatures(unittest.TestCase):
         pts_valid = numpy.sum(numpy.abs(numpy.array(pts).flatten()-numpy.array(self.gt_floc).flatten())) < 1e-6
         fdesc_valid = numpy.sum(numpy.abs(fdesc.flatten()-self.gt_fdesc.flatten())) < 1e-6
         self.assertTrue(pts_valid and fdesc_valid)
-        
+

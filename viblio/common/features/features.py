@@ -35,7 +35,7 @@ class RawFeatureDescriptor(BaseFeatureDescriptor):
 
 if __name__ == '__main__':
 
-    from Viblio.common import config
+    from viblio.common import config
     filename = config.resource_dir() + '/features/sample_img_001.jpg' 
     
     # read the image and convert to gray
