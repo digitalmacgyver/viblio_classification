@@ -2,7 +2,8 @@ function run_image_ftr_extractor(inputDir, ftrDir, tempAddress, codeDir, dataDir
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % the function extracts image based features on a directory of videos.
 % input:
-%   inputDir : indicates the input directory that contains videos
+%   inputDir : indicates the input directory that contains videos or list
+%   of frames
 %   ftrDir: indicates the target directory that will be used to store features
 %           each feature will be stored in subdirectory named with the feature name.
 %   tempAddress: indicate a path for temporary files
@@ -10,12 +11,11 @@ function run_image_ftr_extractor(inputDir, ftrDir, tempAddress, codeDir, dataDir
 %   dataDir: indicates the directory containing provided by SFU.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% inputDir = '/home/vmladmin/data/viblio_test/video';
-% ftrDir = '/home/vmladmin/data/viblio_test/feature';
+% inputDir = '/home/vmladmin/code/viblio/classification/matlab-codes/resources/input/sample_img_001.jpg';
+% ftrDir = '/home/vmladmin/code/viblio/classification/matlab-codes/resources/output';
 % tempAddress = '/home/vmladmin/tmp';
 % codeDir = '/home/vmladmin/code/viblio/classification/matlab-codes';
 % dataDir = '/home/vmladmin/code/viblio/classification/data';
-
 
 op.tmpAddress = tempAddress;
 op.codeDir    = codeDir;
@@ -41,7 +41,9 @@ OBDFeatNames = {'OBDScale', 'OBD_Max_Temporal_2', 'OBD_Max_Level_3_Horz', 'OBD_A
 
 %**************************************************************************
 
-fileList = dir(sprintf('%s/*.mp4', inputDir));
+[pathstr, videoName, ext] = fileparts(inputDir);
+
+fileList = [dir(sprintf('%s/*.mp4', inputDir)) dir(sprintf('%s/*.jpg', inputDir))];
 for f = 1:length(fileList)
     videoPath = sprintf('%s/%s', inputDir, fileList(f).name);
     

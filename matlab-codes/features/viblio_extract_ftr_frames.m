@@ -4,7 +4,8 @@ function out = viblio_extract_ftr_frames(videoPath, ftrDir, featNames, op)
 % op_ssim, op_spsift_hesaff, op_spsift_mser, op_geo_color.
 % 
 % Input:
-%   videoPath: Path to the video.
+%   videoPath: Path to the video/image
+%              if image it should be ".jpg" file
 %   ftrDir: Path to an empty directory that will contain the feature files.
 %   featNames: a cell array of feature names.
 %   supported names are: 'hog2x2', 'DenseSIFT', 'ssim', 'spsift_hesaff',
@@ -28,6 +29,13 @@ vl_setup('noprefix');
 
 fprintf('%s\n', videoPath);
 [pathstr, videoName, ext] = fileparts(videoPath);
+
+
+if strcmpi(ext, '.jpg')
+    singleImageFlag = 1;
+else
+    singleImageFlag = 0;
+end
 
 
 % settings for hog2x2 feature
@@ -165,11 +173,14 @@ conf.geo_color.outsideNorm        = false;
 
 
 % extract frames using ffmpeg
-imageDir = sprintf('%s/img', tmpDir);
-mkdir(imageDir);
-command = sprintf('ffmpeg -i %s  -r %0.2f -t  600 -ss  00:00:00 %s/%%06d.jpg', fixPath4Linux(videoPath), 1/op.tempRate, imageDir);
-system(command);
-%
+if ~singleImageFlag
+    imageDir = sprintf('%s/img', tmpDir);
+    mkdir(imageDir);
+    command = sprintf('ffmpeg -i %s  -r %0.2f -t  600 -ss  00:00:00 %s/%%06d.jpg', fixPath4Linux(videoPath), 1/op.tempRate, imageDir);
+    system(command);
+else
+    imageDir = pathstr;
+end
 
 
 fileList = dir( sprintf('%s/*.jpg', imageDir) );

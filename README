@@ -26,11 +26,14 @@ Other third party softwares: most of the third party codes are compiled for a 64
 
 
 
-*** Running Code ***
+*** Running Unit-test Code ***
 run the following command for the first time on the ubuntu 12.04 64 bit:
 sudo apt-get install libjpeg62
 
-In order to run feature extraction modules, you will need to run the following python script in the features directory:
-run_matlab_code.py
+In order to run unit-test for Matlab code, you will need to run the following python script in the test directory:
+test_matlab_image_ftr.py
 
-The script has comments that describe few variables that should be set when the code is ported. The only assumption of these scripts is that you videos are located in a directory. Features will be computed for all the videos in the directory and they will be all stored in a target directory defined in the script.
+There are very few parameters that should be set for test_matlab_image_ftr.py. The parameters are set in configure.py
+code next to the script. The following two parameters should be set:
+base_dir : the location of matlab code in system (classification directory)
+temp_dir : an empty directory for storing temporary files

@@ -23,11 +23,22 @@ tmpDir = sprintf('%s/%016.0f', op.tmpAddress, 1e16 * rand(1,1));
 % extract video name
 [pathstr, videoName, ext] = fileparts(videoPath);
 
+% check whether input is single image
+if strcmpi(ext, '.jpg')
+    singleImageFlag = 1;
+else
+    singleImageFlag = 0;
+end
+
 % extract frames using ffmpeg
-frameDir = sprintf('%s/img', tmpDir);
-mkdir(frameDir);
-command = sprintf('ffmpeg -i %s  -r %0.2f -t  900 -ss  00:00:00 %s/%%06d.jpg', fixPath4Linux(videoPath), 1/op.tempRate, frameDir);
-system(command);
+if singleImageFlag
+    frameDir = pathstr;
+else 
+    frameDir = sprintf('%s/img', tmpDir);
+    mkdir(frameDir);
+    command = sprintf('ffmpeg -i %s  -r %0.2f -t  900 -ss  00:00:00 %s/%%06d.jpg', fixPath4Linux(videoPath), 1/op.tempRate, frameDir);
+    system(command);
+end
 imageList = dir(sprintf('%s/*.jpg', frameDir));
 
 %%% process only the first 450 images (15min) 
