@@ -1,8 +1,12 @@
+import viblio
+import os
 # the location of matlab code in system (classification directory)
-base_dir = '/home/vmladmin/code/viblio/classification'
+#base_dir = '/home/vmladmin/code/viblio/classification'
+base_dir = os.path.join(os.path.dirname(viblio.__file__),'../')
 
 #an empty directory for storing temporary files
-temp_dir = '/home/vmladmin/tmp'
+#temp_dir = '/home/vmladmin/tmp'
+temp_dir='/tmp'
 
 # list of image based features used for unit-testing
 ftrList = ['op_hog2x2', 'op_DenseSIFT', 'op_ssim', 'op_spsift_hesaff', 'op_spsift_mser', 'op_geo_color',
