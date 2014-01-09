@@ -9,3 +9,6 @@ aws_secret_access_key = 'gPKpaSdHdHwgc45DRFEsZkTDpX9Y8UzJNjz0fQlX'
 def resource_dir():
     return base_dir + '/resources'
 
+def common_dir():
+    return base_dir + '/common'
+

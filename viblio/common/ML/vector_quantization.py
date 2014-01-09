@@ -5,7 +5,7 @@ import scipy.sparse as sp
 import os
 import math
 
-class vector_quantization():
+class vector_quantization(object):
     def hard_assignment(self,descrs, centers):
         xx = np.sum(descrs ** 2, 2)
         xc = descrs * centers.T
