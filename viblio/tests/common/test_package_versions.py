@@ -1,6 +1,7 @@
 import unittest
 import os
 import sys
+from viblio.common import config
 
 class TestPackageVersions(unittest.TestCase):
     
@@ -75,6 +76,14 @@ class TestPackageVersions(unittest.TestCase):
         from cv2 import __version__
         opencv_version = __version__
         self.assertEqual(self.packages['opencv'], opencv_version)
+    
+    def test_hog2x2_library(self):
+	library_path = config.common_dir() + '../bin/hog2D_library.so'
+        try:
+            open(library_path)
+        except Exception as e:
+            self.fail('run make.sh in ./viblio folder',e)
+            
             
     def tearDown(self):
         pass

@@ -55,11 +55,11 @@ class Hog2x2FeatureDescriptor(BaseFeatureDescriptor):
         super(Hog2x2FeatureDescriptor, self).__init__('hog2x2')
 
         # check if libraries exist:
-        library_path = config.common_dir() + '/features/lib/hog2D_library.so'
+        library_path = config.common_dir() + '../bin/hog2D_library.so'
         try:
             open(library_path)
         except Exception as e:
-            print 'run compile.sh in ./viblio/common/features/lib'
+            print 'run make.sh in ./viblio folder'
             raise(e)
 
         # load shared library and set input/output format for hog2D feature extractor
