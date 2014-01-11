@@ -55,7 +55,7 @@ class Hog2x2FeatureDescriptor(BaseFeatureDescriptor):
         super(Hog2x2FeatureDescriptor, self).__init__('hog2x2')
 
         # check if libraries exist:
-        library_path = config.common_dir() + '../bin/hog2D_library.so'
+        library_path = config.base_dir() + '/bin/hog2D_library.so'
         try:
             open(library_path)
         except Exception as e:

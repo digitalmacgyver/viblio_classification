@@ -24,7 +24,7 @@ class TestFeatures(unittest.TestCase):
         self.gt_fdesc = feature_data['fdesc']
         
     def test_surf_features(self):
-        surf_detector = features.SurfFeatureDetector(self.params)
+        surf_detector = features.SurfFeatureDetector()
         keypoints = surf_detector.run(self.img)
         surf_descriptor  = features.SurfFeatureDescriptor()
         floc, fdesc = surf_descriptor.run(self.img, keypoints)
