@@ -36,7 +36,7 @@ class TestHOG2DFeature(unittest.TestCase):
         hog2D_detector = features.Hog2x2FeatureDetector();
         hog2D_descriptor = features.Hog2x2FeatureDescriptor();
 
-        raw_feature = hog2D_descriptor.extractRawHog2DFeature(self.img)
+        raw_feature = hog2D_descriptor.extract_rawhog2d_feature(self.img)
         floc, fdesc = hog2D_descriptor.run(self.img)
 
         # extract codebooks
