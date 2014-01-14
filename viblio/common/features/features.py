@@ -69,7 +69,7 @@ class Hog2x2FeatureDescriptor(BaseFeatureDescriptor):
 
     def run(self, img):
         # extract raw hog2D on whole image
-        rawftr = self.extractRawHog2DFeature(img)
+        rawftr = self.extract_rawhog2d_feature(img)
 
         # extract num total bins in x and y.
         (xmax, ymax, ftr_dim) = rawftr.shape

@@ -1,7 +1,7 @@
 import unittest
 from viblio.common.features import features
 from viblio.common import config
-from viblio.common.ML import feature_pooling
+from viblio.common.ml import feature_pooling
 import scipy.io
 import numpy
 
