@@ -1,36 +1,63 @@
 from __future__ import division
 import numpy as np
 import scipy.spatial.distance
+import scipy.io
 
-class hard_quantization():
-    def __init__(self, centers):
-        self.centers = centers
 
-    def hard_assignment(self,descrs):
-        xx = np.sum(descrs ** 2, 2)
-        xc = descrs * self.centers.T
-        cc = np.sum(self.centers ** 2, 2)
-        dist =   (-2*(xc)+ xx)+ cc.T
+class Quantization(object):
+    # if model_filename is set centers and whitening
+    # variables will be set from the model_filename
+    def __init__(self, model_filename, params):
+        if not model_filename == '':
+            self.params = params
+
+            codebook_mat = scipy.io.loadmat(model_filename)
+            self.params['centers'] = codebook_mat['center']
+            if params['whiten'] == 1:
+                self.params['patchMean'] = codebook_mat['patchMean']
+                self.params['patchProj'] = codebook_mat['patchProj']
+
+    def project(self, descrs):
+        pass
+
+    def learn(self):
+        pass
+
+    def whiten(self, descrs):
+        if self.params['whiten'] == 1:
+            descrs = np.dot(descrs.transpose() - self.params['patchMean'], self.params['patchProj'])
+
+        return descrs
+
+
+class HardQuantization(Quantization):
+    def __init__(self, model_filename, params):
+        super(SoftKernelQuantization, self).__init__(model_filename, params)
+
+    def project(self, descrs):
+        descrs = self.whiten(descrs)
+
+        # compute the squared distance between every patch and cluster center
+        sqdist = scipy.spatial.distance.cdist(descrs, self.params['centers'], 'sqeuclidean')
+
         # find the closest center to each feature
-        tmp, q_ftr = np.min(dist, np.array([]), 2) # nargout=2
+        q_ftr = np.argmin(sqdist, 2)
         return q_ftr
 
 
-class soft_kernel_quantization():
-    def __init__(self, centers, gamma, kNN):
-        self.centers = centers
-        self.gamma = gamma
-        self.kNN = kNN # number of closest centers used in quantization
+class SoftKernelQuantization(Quantization):
+    def __init__(self, model_filename, params):
+        super(SoftKernelQuantization, self).__init__(model_filename, params)
 
+    def project(self, descrs):
+        descrs = self.whiten(descrs)
 
-    def soft_assignment(self, descrs):
         # extract number of center
-        (ncenter, ftr_dim) = self.centers.shape
+        (ncenter, ftr_dim) = self.params['centers'].shape
         (nftr, ftr_dim) = descrs.shape
 
         # compute the squared distance between every patch and cluster center
-        sqdist = scipy.spatial.distance.cdist(descrs, self.centers, 'sqeuclidean')
-
+        sqdist = scipy.spatial.distance.cdist(descrs, self.params['centers'], 'sqeuclidean')
 
         # initialize quantized feature
         quantize_ftr = np.zeros((nftr, ncenter))
@@ -38,13 +65,13 @@ class soft_kernel_quantization():
         for i in range(nftr):
             # find K closes centers
             ind = np.argsort(sqdist[i, :])
-            ind = ind[0:self.kNN]
+            ind = ind[0:self.params['kNN']]
 
             # extract distance to them
             dist = sqdist[i, ind]
 
             # compute the kernelized distance
-            dist = np.exp(- self.gamma * dist)
+            dist = np.exp(- self.params['gamma'] * dist)
 
             # L1 normalize distance
             dist = dist / (np.sum(dist) + 1e-8)
@@ -54,7 +81,7 @@ class soft_kernel_quantization():
         return quantize_ftr
     
 
-class spatial_pyramid():
+class SpatialPyramid():
     def __init__(self, max_level, branching_fact):
         self.max_level = max_level
         self.branching_fact = branching_fact
@@ -71,11 +98,11 @@ class spatial_pyramid():
     #   imageSize : a tuple of size 2 containing image size (Height, Width).
     #
     # output:
-    #   sp_ftr: concatenated sptial pyramid feature starting from the highest
+    #   sp_ftr: concatenated spatial pyramid feature starting from the highest
     #   level (zero) where in each level rows are traversed first (similar to
     #   Matlab).
     ####
-    def create_spatial_pyramid(self, ftr, ftr_pos, image_size):
+    def create(self, ftr, ftr_pos, image_size):
         # initialize the spatial pyramid feature
         spatial_ftr = list()
 

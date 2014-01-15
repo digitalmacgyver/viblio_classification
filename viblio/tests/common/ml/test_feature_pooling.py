@@ -1,4 +1,3 @@
-from pango import units_to_double
 import unittest
 from viblio.common.ml import feature_pooling
 from viblio.common import config
@@ -31,24 +30,20 @@ class TestFeaturePooling(unittest.TestCase):
         filename = config.resource_dir() + '/features/spatial_pyramidHOG2D.mat'
         self.gt_spatial_pyramidHOG2D = scipy.io.loadmat(filename)
 
-
     def test_soft_quantization(self):
         hog2D_detector = features.Hog2x2FeatureDetector()
         hog2D_descriptor = features.Hog2x2FeatureDescriptor()
 
         # extract codebooks
         codebook_file = config.resource_dir() + '/features/codebooks/' + hog2D_descriptor.params['codebook_file']
-        codebook_mat = scipy.io.loadmat(codebook_file)
-
-        # whiten feature
-        whitened_ftr = numpy.dot(self.fdesc.transpose() - codebook_mat['patchMean'], codebook_mat['patchProj'])
 
         # quantize feature
-        centers = codebook_mat['center']
-        gamma = float(hog2D_descriptor.params['gamma'])
-        kNN = int(hog2D_descriptor.params['kNN'])
-        vq = feature_pooling.SoftKernelQuantization(centers, gamma, kNN);
-        quantized_ftr = vq.assign(whitened_ftr)
+        q_params = dict()
+        q_params['kNN'] = int(hog2D_descriptor.params['kNN'])
+        q_params['gamma'] = float(hog2D_descriptor.params['gamma'])
+        q_params['whiten'] = int(hog2D_descriptor.params['whiten'])
+        vq = feature_pooling.SoftKernelQuantization(codebook_file, q_params)
+        quantized_ftr = vq.project(self.fdesc)
 
         # create spatial pyramid
         max_level = int(hog2D_descriptor.params['maxPyramidLevel'])
