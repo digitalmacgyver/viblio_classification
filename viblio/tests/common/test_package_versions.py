@@ -78,11 +78,11 @@ class TestPackageVersions(unittest.TestCase):
         self.assertEqual(self.packages['opencv'], opencv_version)
     
     def test_hog2x2_library(self):
-	library_path = config.common_dir() + '../bin/hog2D_library.so'
+        library_path = config.base_dir() + '/bin/hog2D_library.so'
         try:
             open(library_path)
         except Exception as e:
-            self.fail('run make.sh in ./viblio folder',e)
+            self.fail('run make.sh in ./viblio folder', e)
             
             
     def tearDown(self):
