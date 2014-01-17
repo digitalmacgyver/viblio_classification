@@ -8,7 +8,7 @@ from viblio.common import config
 from viblio.common.ml import feature_pooling
 import scipy.io
 import numpy
-
+import PIL
 from PIL import Image
 import urllib2 as urllib
 import cStringIO
@@ -16,6 +16,12 @@ import cStringIO
 fd = urllib.urlopen("https://object-classification.s3.amazonaws.com/JDOSFy1IU0I/images00052.png")
 image_file = cStringIO.StringIO(fd.read())
 im = Image.open(image_file)
+basewidth = 640
+wpercent = (basewidth/float(im.size[0]))
+hsize = int((float(im.size[1])*float(wpercent)))
+im = im.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
+
+
 print im.size
 pix = numpy.array(im)
 
