@@ -1,5 +1,5 @@
 import numpy as np
-from viblio.common.ml import learn_svm
+from viblio.common.ml import viblio_svm
 import unittest
 from viblio.common import config
 import pickle
@@ -20,23 +20,23 @@ class TestSVM(unittest.TestCase):
 
     def test_svm(self):
         # initialize kernel object
-        kernel = learn_svm.HIK([])
+        kernel = viblio_svm.HIK([])
 
         # initialize svm SKLearnSVM object
-        svm = learn_svm.SKLearnSMV(self.C, kernel)
+        sk_svm = viblio_svm.SKLearnSMV(self.C, kernel)
 
         # train svm using synthetic data
-        svm.learn(self.x, self.y)
+        sk_svm.learn(self.x, self.y)
 
         # save svm model to disk
-        svm.save(self.filename)
+        sk_svm.save(self.filename)
 
         # load model from disk
-        svm = learn_svm.SKLearnSMV(self.C, kernel=kernel)
-        svm.load(self.filename)
+        sk_svm = viblio_svm.SKLearnSMV(self.C, kernel=kernel)
+        sk_svm.load(self.filename)
 
         # classify the test data
-        prob = svm.project(self.x, 2 * self.x)
+        prob = sk_svm.predict(self.x, 2 * self.x)
 
         # check the result
         diff = np.sum(np.abs(prob - self.prob))
