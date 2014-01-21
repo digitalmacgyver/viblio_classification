@@ -11,6 +11,8 @@ import PIL
 from PIL import Image
 import urllib2 as urllib
 import cStringIO
+import tables
+import h5py
 
 #usage:
 #python feature_extractor.py -i soccer.txt -o soccer -inter_dir soccer
@@ -34,12 +36,12 @@ if __name__ == '__main__':
 
     x =[]
     labels =[]
-    labels=-numpy.ones(shape=(1,1))
-    x = numpy.zeros(shape=(1,20000))
+    #labels=-numpy.ones(shape=(1,1))
+    #x = numpy.zeros(shape=(1,20000))
 
     # Loop through each url and extract feature
     for index,line in enumerate(content):
-        if(index<len(content)-1):
+        try:
             fd = urllib.urlopen(line.split()[1])
             image_file = cStringIO.StringIO(fd.read())
             im = Image.open(image_file)
@@ -75,30 +77,49 @@ if __name__ == '__main__':
             sp_pyramid = feature_pooling.SpatialPyramid(max_level, branch_factor)
             (h, w, nc) = pix.shape
             spatial_ftr = sp_pyramid.create(quantized_ftr, floc, (h, w))
-        
-            x = numpy.vstack([x,spatial_ftr])
-            if int(line.split()[3])==0:
-                label=-1
+            
+            if(index ==0):
+                x = numpy.zeros(shape=spatial_ftr.shape)
+                print type(spatial_ftr)
+                x = spatial_ftr
+                if int(line.split()[3])==0:
+                    labels=-1
+                else:
+                    labels=1
             else:
-                label=1
+                x = numpy.vstack([x,spatial_ftr])
+                if int(line.split()[3])==0:
+                    label=-1
+                else:
+                    label=1
                 labels=numpy.vstack([labels,label])
+        except:
+            pass
 
         #print spatial_ftr.shape
 
 
+    # Saving in hdf format using Pytables
+    filename1 = results.inter_dir+'/'+results.output_filename+ '.hdf'
+    f1=tables.openFile(filename1,'w')
+    atom1=tables.Atom.from_dtype(x.dtype)
+    ds1 = f1.createCArray(f1.root, 'ftr', atom1, x.shape)
+    ds1[:]=x
+    f1.close()
+    filename2 = results.inter_dir+'/'+results.output_filename+'_labels.hdf'
+    f2=tables.openFile(filename2,'w')
+    atom2=tables.Atom.from_dtype(labels.dtype)
+    ds2 = f2.createCArray(f2.root, 'labels', atom2, labels.shape)
+    ds2[:]=labels
+    f2.close()
+    print x.shape
+    print labels.shape
 
-    filename1 = results.inter_dir+'/'+results.output_filename+ '.csv'
-    numpy.savetxt(filename1,x,delimiter=",")
-    filename2 = results.inter_dir+'/'+results.output_filename+'_labels.csv'
-    numpy.savetxt(filename2,labels,delimiter=",")
-    #print x.shape
-    #print labels.shape
+"""   Loading stored hdf5 files again into a numpy array
+    with h5py.File(filename1,'r')as f:
+        x =f['ftr'].value
+    print x.shape
 
-"""   Testing numpy save and load
-import numpy
-a = numpy.asarray([[1,2,3],[4,5,6],[7,8,9]])
-numpy.savetxt("foo.csv", a, delimiter=",")
-
-k = numpy.loadtxt(open("foo.csv","rb"),delimiter=",")
-print k
 """
+
+
