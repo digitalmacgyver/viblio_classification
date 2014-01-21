@@ -147,6 +147,31 @@ sudo apt-get install python-gdata
 sudo apt-get install python-beautifulsoup
 sudo easy_install selenium
 
+#Installation for PyTables(Hdf5 storage for features)
+
+#Sub dependencies - 1) numexpr
+wget http://numexpr.googlecode.com/files/numexpr-2.2.2.tar.gz
+tar -xzvf numexpr-2.2.2.tar.gz
+cd numexpr-2.2.2/
+python setup.py build
+sudo python setup.py install
+cd ..
+
+#sub dependencies - 2) HDF5
+sudo apt-get install libhdf5-serial-dev
+
+#sub dependencies - 3) Cython
+wget http://www.cython.org/release/Cython-0.20.tar.gz
+tar -xzvf Cython-0.20.tar.gz
+cd Cython-0.20/
+sudo python setup.py install
+cd ..
+
+#PyTables
+sudo easy_install tables
+
+
+
 
 
 
