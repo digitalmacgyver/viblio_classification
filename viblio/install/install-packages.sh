@@ -170,7 +170,8 @@ cd ..
 #PyTables
 sudo easy_install tables
 
-
+#h5py to read the stored hdf file
+sudo easy_install h5py
 
 
 
