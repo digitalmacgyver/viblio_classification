@@ -64,7 +64,7 @@ if __name__ == '__main__':
             filename=results.inter_dir+'/'+line.split()[0]+'_'+line.split()[1].split('/')[4].split('.')[0]+'.hdf'
             nmp.numpy2hdf(filename,spatial_ftr,'ftr')
             #Stored feature filename and its label are stored in a text file
-            filepointer.write('%s %s\n'%(filename.split('/')[1],line.split()[3]))
+            filepointer.write('%s %s %s\n'%(line.split()[1],filename.split('/')[1],line.split()[3]))
         except:
             pass
 
