@@ -1,10 +1,13 @@
 
+import sys
+sys.path.extend(['/home/rgolla/Desktop/classification'])
 
 import argparse
 import os
 from viblio.common.features import features
 from viblio.common import config
 from viblio.common.ml import feature_pooling
+from viblio.common.utils import numpyutils
 import scipy.io
 import numpy
 import PIL
@@ -35,64 +38,45 @@ if __name__ == '__main__':
         content = f.readlines()
 
     x =[]
-    labels =[]
-    #labels=-numpy.ones(shape=(1,1))
-    #x = numpy.zeros(shape=(1,20000))
+    # setup Hog2D features
+    hog2D_detector = features.Hog2x2FeatureDetector()
+    hog2D_descriptor = features.Hog2x2FeatureDescriptor()
 
+    # extract codebooks
+    codebook_file = config.resource_dir() + '/features/codebooks/' + hog2D_descriptor.params['codebook_file']
+    codebook_mat = scipy.io.loadmat(codebook_file)
+
+    #softkernel
+    q_params = dict()
+    q_params['kNN'] = int(hog2D_descriptor.params['kNN'])
+    q_params['gamma'] = float(hog2D_descriptor.params['gamma'])
+    q_params['whiten'] = int(hog2D_descriptor.params['whiten'])
+    vq = feature_pooling.SoftKernelQuantization(codebook_file, q_params)
+
+    #spatial pyramid
+    max_level = int(hog2D_descriptor.params['maxPyramidLevel'])
+    branch_factor = int(hog2D_descriptor.params['branchFact'])
+    sp_pyramid = feature_pooling.SpatialPyramid(max_level, branch_factor)
+
+    #numpy utils object
+    nmp =numpyutils.NumpyUtil()
+
+   
     # Loop through each url and extract feature
     for index,line in enumerate(content):
         try:
-            fd = urllib.urlopen(line.split()[1])
-            image_file = cStringIO.StringIO(fd.read())
-            im = Image.open(image_file)
-            basewidth = 640
-            wpercent = (basewidth/float(im.size[0]))
-            hsize = int((float(im.size[1])*float(wpercent)))
-            im = im.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
-        #print im.size
-            print str(index)+'/'+str(len(content)-1)
-            pix = numpy.array(im)
-        # extract hog 2d descriptors
-            hog2D_detector = features.Hog2x2FeatureDetector()
-            hog2D_descriptor = features.Hog2x2FeatureDescriptor()
-            raw_feature = hog2D_descriptor.extract(pix)
+            print str(index)
+            pix = nmp.url2numpy(line.split()[1],640)
             floc, fdesc = hog2D_descriptor.run(pix)
-
-        # extract codebooks
-            codebook_file = config.resource_dir() + '/features/codebooks/' + hog2D_descriptor.params['codebook_file']
-            codebook_mat = scipy.io.loadmat(codebook_file)
-
-
-        # quantize feature
-            q_params = dict()
-            q_params['kNN'] = int(hog2D_descriptor.params['kNN'])
-            q_params['gamma'] = float(hog2D_descriptor.params['gamma'])
-            q_params['whiten'] = int(hog2D_descriptor.params['whiten'])
-            vq = feature_pooling.SoftKernelQuantization(codebook_file, q_params)
+        # quantize feature 
             quantized_ftr = vq.project(fdesc)
-
         # create spatial pyramid
-            max_level = int(hog2D_descriptor.params['maxPyramidLevel'])
-            branch_factor = int(hog2D_descriptor.params['branchFact'])
-            sp_pyramid = feature_pooling.SpatialPyramid(max_level, branch_factor)
             (h, w, nc) = pix.shape
             spatial_ftr = sp_pyramid.create(quantized_ftr, floc, (h, w))
-            
             if(index ==0):
-                x = numpy.zeros(shape=spatial_ftr.shape)
-                print type(spatial_ftr)
                 x = spatial_ftr
-                if int(line.split()[3])==0:
-                    labels=-1
-                else:
-                    labels=1
             else:
                 x = numpy.vstack([x,spatial_ftr])
-                if int(line.split()[3])==0:
-                    label=-1
-                else:
-                    label=1
-                labels=numpy.vstack([labels,label])
         except:
             pass
 
@@ -106,14 +90,10 @@ if __name__ == '__main__':
     ds1 = f1.createCArray(f1.root, 'ftr', atom1, x.shape)
     ds1[:]=x
     f1.close()
-    filename2 = results.inter_dir+'/'+results.output_filename+'_labels.hdf'
-    f2=tables.openFile(filename2,'w')
-    atom2=tables.Atom.from_dtype(labels.dtype)
-    ds2 = f2.createCArray(f2.root, 'labels', atom2, labels.shape)
-    ds2[:]=labels
-    f2.close()
+    
     print x.shape
-    print labels.shape
+
+
 
 """   Loading stored hdf5 files again into a numpy array
     with h5py.File(filename1,'r')as f:
