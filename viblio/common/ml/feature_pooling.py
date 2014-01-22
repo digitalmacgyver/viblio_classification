@@ -7,13 +7,13 @@ from viblio.common import config
 
 
 class Quantization(object):
-    def __init__(self, secion, config_file=[]):
+    def __init__(self, section, config_file=[]):
         # read the content of config
         if not config_file:
             config_file = config.resource_dir() + '/features/feature.cfg'
 
         all_params = ConfigObj(config_file)
-        self.params = all_params[secion]
+        self.params = all_params[section]
 
         # find the codebook in resource dir
         center_path = config.resource_dir() + '/features/codebooks/' + self.params['codebook_file']
@@ -42,8 +42,8 @@ class Quantization(object):
 
 
 class HardQuantization(Quantization):
-    def __init__(self, secion, config_file=[]):
-        super(SoftKernelQuantization, self).__init__(secion, config_file)
+    def __init__(self, section, config_file=[]):
+        super(SoftKernelQuantization, self).__init__(section, config_file)
 
     def project(self, descrs):
         descrs = self.whiten(descrs)
