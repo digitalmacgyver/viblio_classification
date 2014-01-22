@@ -3,6 +3,7 @@ from PIL import Image
 import urllib2 as urllib
 import cStringIO
 import numpy
+import tables
 
 
 class NumpyUtil():
@@ -17,4 +18,12 @@ class NumpyUtil():
         im = im.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
         numpy_image = numpy.array(im)
 	return numpy_image
+
+    def numpy2hdf(self,filename,numpyarray,rootname):
+	f=tables.openFile(filename,'w')
+        atom=tables.Atom.from_dtype(numpyarray.dtype)
+	ds = f.createCArray(f.root, rootname, atom, numpyarray.shape)
+        ds[:]=numpyarray
+	f.close()
+    
     

@@ -1,7 +1,4 @@
 
-import sys
-sys.path.extend(['/home/rgolla/Desktop/classification'])
-
 import argparse
 import os
 from viblio.common.features import features
@@ -14,11 +11,10 @@ import PIL
 from PIL import Image
 import urllib2 as urllib
 import cStringIO
-import tables
 import h5py
 
 #usage:
-#python feature_extractor.py -i soccer.txt -o soccer -inter_dir soccer
+#python feature_extractor.py -i soccer_parse_results.txt -o soccer -inter_dir soccer
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -37,7 +33,6 @@ if __name__ == '__main__':
     with open(results.info_filename) as f:
         content = f.readlines()
 
-    x =[]
     # setup Hog2D features
     hog2D_detector = features.Hog2x2FeatureDetector()
     hog2D_descriptor = features.Hog2x2FeatureDescriptor()
@@ -50,6 +45,9 @@ if __name__ == '__main__':
 
     #numpy utils object
     nmp =numpyutils.NumpyUtil()
+    
+    #file pointer for output text file that stores correspondence
+    filepointer=open(results.inter_dir+'/'+results.inter_dir+'_features.txt','w')
    
     # Loop through each url and extract feature
     for index,line in enumerate(content):
@@ -58,37 +56,28 @@ if __name__ == '__main__':
             pix = nmp.url2numpy(line.split()[1],640)
             floc, fdesc = hog2D_descriptor.run(pix)
             # quantize feature
-            quantized_ftr = vq.project(fdesc)
+            quantized_ftr = vq.project(fdesc.transpose())
             # create spatial pyramid
             (h, w, nc) = pix.shape
             spatial_ftr = sp_pyramid.create(quantized_ftr, floc, (h, w))
-            if(index ==0):
-                x = spatial_ftr
-            else:
-                x = numpy.vstack([x,spatial_ftr])
+            #storing each feature as a single hdf file
+            filename=results.inter_dir+'/'+line.split()[0]+'_'+line.split()[1].split('/')[4].split('.')[0]+'.hdf'
+            nmp.numpy2hdf(filename,spatial_ftr,'ftr')
+            #Stored feature filename and its label are stored in a text file
+            filepointer.write('%s %s\n'%(filename.split('/')[1],line.split()[3]))
         except:
             pass
 
-        #print spatial_ftr.shape
+    filepointer.close()
 
-
-    # Saving in hdf format using Pytables
-    filename1 = results.inter_dir+'/'+results.output_filename+ '.hdf'
-    f1=tables.openFile(filename1,'w')
-    atom1=tables.Atom.from_dtype(x.dtype)
-    ds1 = f1.createCArray(f1.root, 'ftr', atom1, x.shape)
-    ds1[:]=x
-    f1.close()
-    
-    print x.shape
-
-
-
-"""   Loading stored hdf5 files again into a numpy array
+        
+"""
+   #Loading stored hdf5 files again into a numpy array
     with h5py.File(filename1,'r')as f:
         x =f['ftr'].value
     print x.shape
-
 """
+
+
 
 
