@@ -31,11 +31,11 @@ class TestFeaturePooling(unittest.TestCase):
 
     def test_soft_quantization(self):
         # quantize feature
-        vq = feature_pooling.SoftKernelQuantization('hog2x2')
+        vq = feature_pooling.SoftKernelQuantization(section='hog2x2')
         quantized_ftr = vq.project(self.fdesc.transpose())
 
         # create spatial pyramid
-        sp_pyramid = feature_pooling.SpatialPyramid('hog2x2')
+        sp_pyramid = feature_pooling.SpatialPyramid(section='hog2x2')
         (w, h, nc) = self.img.shape
         spatial_ftr = sp_pyramid.create(quantized_ftr, self.floc, (w, h))
 

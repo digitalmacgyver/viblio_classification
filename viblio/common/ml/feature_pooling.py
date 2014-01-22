@@ -7,9 +7,11 @@ from viblio.common import config
 
 
 class Quantization(object):
-    def __init__(self, secion):
+    def __init__(self, secion, config_file=[]):
         # read the content of config
-        config_file = config.resource_dir() + '/features/feature.cfg'
+        if not config_file:
+            config_file = config.resource_dir() + '/features/feature.cfg'
+
         all_params = ConfigObj(config_file)
         self.params = all_params[secion]
 
@@ -40,8 +42,8 @@ class Quantization(object):
 
 
 class HardQuantization(Quantization):
-    def __init__(self, secion):
-        super(SoftKernelQuantization, self).__init__(secion)
+    def __init__(self, secion, config_file=[]):
+        super(SoftKernelQuantization, self).__init__(secion, config_file)
 
     def project(self, descrs):
         descrs = self.whiten(descrs)
@@ -55,9 +57,9 @@ class HardQuantization(Quantization):
 
 
 class SoftKernelQuantization(Quantization):
-    def __init__(self, section):
+    def __init__(self, section, config_file=[]):
         # initialize the super class
-        super(SoftKernelQuantization, self).__init__(section)
+        super(SoftKernelQuantization, self).__init__(section, config_file)
 
         # for soft quantization kNN and gamma variables should be
         # extracted as well.
@@ -98,9 +100,11 @@ class SoftKernelQuantization(Quantization):
     
 
 class SpatialPyramid():
-    def __init__(self, section):
+    def __init__(self, section, config_file=[]):
         # read the content of config
-        config_file = config.resource_dir() + '/features/feature.cfg'
+        if not config_file:
+            config_file = config.resource_dir() + '/features/feature.cfg'
+
         all_params = ConfigObj(config_file)
         all_params = all_params[section]
 
