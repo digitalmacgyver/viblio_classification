@@ -2,20 +2,29 @@ from __future__ import division
 import numpy as np
 import scipy.spatial.distance
 import scipy.io
+from configobj import ConfigObj
+from viblio.common import config
 
 
 class Quantization(object):
-    # if model_filename is set centers and whitening
-    # variables will be set from the model_filename
-    def __init__(self, model_filename, params):
-        if not model_filename == '':
-            self.params = params
+    def __init__(self, secion):
+        # read the content of config
+        config_file = config.resource_dir() + '/features/feature.cfg'
+        all_params = ConfigObj(config_file)
+        self.params = all_params[secion]
 
-            codebook_mat = scipy.io.loadmat(model_filename)
-            self.params['centers'] = codebook_mat['center']
-            if params['whiten'] == 1:
-                self.params['patchMean'] = codebook_mat['patchMean']
-                self.params['patchProj'] = codebook_mat['patchProj']
+        # find the codebook in resource dir
+        center_path = config.resource_dir() + '/features/codebooks/' + self.params['codebook_file']
+
+        # load the codebook file
+        codebook_mat = scipy.io.loadmat(center_path)
+        self.params['centers'] = codebook_mat['center']
+
+        # if whitenning is required store patch mean and patch projection bases.
+        self.params['whiten'] = int(self.params['whiten'])
+        if self.params['whiten'] == 1:
+            self.params['patchMean'] = codebook_mat['patchMean']
+            self.params['patchProj'] = codebook_mat['patchProj']
 
     def project(self, descrs):
         pass
@@ -25,14 +34,14 @@ class Quantization(object):
 
     def whiten(self, descrs):
         if self.params['whiten'] == 1:
-            descrs = np.dot(descrs.transpose() - self.params['patchMean'], self.params['patchProj'])
+            descrs = np.dot(descrs - self.params['patchMean'], self.params['patchProj'])
 
         return descrs
 
 
 class HardQuantization(Quantization):
-    def __init__(self, model_filename, params):
-        super(SoftKernelQuantization, self).__init__(model_filename, params)
+    def __init__(self, secion):
+        super(SoftKernelQuantization, self).__init__(secion)
 
     def project(self, descrs):
         descrs = self.whiten(descrs)
@@ -46,8 +55,14 @@ class HardQuantization(Quantization):
 
 
 class SoftKernelQuantization(Quantization):
-    def __init__(self, model_filename, params):
-        super(SoftKernelQuantization, self).__init__(model_filename, params)
+    def __init__(self, section):
+        # initialize the super class
+        super(SoftKernelQuantization, self).__init__(section)
+
+        # for soft quantization kNN and gamma variables should be
+        # extracted as well.
+        self.params['kNN'] = int(self.params['kNN'])
+        self.params['gamma'] = float(self.params['gamma'])
 
     def project(self, descrs):
         descrs = self.whiten(descrs)
@@ -58,6 +73,7 @@ class SoftKernelQuantization(Quantization):
 
         # compute the squared distance between every patch and cluster center
         sqdist = scipy.spatial.distance.cdist(descrs, self.params['centers'], 'sqeuclidean')
+
 
         # initialize quantized feature
         quantize_ftr = np.zeros((nftr, ncenter))
@@ -82,9 +98,15 @@ class SoftKernelQuantization(Quantization):
     
 
 class SpatialPyramid():
-    def __init__(self, max_level, branching_fact):
-        self.max_level = max_level
-        self.branching_fact = branching_fact
+    def __init__(self, section):
+        # read the content of config
+        config_file = config.resource_dir() + '/features/feature.cfg'
+        all_params = ConfigObj(config_file)
+        all_params = all_params[section]
+
+        # extract maximum pyramid level and branching factor
+        self.max_level = int(all_params['maxPyramidLevel'])
+        self.branching_fact = int(all_params['branchFact'])
 
     ####
     # this function creates a spatial pyramid from quantized feature.

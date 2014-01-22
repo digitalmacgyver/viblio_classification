@@ -42,25 +42,14 @@ if __name__ == '__main__':
     hog2D_detector = features.Hog2x2FeatureDetector()
     hog2D_descriptor = features.Hog2x2FeatureDescriptor()
 
-    # extract codebooks
-    codebook_file = config.resource_dir() + '/features/codebooks/' + hog2D_descriptor.params['codebook_file']
-    codebook_mat = scipy.io.loadmat(codebook_file)
+    # initialize quantization object
+    vq = feature_pooling.SoftKernelQuantization('hog2x2')
 
-    #softkernel
-    q_params = dict()
-    q_params['kNN'] = int(hog2D_descriptor.params['kNN'])
-    q_params['gamma'] = float(hog2D_descriptor.params['gamma'])
-    q_params['whiten'] = int(hog2D_descriptor.params['whiten'])
-    vq = feature_pooling.SoftKernelQuantization(codebook_file, q_params)
-
-    #spatial pyramid
-    max_level = int(hog2D_descriptor.params['maxPyramidLevel'])
-    branch_factor = int(hog2D_descriptor.params['branchFact'])
-    sp_pyramid = feature_pooling.SpatialPyramid(max_level, branch_factor)
+    #initialize spatial pyramid object
+    sp_pyramid = feature_pooling.SpatialPyramid('hog2x2')
 
     #numpy utils object
     nmp =numpyutils.NumpyUtil()
-
    
     # Loop through each url and extract feature
     for index,line in enumerate(content):
@@ -68,9 +57,9 @@ if __name__ == '__main__':
             print str(index)
             pix = nmp.url2numpy(line.split()[1],640)
             floc, fdesc = hog2D_descriptor.run(pix)
-        # quantize feature 
+            # quantize feature
             quantized_ftr = vq.project(fdesc)
-        # create spatial pyramid
+            # create spatial pyramid
             (h, w, nc) = pix.shape
             spatial_ftr = sp_pyramid.create(quantized_ftr, floc, (h, w))
             if(index ==0):

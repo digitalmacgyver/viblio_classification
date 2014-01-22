@@ -1,22 +1,28 @@
 import numpy as np
 from viblio.common.ml import viblio_svm
-import unittest
 from viblio.common import config
-import pickle
+import numpy.random as nprand
+import unittest
 import os
+import math
 
 class TestSVM(unittest.TestCase):
     def setUp(self):
-        self.x = np.array([[2, 0], [4, 0], [0, 2], [0, 4]])
-        self.y = np.array([-1, -1, 1, 1])
-        self.C = 1e1
-        self.filename = config.resource_dir() + '/ml/svm.model'
+        ndata = 1000
+        ndim = 200
+        positive_samples = 0.5 * nprand.randn(ndata, ndim) + 4
+        negative_samples = 0.5 * nprand.randn(ndata, ndim) + 0
 
-        prob_filename = config.resource_dir() + '/ml/hik_svm.prob'
-        output = open(prob_filename, 'rb')
-        prob_data = pickle.load(output)
-        output.close()
-        self.prob = prob_data[0]
+        half = math.floor(ndata/2)
+        self.x_train = np.vstack((positive_samples[0:half, :],  negative_samples[0:half, :]))
+        self.y_train = np.hstack((np.ones(half), -1 * np.ones(half)))
+
+        self.x_test = np.vstack((positive_samples[half:, :],  negative_samples[half:, :]))
+        self.y_test = np.hstack((np.ones(ndata - half), -1 * np.ones(ndata - half)))
+        self.C = 1e1
+
+
+        self.filename = config.resource_dir() + '/ml/svm.model'
 
     def test_svm(self):
         # initialize kernel object
@@ -26,7 +32,7 @@ class TestSVM(unittest.TestCase):
         sk_svm = viblio_svm.SKLearnSMV(self.C, kernel)
 
         # train svm using synthetic data
-        sk_svm.learn(self.x, self.y)
+        sk_svm.learn(self.x_train, self.y_train)
 
         # save svm model to disk
         sk_svm.save(self.filename)
@@ -36,10 +42,13 @@ class TestSVM(unittest.TestCase):
         sk_svm.load(self.filename)
 
         # classify the test data
-        prob = sk_svm.predict(self.x, 2 * self.x)
+        prob = sk_svm.predict(self.x_train, 2 * self.x_test)
 
-        # check the result
-        diff = np.sum(np.abs(prob - self.prob))
+        predict_label = np.zeros((prob.shape[0], ))
+        predict_label[prob >= 0.5] = 1
+        predict_label[prob < 0.5] = -1
+
+        diff = np.sum(np.abs(predict_label - self.y_test))
         self.assertTrue(diff < 1e-6)
 
     def tearDown(self):

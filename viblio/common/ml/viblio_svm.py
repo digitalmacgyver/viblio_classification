@@ -53,7 +53,7 @@ class SKLearnSMV(SVMClassifier):
     def predict(self, train_features, test_feature):
         kernel = self.kernel.compute(train_features, test_feature)
         prob = self.clf.predict_proba(kernel)
-        return prob[:, self.clf._label==1]
+        return prob[:, self.clf._label==1].reshape(test_feature.shape[0])
 
     def load(self, filename):
         inputfile = open(filename, 'rb')

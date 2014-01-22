@@ -5,9 +5,9 @@ import numpy
 import ctypes
 
 class BaseFeatureDetector(object):
-    def __init__(self,ftr_name):
+    def __init__(self, ftr_name):
         config_file = config.resource_dir() + '/features/feature.cfg'
-        all_params =  ConfigObj(config_file)
+        all_params = ConfigObj(config_file)
         self.params = all_params[ftr_name]
 
                    

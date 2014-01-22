@@ -17,42 +17,34 @@ class TestFeaturePooling(unittest.TestCase):
 
         # path to the patched HOG2D feature extracted by matlab code
         filename = config.resource_dir() + '/features/patchHOG2D.mat'
-        gt_patchedHOG2D = scipy.io.loadmat(filename)
-        self.floc = gt_patchedHOG2D['frames']
-        self.fdesc = gt_patchedHOG2D['descrs']
-
+        gt_patched_hog2d = scipy.io.loadmat(filename)
+        self.floc = gt_patched_hog2d['frames']
+        self.fdesc = gt_patched_hog2d['descrs']
 
         # path to the quantized HOG2D feature extracted by matlab code
         filename = config.resource_dir() + '/features/quantizedHOG2D.mat'
-        self.gt_quantizedHOG2D = scipy.io.loadmat(filename)
+        self.gt_quantized_hog2d = scipy.io.loadmat(filename)
 
         # path to the spatial pyramid HOG2D feature extracted by matlab code
         filename = config.resource_dir() + '/features/spatial_pyramidHOG2D.mat'
-        self.gt_spatial_pyramidHOG2D = scipy.io.loadmat(filename)
+        self.gt_spatial_pyramid_hog2d = scipy.io.loadmat(filename)
 
     def test_soft_quantization(self):
-        hog2D_detector = features.Hog2x2FeatureDetector()
-        hog2D_descriptor = features.Hog2x2FeatureDescriptor()
-
-        # extract codebooks
-        codebook_file = config.resource_dir() + '/features/codebooks/' + hog2D_descriptor.params['codebook_file']
-
         # quantize feature
-        q_params = dict()
-        q_params['kNN'] = int(hog2D_descriptor.params['kNN'])
-        q_params['gamma'] = float(hog2D_descriptor.params['gamma'])
-        q_params['whiten'] = int(hog2D_descriptor.params['whiten'])
-        vq = feature_pooling.SoftKernelQuantization(codebook_file, q_params)
-        quantized_ftr = vq.project(self.fdesc)
+        vq = feature_pooling.SoftKernelQuantization('hog2x2')
+        quantized_ftr = vq.project(self.fdesc.transpose())
 
         # create spatial pyramid
-        max_level = int(hog2D_descriptor.params['maxPyramidLevel'])
-        branch_factor = int(hog2D_descriptor.params['branchFact'])
-        sp_pyramid = feature_pooling.SpatialPyramid(max_level, branch_factor)
+        sp_pyramid = feature_pooling.SpatialPyramid('hog2x2')
         (w, h, nc) = self.img.shape
         spatial_ftr = sp_pyramid.create(quantized_ftr, self.floc, (w, h))
 
-        diff_quantize = numpy.sum(numpy.abs( quantized_ftr.flatten() - self.gt_quantizedHOG2D['q_ftr'].flatten() ))
-        diff_spatial_ftr = numpy.sum(numpy.abs( spatial_ftr.flatten() - self.gt_spatial_pyramidHOG2D['sp_ftr'].flatten() ))
+        # compute the difference
+        diff_quantize = numpy.sum(numpy.abs(quantized_ftr.flatten() - self.gt_quantized_hog2d['q_ftr'].flatten()))
+        diff_spatial_ftr = numpy.sum(numpy.abs(spatial_ftr.flatten() - self.gt_spatial_pyramid_hog2d['sp_ftr'].flatten()))
 
         self.assertTrue(diff_quantize < 1e-6 and diff_spatial_ftr < 1e-6)
+
+
+if __name__ == '__main__':
+    unittest.main()
