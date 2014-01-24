@@ -1,5 +1,7 @@
 import numpy as np
 from sklearn import svm
+from sklearn import metrics
+from sklearn import cross_validation
 import pickle
 
 
@@ -44,7 +46,7 @@ class SVMClassifier(object):
 class SKLearnSMV(SVMClassifier):
     def __init__(self, C, kernel):
         super(SKLearnSMV, self).__init__(C, kernel)
-        self.clf = svm.SVC(kernel='precomputed', C=self.C, probability=True, class_weight='auto', random_state=30)
+        self.clf = svm.SVC(kernel='precomputed', C=self.C, probability=True, class_weight='auto', cache_size=500, random_state=30, verbose=False)
 
     def learn(self, features, labels):
         kernel = self.kernel.compute(features, features)
@@ -62,3 +64,9 @@ class SKLearnSMV(SVMClassifier):
         self.kernel = temp.kernel
         self.clf = temp.clf
         inputfile.close()
+
+    def cross_validate(self, features, labels, n_fold):
+        kernel = self.kernel.compute(features, features)
+        scores = cross_validation.cross_val_score(self.clf, kernel, labels, cv=n_fold, scoring='average_precision')
+
+        return scores
