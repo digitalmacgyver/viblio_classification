@@ -21,6 +21,7 @@ if __name__ == '__main__':
     labels=[]
     for index,line in enumerate(content):
 	try:
+                print str(index)
 		hdf5file=line.split()[1]
 		l = 1 if int(line.split()[2]) else -1
 		label=numpy.array(l)
@@ -29,18 +30,19 @@ if __name__ == '__main__':
 			with h5py.File(hdf5path,'r')as f:
         			feature =f['ftr'].value
 				if(index==0):
-					x=feature
-					labels=label
+					x=numpy.zeros(shape=(len(content),feature.size))
+					x[index] = feature
+					labels=-numpy.ones(shape=(len(content),1))
+					labels[index]=label
 				else:
-					x = numpy.vstack([x,feature])
-					labels=numpy.vstack([labels,label])
+					x[index] = feature
+					labels[index]=label
 				
 		
 	except:
 		pass
   
-
-
+    
     # initialize kernel object
     kernel = viblio_svm.HIK([])
 
@@ -52,6 +54,7 @@ if __name__ == '__main__':
 
     # save svm model to disk in the same folder that is passed through info_folder
     model_filename= os.path.normpath(results.info_folder)+'/'+os.path.basename(results.info_folder)+'.model'
+    
     sk_svm.save(model_filename)
 
 
