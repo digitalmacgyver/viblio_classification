@@ -67,6 +67,6 @@ class SKLearnSMV(SVMClassifier):
 
     def cross_validate(self, features, labels, n_fold):
         kernel = self.kernel.compute(features, features)
-        scores = cross_validation.cross_val_score(self.clf, kernel, labels, cv=n_fold, scoring='average_precision')
+        scores = cross_validation.cross_val_score(self.clf, kernel, labels, cv=n_fold)
 
         return scores

@@ -1,4 +1,5 @@
-
+import sys
+sys.path.extend(['/home/rgolla/classification'])
 import argparse
 import os
 import h5py
@@ -42,19 +43,40 @@ if __name__ == '__main__':
 	except:
 		pass
   
-    
+        
+    print x.shape
+    print labels.shape
+    print labels
+
+    print "done with labels"
     # initialize kernel object
     kernel = viblio_svm.HIK([])
 
     # initialize svm SKLearnSVM object
     sk_svm = viblio_svm.SKLearnSMV(1e1, kernel)
-
+    print "starting training"
     # train svm using the data extracted
     sk_svm.learn(x,labels)
 
     # save svm model to disk in the same folder that is passed through info_folder
     model_filename= os.path.normpath(results.info_folder)+'/'+os.path.basename(results.info_folder)+'.model'
-    
+    print "saving model"
     sk_svm.save(model_filename)
+    
+  
+    #cross validation
+    Cs = [1e-4, 1e-3, 1e-2, 1e-1, 1e0,1e1]
+    
+
+    scores = []
+    for c in Cs:
+        # initialize svm SKLearnSVM object
+	kernel = viblio_svm.HIK([])
+        sk_svm = viblio_svm.SKLearnSMV(c, kernel)
+       
+        score = sk_svm.cross_validate(x,labels, 5)
+        scores.append(score)
+
+    print scores
 
 
