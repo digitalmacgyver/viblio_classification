@@ -64,7 +64,7 @@ class TestSVM(unittest.TestCase):
 
             # cross validate svm using synthetic data
             score = sk_svm.cross_validate(self.x_train, self.y_train, 5)
-            scores.append(score)
+            scores.append(np.mean(score))
 
         diff = np.abs(np.mean(scores) - 1)
         self.assertTrue(diff < 1e-6)

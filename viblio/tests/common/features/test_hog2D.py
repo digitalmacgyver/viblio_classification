@@ -22,8 +22,8 @@ class TestHOG2DFeature(unittest.TestCase):
         self.gt_patchedHOG2D = scipy.io.loadmat(filename)
 
     def test_hog2D_features(self):
-        hog2D_detector = features.Hog2x2FeatureDetector();
-        hog2D_descriptor = features.Hog2x2FeatureDescriptor();
+        hog2D_detector = features.Hog2x2FeatureDetector()
+        hog2D_descriptor = features.Hog2x2FeatureDescriptor()
 
         raw_feature = hog2D_descriptor.extract(self.img)
         floc, fdesc = hog2D_descriptor.run(self.img)
@@ -34,3 +34,6 @@ class TestHOG2DFeature(unittest.TestCase):
 
         self.assertTrue(diff_raw < 1e-6 and diff_loc < 1e-6 and diff_desc < 1e-6)
 
+
+if __name__ == '__main__':
+    unittest.main()
