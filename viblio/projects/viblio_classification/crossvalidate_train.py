@@ -1,48 +1,23 @@
 import sys
-sys.path.extend(['/home/rgolla/classification'])
+sys.path.extend(['/home/rgolla/Desktop/classification'])
 import argparse
 import os
 import h5py
 import numpy
 import numpy.random
 from viblio.common.ml import viblio_svm
+from viblio.common.utils import numpyutils
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', action='store', dest='info_folder', help='Folder path that has all features stored with corresponding files (the folder given to store feature vectors)')
     results = parser.parse_args()
-
     filename = os.path.normpath(results.info_folder) + '/' + os.path.basename(results.info_folder) + '_features.txt'
     #filename = os.path.normpath(results.info_folder) + '/' + os.path.basename(results.info_folder) + '_features_temp.txt'
+    # Load features and labels
+    nmp =numpyutils.NumpyUtil()
+    x,labels = nmp.text2numpy_aggregate(results.info_folder,filename,'ftr')
     
-    # read text file containing correspondence of feature_vectors, labels and url
-    with open(filename) as f:
-        content = f.readlines()
-
-    # Load the features in 'x' and class labels in 'labels' 
-    x = []
-    labels = numpy.ones(shape=len(content))
-    for index, line in enumerate(content):
-        try:
-            #print str(index)
-            hdf5file = line.split()[1]
-            label = 1 if int(line.split()[2]) else -1
-            hdf5path = os.path.normpath(results.info_folder) + '/' + hdf5file
-            if os.path.isfile(hdf5path):
-                with h5py.File(hdf5path, 'r')as f:
-                    feature = f['ftr'].value
-                    if index == 0:
-                        x = numpy.zeros(shape=(len(content), feature.size))
-                        x[index] = feature
-                        labels[index] = label
-                    else:
-                        x[index] = feature
-                        labels[index] = label
-        except:
-            pass
-
-    #print x.shape
-    #print labels.shape
 
     print "done with loading data"
     print "# positive =", numpy.sum(labels == 1)
@@ -78,3 +53,4 @@ if __name__ == '__main__':
     model_filename = os.path.normpath(results.info_folder)+'/'+os.path.basename(results.info_folder)+'.model'
     print "saving model"
     sk_svm.save(model_filename)
+
