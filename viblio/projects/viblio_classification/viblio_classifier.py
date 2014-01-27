@@ -1,5 +1,4 @@
-import sys
-sys.path.extend(['/home/rgolla/Desktop/classification'])
+
 import argparse
 import os
 import numpy
