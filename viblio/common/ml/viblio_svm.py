@@ -50,12 +50,20 @@ class SKLearnSMV(SVMClassifier):
 
     def learn(self, features, labels):
         kernel = self.kernel.compute(features, features)
+        self.training_data = features
         self.clf.fit(kernel, labels)
 
-    def predict(self, train_features, test_feature):
-        kernel = self.kernel.compute(train_features, test_feature)
+    def predict(self, test_feature):
+        kernel = self.kernel.compute(test_feature, self.training_data)
         prob = self.clf.predict_proba(kernel)
-        return prob[:, self.clf._label==1].reshape(test_feature.shape[0])
+        prob = prob[:, self.clf._label==1].reshape(test_feature.shape[0])
+
+        # compute labels
+        predict_label = np.zeros((prob.shape[0], ))
+        predict_label[prob >= 0.5] = 1
+        predict_label[prob < 0.5] = -1
+
+        return prob, predict_label
 
     def load(self, filename):
         inputfile = open(filename, 'rb')
@@ -63,6 +71,7 @@ class SKLearnSMV(SVMClassifier):
         self.C = temp.C
         self.kernel = temp.kernel
         self.clf = temp.clf
+        self.training_data = temp.training_data
         inputfile.close()
 
     def cross_validate(self, features, labels, n_fold):

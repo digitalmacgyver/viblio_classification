@@ -35,7 +35,8 @@ class NumpyUtil():
              content = f.readlines()
          # Load the features in 'x' and class labels in 'labels' 
          x=[]
-         labels =[]
+         labels = numpy.zeros(shape=len(content))
+         file_ids = []
          for index, line in enumerate(content):
              try:
                  hdf5file = line.split()[1]
@@ -44,16 +45,42 @@ class NumpyUtil():
                  if os.path.isfile(hdf5path):
                      with h5py.File(hdf5path, 'r')as f:
                          feature = f[rootname].value
+
+                     file_ids.append(hdf5file)
+                     labels[index] = label
                      if index == 0:
                          x = numpy.zeros(shape=(len(content), feature.size))
                          x[index] = feature
-                         labels=-numpy.ones(shape=(len(content),1))
-                         labels[index] = label
                      else:
                          x[index] = feature
-                         labels[index] = label
 
              except:
                  pass
              
-         return (x,labels)
+         return (file_ids, x, labels)
+
+    def write_labels2file(self, filename, file_ids, prob, labels):
+        filepointer=open(filename,'w')
+        for i in range(len(file_ids)):
+            filepointer.write('%s %f %d\n'%(file_ids[i], prob[i], labels[i]))
+        filepointer.close()
+
+    def read_labels_from_file(self, filename):
+        with open(filename) as f:
+             content = f.readlines()
+        try:
+            labels = numpy.zeros(shape=len(content))
+            probs = numpy.zeros(shape=len(content))
+            file_ids = []
+            for index, line in enumerate(content):
+                file_id = line.split()[0]
+                file_ids.append(file_id)
+
+                probs[index] = float(line.split()[1])
+
+                label = 1 if int(line.split()[2]) == 1 else -1
+                labels[index] = label
+
+        except:
+            pass
+        return file_ids, probs, labels

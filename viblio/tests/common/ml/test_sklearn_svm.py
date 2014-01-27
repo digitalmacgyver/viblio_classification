@@ -44,11 +44,7 @@ class TestSVM(unittest.TestCase):
         sk_svm.load(self.filename)
 
         # classify the test data
-        prob = sk_svm.predict(self.x_train, self.x_test)
-
-        predict_label = np.zeros((prob.shape[0], ))
-        predict_label[prob >= 0.5] = 1
-        predict_label[prob < 0.5] = -1
+        prob, predict_label = sk_svm.predict(self.x_test)
 
         diff = np.sum(np.abs(predict_label - self.y_test))
         self.assertTrue(diff < 1e-6)
