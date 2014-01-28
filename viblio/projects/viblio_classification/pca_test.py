@@ -24,8 +24,8 @@ if __name__ == '__main__':
     nmp = numpyutils.NumpyUtil()
     file_ids, x, labels = nmp.text2numpy_aggregate(results.info_folder, filename, 'ftr')
     print "starting pca training"
-    n_components=min(x.shape[0],x.shape[1])
-    pca_x = decomposition.PCA(n_components=450).fit_transform(x)
+    n_comp=min(x.shape[0],x.shape[1])
+    pca_x = decomposition.PCA(n_components=n_comp).fit_transform(x)
     print "original x: "+ x.shape()+ "  reduced x : "+ pca_x.shape()
     
     
