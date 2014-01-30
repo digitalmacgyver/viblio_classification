@@ -53,7 +53,7 @@ if __name__ == '__main__':
     for index,line in enumerate(content):
         try:
             print str(index)
-            pix = nmp.url2numpy(line.split()[1],640)
+            pix = nmp.imagefile2numpy(line.split()[1],640)
             floc, fdesc = hog2D_descriptor.run(pix)
             # quantize feature
             quantized_ftr = vq.project(fdesc.transpose())
