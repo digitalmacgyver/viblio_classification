@@ -13,10 +13,13 @@ import os
 class NumpyUtil():
     def __init__(self):
         pass
-    def url2numpy(self,url,basewidth):
-	fd = urllib.urlopen(url)
-        image_file = cStringIO.StringIO(fd.read())
-        im = Image.open(image_file)
+    def imagefile2numpy(self,path,basewidth,local_file=False):
+        if local_file:
+            im = Image.open(path)
+        else:
+            fd = urllib.urlopen(path)
+            image_file = cStringIO.StringIO(fd.read())
+            im = Image.open(image_file)
         wpercent = (basewidth/float(im.size[0]))
         hsize = int((float(im.size[1])*float(wpercent)))
         im = im.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
