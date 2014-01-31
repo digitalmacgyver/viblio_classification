@@ -1,3 +1,5 @@
+import sys
+sys.path.extend(['/home/rgolla/Desktop/classification'])
 import argparse
 import os
 from viblio.common.features import features
@@ -67,11 +69,14 @@ if __name__ == '__main__':
             #storing each feature as a single hdf file
             if line.split()[1].startswith('http'):
                 filename=results.inter_dir+'/'+line.split()[0]+'_'+line.split()[1].split('/')[4].split('.')[0]+'.hdf'
+                filepointer.write('%s %s %s\n'%(line.split()[1],filename.split('/')[1],line.split()[3]))
             else:
                 filename=results.inter_dir+'/'+line.split()[1].split('.')[0]+'.hdf'
+                #filepointer.write('%s %s %s\n'%(line.split()[1],line.split()[0],line.split()[3]))
+                filepointer.write('%s %s %s\n'%(line.split()[1],line.split()[1].split('.')[0]+'.hdf',line.split()[2]))
             nmp.numpy2hdf(filename,spatial_ftr,'ftr')
             #Stored feature filename and its label are stored in a text file
-            filepointer.write('%s %s %s\n'%(line.split()[1],filename.split('/')[1],line.split()[3]))
+            
         except:
             pass
 
