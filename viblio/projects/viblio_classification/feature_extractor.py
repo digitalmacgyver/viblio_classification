@@ -1,4 +1,3 @@
-
 import argparse
 import os
 from viblio.common.features import features
@@ -14,13 +13,13 @@ import cStringIO
 import h5py
 
 #usage:
-#python feature_extractor.py -i soccer_parse_results.txt -o soccer -inter_dir soccer
+#python feature_extractor.py -i /home/rgolla/Downloads/vid4/vid4_paths.txt -o vid4 -inter_dir /home/rgolla/Downloads/vid4
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', action='store', dest='info_filename', help='Text file with urls of images and labels')
     parser.add_argument('-c', action='store', dest='config_filename', help='Text file where configuration parameters for feature is located')
-    parser.add_argument('-o',action='store',dest='output_filename',help='filename to store the svm trained model')
+    parser.add_argument('-o',action='store',dest='output_filename',help='output_filename_features.txt stores the extracted features and correspondence')
     parser.add_argument('-inter_dir',action='store',dest='inter_dir',help='directory path where the trained model,labels and extracted features are stored')
 
     results = parser.parse_args()
@@ -47,13 +46,18 @@ if __name__ == '__main__':
     nmp =numpyutils.NumpyUtil()
     
     #file pointer for output text file that stores correspondence
-    filepointer=open(results.inter_dir+'/'+results.inter_dir+'_features.txt','w')
+    filepointer=open(results.inter_dir+'/'+results.output_filename+'_features.txt','w')
    
     # Loop through each url and extract feature
     for index,line in enumerate(content):
         try:
             print str(index)
-            pix = nmp.imagefile2numpy(line.split()[1],640)
+            # Check whether it is a url or local file and process accordingly
+            if not line.split()[1].startswith('http'):
+                path =os.path.dirname(os.path.realpath(results.info_filename))+'/'+line.split()[1]
+                pix = nmp.imagefile2numpy(path,640,local_file=True)
+            else:
+                pix = nmp.imagefile2numpy(line.split()[1],640)
             floc, fdesc = hog2D_descriptor.run(pix)
             # quantize feature
             quantized_ftr = vq.project(fdesc.transpose())
@@ -61,7 +65,10 @@ if __name__ == '__main__':
             (h, w, nc) = pix.shape
             spatial_ftr = sp_pyramid.create(quantized_ftr, floc, (h, w))
             #storing each feature as a single hdf file
-            filename=results.inter_dir+'/'+line.split()[0]+'_'+line.split()[1].split('/')[4].split('.')[0]+'.hdf'
+            if line.split()[1].startswith('http'):
+                filename=results.inter_dir+'/'+line.split()[0]+'_'+line.split()[1].split('/')[4].split('.')[0]+'.hdf'
+            else:
+                filename=results.inter_dir+'/'+line.split()[1].split('.')[0]+'.hdf'
             nmp.numpy2hdf(filename,spatial_ftr,'ftr')
             #Stored feature filename and its label are stored in a text file
             filepointer.write('%s %s %s\n'%(line.split()[1],filename.split('/')[1],line.split()[3]))
