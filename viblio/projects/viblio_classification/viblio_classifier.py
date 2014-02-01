@@ -1,4 +1,3 @@
-
 import argparse
 import os
 import numpy
@@ -14,6 +13,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', action='store', dest='info_folder', help='Folder path that has all features stored with corresponding files')
     parser.add_argument('-i', action='store', dest='file_list', help='the file containing the list of image files and their labels')
     parser.add_argument('-c', action='store', dest='config_file', help='Path to the config file which contains the parameters of SVM model')
+    parser.add_argument('-m', action='store', dest='model_file', help='Path to the SVM trained model')
     parser.add_argument('-s', action='store', dest='stage', help="indicates the stage of algorith 'learn', 'cross-validate', 'predict', 'report'")
     results = parser.parse_args()
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         best_C = float(svm_params['best_C'])
 
         # load svm model from the same folder that is passed through info_folder
-        model_filename = os.path.normpath(results.info_folder) + '/' + svm_params['model_file']
+        model_filename = results.model_file
 
         # load model from disk
         sk_svm = viblio_svm.SKLearnSMV(best_C, kernel=kernel)
