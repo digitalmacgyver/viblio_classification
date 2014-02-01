@@ -61,7 +61,7 @@ if __name__ == '__main__':
         sk_svm.learn(x, labels)
 
         # save svm model to disk in the same folder that is passed through info_folder
-        model_filename = os.path.normpath(results.info_folder) + '/' + svm_params['model_file']
+        model_filename = results.model_file
         print "model saved in", model_filename
         sk_svm.save(model_filename)
 
