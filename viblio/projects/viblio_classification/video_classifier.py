@@ -26,7 +26,8 @@ if __name__ == '__main__':
     #classify the extracted frames from the video
     os.system('python viblio_classifier.py -d %s -i %s_features.txt -c %s -s predict -m %s'%(results.output_directory,path1,results.config_file,results.model_file))
     print "starting actual prediction of frames"
-    with open('/home/rgolla/Downloads/%s/prediction.txt'%path1) as f:
+    path2=os.path.normpath(results.output_directory)
+    with open('%s/prediction.txt'%path2) as f:
         content=f.readlines()
         positive = 0
         negative = 0
