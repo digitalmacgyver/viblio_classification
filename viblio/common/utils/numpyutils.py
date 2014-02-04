@@ -69,9 +69,9 @@ class NumpyUtil():
         filepointer.close()
 
     def read_labels_from_file(self, filename):
-        with open(filename) as f:
-             content = f.readlines()
         try:
+            with open(filename) as f:
+                content = f.readlines()
             labels = numpy.zeros(shape=len(content))
             probs = numpy.zeros(shape=len(content))
             file_ids = []
@@ -85,5 +85,6 @@ class NumpyUtil():
                 labels[index] = label
 
         except:
-            pass
+            print 'error loading label file:', filename
+            raise
         return file_ids, probs, labels

@@ -1,5 +1,6 @@
 import argparse
 import os
+import os.path
 import numpy
 import numpy.random
 from viblio.common.ml import viblio_svm
@@ -14,6 +15,7 @@ if __name__ == '__main__':
     parser.add_argument('-i', action='store', dest='file_list', help='the file containing the list of image files and their labels')
     parser.add_argument('-c', action='store', dest='config_file', help='Path to the config file which contains the parameters of SVM model')
     parser.add_argument('-m', action='store', dest='model_file', help='Path to the SVM trained model')
+    parser.add_argument('-p', action='store', dest='prediction_file', help='Path to a txt file that stores the predicted labels')
     parser.add_argument('-s', action='store', dest='stage', help="indicates the stage of algorith 'learn', 'cross-validate', 'predict', 'report'")
     results = parser.parse_args()
 
@@ -27,8 +29,12 @@ if __name__ == '__main__':
     print "# negative =", numpy.sum(labels == -1)
 
     #load svm configs
-    all_params = ConfigObj(results.config_file)
-    svm_params = all_params['default']
+    try:
+        all_params = ConfigObj(results.config_file)
+        svm_params = all_params['default']
+    except:
+        print 'error loading svm config file:', results.config_file
+        raise
 
     #set kernel type
     kernel = viblio_svm.HIK([])
@@ -79,12 +85,12 @@ if __name__ == '__main__':
         prob, predicted_labels = sk_svm.predict(x)
 
         # file that will store the predicted labels
-        predict_label_filename = os.path.normpath(results.info_folder) + '/' + svm_params['prediction_file']
+        predict_label_filename = results.prediction_file
         nmp.write_labels2file(predict_label_filename, file_ids, prob, predicted_labels)
 
     elif results.stage == 'report':
         # file that stores the predicted labels
-        predict_label_filename = os.path.normpath(results.info_folder) + '/' + svm_params['prediction_file']
+        predict_label_filename = results.prediction_file
 
         # load the file_ids and prob from the prediction file
         file_ids, prob, predicted_labels = nmp.read_labels_from_file(predict_label_filename)
@@ -104,6 +110,10 @@ if __name__ == '__main__':
         pl.legend(loc="lower right")
         print "the area under the roc curve is ", '%.2f%%' % (roc_auc * 100)
         pl.show()
+
+    else:
+        print 'the stage', results.stage, 'is not defined.'
+        print 'type "python', os.path.basename(__file__), '--help" for more help'
 
 
 

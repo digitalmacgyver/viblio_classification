@@ -66,13 +66,18 @@ class SKLearnSMV(SVMClassifier):
         return prob, predict_label
 
     def load(self, filename):
-        inputfile = open(filename, 'rb')
-        temp = pickle.load(inputfile)
+        try:
+            input_file = open(filename, 'rb')
+            temp = pickle.load(input_file)
+        except:
+            print 'error reading SVM model file:', filename
+            raise
+
         self.C = temp.C
         self.kernel = temp.kernel
         self.clf = temp.clf
         self.training_data = temp.training_data
-        inputfile.close()
+        input_file.close()
 
     def cross_validate(self, features, labels, n_fold):
         kernel = self.kernel.compute(features, features)

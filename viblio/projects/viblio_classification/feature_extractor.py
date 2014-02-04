@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('-i', action='store', dest='info_filename', help='Text file with urls of images and labels')
     parser.add_argument('-c', action='store', dest='config_filename', help='Text file where configuration parameters for feature is located')
     parser.add_argument('-o',action='store',dest='output_filename',help='output_filename_features.txt stores the extracted features and correspondence')
-    parser.add_argument('-inter_dir',action='store',dest='inter_dir',help='directory path where the trained model,labels and extracted features are stored')
+    parser.add_argument('-inter_dir', action='store',dest='inter_dir',help='directory path where the trained model,labels and extracted features are stored')
 
     results = parser.parse_args()
 
