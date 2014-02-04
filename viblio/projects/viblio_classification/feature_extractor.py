@@ -14,6 +14,9 @@ import h5py
 
 #usage:
 #python feature_extractor.py -i /home/rgolla/Downloads/vid4/vid4_paths.txt -o vid4 -inter_dir /home/rgolla/Downloads/vid4
+#Input text file has one of the following format (Top for url bottom one for local files):
+#_Tf_qyL_9JE  https://viblioclassification-test.s3.amazonaws.com/_Tf_qyL_9JE/images00003.png soccer 0
+#image0001 image0001.png soccer 0
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -53,11 +56,17 @@ if __name__ == '__main__':
         try:
             print str(index)
             # Check whether it is a url or local file and process accordingly
-            if not line.split()[1].startswith('http'):
-                path =os.path.dirname(os.path.realpath(results.info_filename))+'/'+line.split()[1]
+            # Each line has following format: _Tf_qyL_9JE  https://viblioclassification-test.s3.amazonaws.com/_Tf_qyL_9JE/images00003.png soccer 0
+            #filename has  https://viblioclassification-test.s3.amazonaws.com/_Tf_qyL_9JE/images00003.png after line.split()[1] if it is a url
+            #if it is a local file filename has image0001.png 
+            filename= line.split()[1]
+            unique_videoid=line.split()[0]
+            label = line.split()[3]
+            if not filename.startswith('http'):
+                path =os.path.dirname(os.path.realpath(results.info_filename))+'/'+filename
                 pix = nmp.imagefile2numpy(path,640,local_file=True)
             else:
-                pix = nmp.imagefile2numpy(line.split()[1],640)
+                pix = nmp.imagefile2numpy(filename,640)
             floc, fdesc = hog2D_descriptor.run(pix)
             # quantize feature
             quantized_ftr = vq.project(fdesc.transpose())
@@ -65,14 +74,18 @@ if __name__ == '__main__':
             (h, w, nc) = pix.shape
             spatial_ftr = sp_pyramid.create(quantized_ftr, floc, (h, w))
             #storing each feature as a single hdf file
-            if line.split()[1].startswith('http'):
-                filename=results.inter_dir+'/'+line.split()[0]+'_'+line.split()[1].split('/')[4].split('.')[0]+'.hdf'
-                filepointer.write('%s %s %s\n'%(line.split()[1],filename.split('/')[1],line.split()[3]))
+            if filename.startswith('http'):
+                #imagename results in fetching 'images00003' from 'https://viblioclassification-test.s3.amazonaws.com/_Tf_qyL_9JE/images00003.png'
+                imagename = line.split()[1].split('/')[4].split('.')[0]
+                #ftr_name results in _Tf_qyL_9JE_images00003.hdf
+                ftr_name=unique_videoid+'_'+imagename+'.hdf'
+                ftr_filename=results.inter_dir+'/'+ftr_name
+                filepointer.write('%s %s %s\n'%(filename,ftr_name,label))
             else:
-                filename=results.inter_dir+'/'+line.split()[1].split('.')[0]+'.hdf'
-                #filepointer.write('%s %s %s\n'%(line.split()[1],line.split()[0],line.split()[3]))
-                filepointer.write('%s %s %s\n'%(line.split()[1],line.split()[1].split('.')[0]+'.hdf',line.split()[2]))
-            nmp.numpy2hdf(filename,spatial_ftr,'ftr')
+                ftr_name =filename.split('.')[0]+'.hdf'
+                ftr_filename=results.inter_dir+'/'+ftr_name
+                filepointer.write('%s %s %s\n'%(filename,ftr_name,label)
+            nmp.numpy2hdf(ftr_filename,spatial_ftr,'ftr')
             #Stored feature filename and its label are stored in a text file
             
         except:
