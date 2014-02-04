@@ -43,7 +43,11 @@ class NumpyUtil():
          for index, line in enumerate(content):
              try:
                  hdf5file = line.split()[1]
-                 label = 1 if int(line.split()[2]) else -1
+		 print int(line.split()[2])
+                 if (int(line.split()[2]))>0:
+			label=1
+		 else:
+			label=-1
                  hdf5path = os.path.normpath(info_folder) + '/' + hdf5file
                  if os.path.isfile(hdf5path):
                      with h5py.File(hdf5path, 'r')as f:
