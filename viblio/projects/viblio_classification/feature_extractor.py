@@ -142,6 +142,7 @@ if __name__ == '__main__':
                 output_line = "%s %s" % ( filename, ftr_name )
                 if len( optional_fields ):
                     output_line += ' ' + ' ',join( optional_fields )
+                output_line += "\n"
                 filepointer.write( output_line )
             #if line.split()[1].startswith('http'):
             #    filename=results.inter_dir+'/'+line.split()[0]+'_'+line.split()[1].split('/')[4].split('.')[0]+'.hdf'
@@ -153,6 +154,7 @@ if __name__ == '__main__':
                 output_line = "%s %s" % ( filename, ftr_name )
                 if len( optional_fields ):
                     output_line += ' ' + ' ',join( optional_fields )
+                output_line += "\n"
                 filepointer.write( output_line )
             nmp.numpy2hdf(ftr_filename,spatial_ftr,'ftr')
             #Stored feature filename and its label are stored in a text file
