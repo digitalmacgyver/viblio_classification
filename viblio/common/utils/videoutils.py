@@ -16,6 +16,6 @@ class VideoUtils():
         filepointer =open(folder+'/'+append_path+'_paths.txt','w')
         for f in  os.listdir(folder):
             if f.endswith('.png'):
-                filepointer.write('%s %s %s\n'%(append_path,f,'0'))
+                filepointer.write('%s %s %s %s\n'%(append_path,f,'label','0'))
     
         filepointer.close()
