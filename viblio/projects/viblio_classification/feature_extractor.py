@@ -144,7 +144,7 @@ if __name__ == '__main__':
                 #ftr_name results in _Tf_qyL_9JE_images00003.hdf
                 ftr_name=unique_videoid+'_'+imagename+'.hdf'
                 ftr_filename=output_dir+'/'+ftr_name
-                output_line = "%s %s" % ( filename, ftr_name )
+                output_line = "%s %s" % ( filename, ftr_filename )
                 if len( optional_fields ):
                     output_line += ' ' + ' '.join( optional_fields )
                 output_line += "\n"

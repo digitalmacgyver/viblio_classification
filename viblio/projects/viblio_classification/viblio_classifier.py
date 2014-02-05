@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import os
 import os.path
@@ -11,19 +13,20 @@ import pylab as pl
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', action='store', dest='info_folder', help='Folder path that has all features stored with corresponding files')
+    #parser.add_argument('-d', action='store', dest='info_folder', help='Folder path that has all features stored with corresponding files')
     parser.add_argument('-i', action='store', dest='file_list', help='the file containing the list of image files and their labels')
     parser.add_argument('-c', action='store', dest='config_file', help='Path to the config file which contains the parameters of SVM model')
+    parser.add_argument('-c', action='store', default = os.path.dirname( __file__ ) + '/../../resources/ml/svm_config.cfg' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/mp/svm_config.cfg')
     parser.add_argument('-m', action='store', dest='model_file', help='Path to the SVM trained model')
     parser.add_argument('-p', action='store', dest='prediction_file', help='Path to a txt file that stores the predicted labels')
     parser.add_argument('-s', action='store', dest='stage', help="indicates the stage of algorith 'learn', 'cross-validate', 'predict', 'report'")
     results = parser.parse_args()
 
-    filename = os.path.normpath(results.info_folder) + '/' + results.file_list
+    input_file = results.file_list
 
     # Load features and labels
     nmp = numpyutils.NumpyUtil()
-    file_ids, x, labels = nmp.text2numpy_aggregate(results.info_folder, filename, 'ftr')
+    file_ids, features, labels = nmp.load_features( input_file, 'ftr' )
     print "loading data is complete."
     print "# positive =", numpy.sum(labels == 1)
     print "# negative =", numpy.sum(labels == -1)
@@ -50,7 +53,7 @@ if __name__ == '__main__':
             # initialize svm SKLearnSVM object
             sk_svm = viblio_svm.SKLearnSMV(c, kernel)
 
-            score = sk_svm.cross_validate(x, labels, 5)
+            score = sk_svm.cross_validate(features, labels, 5)
             scores.append(numpy.mean(score))
 
         best_c_ind = numpy.argmax(scores)
@@ -64,7 +67,7 @@ if __name__ == '__main__':
         sk_svm = viblio_svm.SKLearnSMV(best_C, kernel)
 
         # train svm using the data extracted
-        sk_svm.learn(x, labels)
+        sk_svm.learn(features, labels)
 
         # save svm model to disk in the same folder that is passed through info_folder
         model_filename = results.model_file
@@ -82,7 +85,7 @@ if __name__ == '__main__':
         sk_svm.load(model_filename)
 
         # classify the test data
-        prob, predicted_labels = sk_svm.predict(x)
+        prob, predicted_labels = sk_svm.predict( features )
 
         # file that will store the predicted labels
         predict_label_filename = results.prediction_file
