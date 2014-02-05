@@ -4,8 +4,6 @@ import urllib
 import gdata.youtube
 import gdata.youtube.service
 
-
-
 class VideoUrls():
     def __init__(self):
         self.root_url = ''
@@ -19,12 +17,13 @@ class VideoUrls():
     def get_nvids_found(self):
         return len(self.video_urls)
 
-
 class YouTubeVideoUrls(VideoUrls):
     
-    def search(self, query):
-
-        max_duration = 600
+    def search(self, query, max_duration=180, max_videos=950):
+        
+        if max_videos < 20:
+            print "Maximum videos for YouTube Search must be at least 20, setting to 20"
+            max_videos = 20
 
         yt_service = gdata.youtube.service.YouTubeService()
         ytquery = gdata.youtube.service.YouTubeVideoQuery()
@@ -32,7 +31,7 @@ class YouTubeVideoUrls(VideoUrls):
         ytquery.orderby = 'relevance'
         #ytquery.racy = 'include'
         max_results = 10 # There was a reason left as 10....to have more url possible on youtube! do not change it.
-        max_num_videos_allowed_in_youtube = 950 
+        max_num_videos_allowed_in_youtube = max_videos
         ytquery.max_results = max_results
         start_index = range(1, max_num_videos_allowed_in_youtube-max_results-1, max_results)
         self.video_urls = []

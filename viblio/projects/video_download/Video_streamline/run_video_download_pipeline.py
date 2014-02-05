@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import uuid
 from viblio.common import config
 import os
@@ -8,26 +10,28 @@ from viblio.projects.video_download.Video_streamline.youtube_video_downloader im
 from viblio.projects.video_download.Video_streamline import video_decoder
 import shutil
 
-
 def usage():
     print "=========================================="
-    print "Usage: run_video_download_pipeline.py -keyword KEYWORD -config_file CONFIG_FILENAME -inter_dir INTERDIR -bucket_name BUCKET_NAME"
-    
+    print "Usage: run_video_download_pipeline.py -label my_label -keyword '\"youtube search\" -terms +desired' -inter_dir /home/me/outputdir -bucket_name s3_storage_bucket [-max_videos 200] [-max_video_duration 600] [-config_file /path/to/ffmpeg_config.ini]"
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-keyword', action='store', dest='keyword', help='youtube search keyword')
+    parser.add_argument('-label', action='store', dest='label', help='Single world label used to tag these search results and build output directory structures.' ) 
+    parser.add_argument('-keyword', action='store', dest='keyword', help='youtube search string' )
     parser.add_argument('-bucket_name', action='store',default='viblioclassification-test', dest='bucket_name', help='Bucket Name')
-    parser.add_argument('-inter_dir', action='store', dest='inter_dir', help='Intermediate directory')
-    parser.add_argument('-config_file', action='store', default = '/resources/projects/video_download/config_ffmpeg.ini', dest='config_file', help='configuration file path')
+    parser.add_argument('-inter_dir', action='store', dest='inter_dir', help='Intermediate directory root, files are placed in the subdirectory of this directory named by -label')
+    parser.add_argument('-config_file', action='store', default = os.path.dirname( __file__ ) + '../../../resources/projects/video_download/config_ffmpeg.ini' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/projects/video_download/config_ffmpeg.ini')
+    parser.add_argument('-max_videos', action='store', default=950, dest='max_videos', help='Maximum number of videos to download, defaults to 950. NOTE: Fewer than -max_videos may be processed if any of them exceed -max_video_duration' )
+    parser.add_argument('-max_video_duration', action='store', default=600, dest='max_video_duration', help='Exclude videos whose length is longer than -max_video_duration in seconds, defaults to 600.' )
     
     results = parser.parse_args()
 
-    #print "Keywords are:", results.keyword
-    #exit(0)
-
+    if not results.label:
+        print "Error! No label for this output is provided."
+        usage()
+        exit(-1)        
     if not results.keyword:
-        print "Error! No youtube keyword to search is provided."
+        print "Error! No YouTube keyword to search is provided."
         usage()
         exit(-1)
     if not results.inter_dir:
@@ -35,30 +39,28 @@ if __name__ == '__main__':
         usage()
         exit(-1)
 
+    outdir = results.inter_dir + '/' + results.label
     
-    if not os.path.exists(results.inter_dir):
-        os.makedirs(results.inter_dir)
+    if not os.path.exists( outdir ):
+        os.makedirs( outdir )
     # search and save urls in urls.txt
     search_pointer=YouTubeSearch()
-    search_pointer.search(results.keyword)
-    file_path = results.inter_dir+"/urls.txt"
+    search_pointer.search(results.keyword, int( results.max_video_duration ), int( results.max_videos ) )
+    file_path = outdir+"/urls.txt"
     search_pointer.save(file_path)
     print " Done with urls.txt"
-
 
     # Initialization of decoder , downloader and uploader
     downloadObj=YoutubeVideoDownLoader()
     vdecoder=video_decoder.VideoDecoder(results.config_file)
     s3conn = s3utils.S3()
-    
-
 
     #Loop through each url
-    file_path2=results.inter_dir+"/url_uuid.txt"
+    file_path2=outdir+"/url_uuid.txt"
     fp=open(file_path,"r")
     fp1=open(file_path2,"w")
     lines=fp.readlines()
-    textfile = results.inter_dir+"/search_results_s3urls.txt"
+    textfile = outdir+"/image_s3urls.txt"
     fp2 = open(textfile,"w")
     max = len(lines)-1
     print "Total no of videos: "+str(max)
@@ -66,7 +68,7 @@ if __name__ == '__main__':
         try:
             #uuid_name =  str(uuid.uuid4())
             uuid_name=lines[iterator].split('?')[0].split('/')[4]
-            local_path=results.inter_dir+"/"+uuid_name
+            local_path=outdir+"/"+uuid_name
             video_local_filename =local_path + '.flv'
         
             # Download the video url with

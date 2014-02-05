@@ -6,10 +6,17 @@ class YouTubeSearch():
         self.urls=[]
         self.no_of_videos_found=0
         
-    def search(self,search_query):
+    def search(self,search_query, max_duration=None, max_videos=None):
         # searches for the query
         searchobj=url_crawls.YouTubeVideoUrls()
-        searchobj.search(search_query)
+        if max_duration is not None and max_videos is not None:
+            searchobj.search(search_query, max_duration=max_duration, max_videos=max_videos)
+        elif max_duration is not None:
+            searchobj.search(search_query, max_duration=max_duration)
+        elif max_videos is not None:
+            searchobj.search(search_query, max_videos=max_videos)
+        else:
+            searchobj.search(search_query)
         self.urls=searchobj.get_urls()
         self.no_of_videos_found=searchobj.get_nvids_found()
         
