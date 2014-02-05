@@ -7,10 +7,11 @@ It is assumed that classification/install-packages-new.sh has been run
 
 Stages
 ======
-1) Download and process videos with run_video_download_pipeline.py
-2) Extract features with feature_extractor.py
-3) Create model with viblio_classifier.py
-4) Test model with video_classifier.py
+
+1. Download and process videos with run_video_download_pipeline.py
+2. Extract features with feature_extractor.py
+3. Create model with viblio_classifier.py
+4. Test model with video_classifier.py
 
 Download and Process Videos
 ===========================
@@ -19,8 +20,8 @@ Root directory: classification/viblio/projects/video_download/Video_streamline
 
 Command usage:
 
-1) Add the root directory to your path
-2) Set up the Python environment:
+1. Add the root directory to your path
+2. Set up the Python environment:
 
 ```
 cd classification
@@ -143,8 +144,8 @@ Root directory: classification/viblio/projects/
 
 Command usage:
 
-1) Add the root directory to your path
-2) Set up the Python environment:
+1. Add the root directory to your path
+2. Set up the Python environment:
 
 ```
 cd classification
