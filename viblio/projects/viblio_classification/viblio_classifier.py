@@ -15,7 +15,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     #parser.add_argument('-d', action='store', dest='info_folder', help='Folder path that has all features stored with corresponding files')
     parser.add_argument('-i', action='store', dest='file_list', help='the file containing the list of image files and their labels')
-    parser.add_argument('-c', action='store', dest='config_file', help='Path to the config file which contains the parameters of SVM model')
     parser.add_argument('-c', action='store', default = os.path.dirname( __file__ ) + '/../../resources/ml/svm_config.cfg' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/mp/svm_config.cfg')
     parser.add_argument('-m', action='store', dest='model_file', help='Path to the SVM trained model')
     parser.add_argument('-p', action='store', dest='prediction_file', help='Path to a txt file that stores the predicted labels')
