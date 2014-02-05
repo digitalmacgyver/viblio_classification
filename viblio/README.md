@@ -102,12 +102,12 @@ video_uid url_to_image_from_video
 The output file defaults to inter_dir/label/image_features.txt, it can
 be overridden with the -o argument, the output has a format of:
 
-filename feature_file optional extra fields
+filename path_to_feature_file optional extra fields
 
 The first whitespace separated field is the image filename, which can
 be a local filesystem path or a URL.
 
-The second is the local filesystem path to the feature file for that
+The second is the full filesystem path to the output feature file for that
 image.
 
 The optional third and subsequent whitespace separated fields are those
