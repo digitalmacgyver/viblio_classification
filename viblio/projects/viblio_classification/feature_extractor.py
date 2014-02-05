@@ -50,7 +50,7 @@ if __name__ == '__main__':
     
     #file pointer for output text file that stores correspondence
     filepointer=open(results.inter_dir+'/'+results.output_filename+'_features.txt','w')
-   
+    
     # Loop through each url and extract feature
     for index,line in enumerate(content):
         try:
@@ -81,6 +81,10 @@ if __name__ == '__main__':
                 ftr_name=unique_videoid+'_'+imagename+'.hdf'
                 ftr_filename=results.inter_dir+'/'+ftr_name
                 filepointer.write('%s %s %s\n'%(filename,ftr_name,label))
+            #if line.split()[1].startswith('http'):
+            #    filename=results.inter_dir+'/'+line.split()[0]+'_'+line.split()[1].split('/')[4].split('.')[0]+'.hdf'
+            #    #filepointer.write('%s %s %s\n'%(line.split()[1],filename.split('/')[1],line.split()[3]))
+            #    filepointer.write('%s %s %s\n'%(line.split()[1],filename.split('/')[-1],line.split()[2]))
             else:
                 ftr_name =filename.split('.')[0]+'.hdf'
                 ftr_filename=results.inter_dir+'/'+ftr_name

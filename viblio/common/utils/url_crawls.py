@@ -23,6 +23,9 @@ class VideoUrls():
 class YouTubeVideoUrls(VideoUrls):
     
     def search(self, query):
+
+        max_duration = 600
+
         yt_service = gdata.youtube.service.YouTubeService()
         ytquery = gdata.youtube.service.YouTubeVideoQuery()
         ytquery.vq = query
@@ -40,7 +43,7 @@ class YouTubeVideoUrls(VideoUrls):
                 for entry in feed.entry:
                     video_duration= int(entry.media.duration.seconds)
                     cur_url = entry.GetSwfUrl()
-                    if cur_url and video_duration<180 :
+                    if cur_url and video_duration<max_duration :
                         self.video_urls.append(cur_url)
                         #print cur_url
             except:

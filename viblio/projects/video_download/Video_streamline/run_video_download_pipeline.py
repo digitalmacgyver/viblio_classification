@@ -19,9 +19,12 @@ if __name__ == '__main__':
     parser.add_argument('-keyword', action='store', dest='keyword', help='youtube search keyword')
     parser.add_argument('-bucket_name', action='store',default='viblioclassification-test', dest='bucket_name', help='Bucket Name')
     parser.add_argument('-inter_dir', action='store', dest='inter_dir', help='Intermediate directory')
-    parser.add_argument('-config_file', action='store', default = config.base_dir+'/resources/projects/video_download/config_ffmpeg.ini', dest='config_file', help='configuration file path')
+    parser.add_argument('-config_file', action='store', default = '/resources/projects/video_download/config_ffmpeg.ini', dest='config_file', help='configuration file path')
     
     results = parser.parse_args()
+
+    #print "Keywords are:", results.keyword
+    #exit(0)
 
     if not results.keyword:
         print "Error! No youtube keyword to search is provided."
@@ -55,31 +58,35 @@ if __name__ == '__main__':
     fp=open(file_path,"r")
     fp1=open(file_path2,"w")
     lines=fp.readlines()
-    textfile = results.inter_dir+"/"+results.keyword+"_s3urls.txt"
+    textfile = results.inter_dir+"/search_results_s3urls.txt"
     fp2 = open(textfile,"w")
     max = len(lines)-1
     print "Total no of videos: "+str(max)
     for iterator in range(0,max):
-        #uuid_name =  str(uuid.uuid4())
-        uuid_name=lines[iterator].split('?')[0].split('/')[4]
-        local_path=results.inter_dir+"/"+uuid_name
-        video_local_filename =local_path + '.flv'
+        try:
+            #uuid_name =  str(uuid.uuid4())
+            uuid_name=lines[iterator].split('?')[0].split('/')[4]
+            local_path=results.inter_dir+"/"+uuid_name
+            video_local_filename =local_path + '.flv'
         
-        # Download the video url with
-        print "downloading video : "+str(iterator)
-        downloadObj.run(lines[iterator],video_local_filename)
-        if os.path.exists(video_local_filename):
-            fp1.write("%s %s\n" %(lines[iterator],video_local_filename))
-            print "decoding the video : "+str(iterator)
-            vdecoder.run(video_local_filename,local_path)
-            print "uploading images : "+str(iterator)
-            for f in os.listdir(local_path):
-                image_path=os.path.join(local_path,f)
-                image_s3_url=s3conn.upload(results.bucket_name,image_path,True,uuid_name)
-                fp2.write("%s %s\n"%(uuid_name,image_s3_url))
-            shutil.rmtree(local_path)
-            print "uploading video: "+str(iterator)
-            s3conn.upload(results.bucket_name, video_local_filename,False)
-            os.remove(video_local_filename)
+            # Download the video url with
+            print "downloading video : "+str(iterator)
+            downloadObj.run(lines[iterator],video_local_filename)
+            if os.path.exists(video_local_filename):
+                fp1.write("%s %s\n" %(lines[iterator],video_local_filename))
+                print "decoding the video : "+str(iterator)
+                vdecoder.run(video_local_filename,local_path)
+                print "uploading images : "+str(iterator)
+                for f in os.listdir(local_path):
+                    image_path=os.path.join(local_path,f)
+                    image_s3_url=s3conn.upload(results.bucket_name,image_path,True,uuid_name)
+                    fp2.write("%s %s\n"%(uuid_name,image_s3_url))
+                shutil.rmtree(local_path)
+                print "uploading video: "+str(iterator)
+                s3conn.upload(results.bucket_name, video_local_filename,False)
+                os.remove(video_local_filename)
+        except Exception as e:
+            print "There was an exception: %s" % e
     fp2.close()
     fp1.close()
+        
