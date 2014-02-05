@@ -81,12 +81,16 @@ if __name__ == '__main__':
     if results.output_filename:
         output_file = results.output_filename
 
+    input_file = "%s/%s/image_s3urls.txt" % ( results.inter_dir, results.label )
+    if results.info_filename:
+        input_file = results.info_filename
+
     # Check existence of inter directory if not create it.
     if not os.path.exists( output_dir ):
         os.makedirs( output_dir )
 
     # Read the input file that contains urls
-    with open(results.info_filename) as f:
+    with open( input_file ) as f:
         content = f.readlines()
 
     # setup Hog2D features
