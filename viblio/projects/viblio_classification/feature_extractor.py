@@ -141,7 +141,7 @@ if __name__ == '__main__':
                 ftr_filename=output_dir+'/'+ftr_name
                 output_line = "%s %s" % ( filename, ftr_name )
                 if len( optional_fields ):
-                    output_line += ' ' + ' ',join( optional_fields )
+                    output_line += ' ' + ' '.join( optional_fields )
                 output_line += "\n"
                 filepointer.write( output_line )
             #if line.split()[1].startswith('http'):
@@ -153,7 +153,7 @@ if __name__ == '__main__':
                 ftr_filename=results.inter_dir+'/'+ftr_name
                 output_line = "%s %s" % ( filename, ftr_name )
                 if len( optional_fields ):
-                    output_line += ' ' + ' ',join( optional_fields )
+                    output_line += ' ' + ' '.join( optional_fields )
                 output_line += "\n"
                 filepointer.write( output_line )
             nmp.numpy2hdf(ftr_filename,spatial_ftr,'ftr')
