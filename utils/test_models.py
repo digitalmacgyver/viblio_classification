@@ -35,7 +35,7 @@ for idx, directory in enumerate( directories ):
     true_file = "/home/matt/class2/%s/image_features.txt" % label
     true_lines = open( true_file ).readlines()
     
-    false_dirs = directory[:idx] + directory[idx+1:]
+    false_dirs = directories[:idx] + directories[idx+1:]
     false_lines = []
     for false_dir in false_dirs:
         false_label = false_dir[2:-1]
@@ -46,11 +46,15 @@ for idx, directory in enumerate( directories ):
     f = open( test_file, 'w' )
 
     for line in true_lines:
+        if len( line.split() ) < 2:
+            continue
         ( a, b ) = line.split()[:2]
         if a not in seen_images:
             f.write( "%s %s 1\n" % ( a, b ) )
 
     for line in false_lines:
+        if len( line.split() ) < 2:
+            continue
         ( a, b ) = line.split()[:2]
         if a not in seen_images:
             f.write( "%s %s 0\n" % ( a, b ) )
