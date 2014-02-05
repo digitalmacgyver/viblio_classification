@@ -125,7 +125,7 @@ Prior to model creation it is presumed we:
    * Positive images containing the desired subject matter
    * Negative images without the desired subject matter
 2. Extracted features for those images using the feature_extractor.py
-2. Created a whitespace seperated input file of the format:
+2. Created a whitespace separated input file of the format:
 
 filename path_to_hdf_file training_value
 
