@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('-keyword', action='store', dest='keyword', help='youtube search string' )
     parser.add_argument('-bucket_name', action='store',default='viblioclassification-test', dest='bucket_name', help='Bucket Name')
     parser.add_argument('-inter_dir', action='store', dest='inter_dir', help='Intermediate directory root, files are placed in the subdirectory of this directory named by -label')
-    parser.add_argument('-config_file', action='store', default = os.path.dirname( __file__ ) + '../../../resources/projects/video_download/config_ffmpeg.ini' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/projects/video_download/config_ffmpeg.ini')
+    parser.add_argument('-config_file', action='store', default = os.path.dirname( __file__ ) + '/../../../resources/projects/video_download/config_ffmpeg.ini' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/projects/video_download/config_ffmpeg.ini')
     parser.add_argument('-max_videos', action='store', default=950, dest='max_videos', help='Maximum number of videos to download, defaults to 950. NOTE: Fewer than -max_videos may be processed if any of them exceed -max_video_duration' )
     parser.add_argument('-max_video_duration', action='store', default=600, dest='max_video_duration', help='Exclude videos whose length is longer than -max_video_duration in seconds, defaults to 600.' )
 

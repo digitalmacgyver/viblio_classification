@@ -63,7 +63,7 @@ if __name__ == '__main__':
     parser.add_argument('-inter_dir', action='store',dest='inter_dir',help='directory path where the trained model,labels and extracted features are stored')
     parser.add_argument('-i', action='store', dest='info_filename', help='Optional input file, defaults to inter_dir/label/image_s3urls.txt')
     parser.add_argument('-o',action='store',dest='output_filename',help='Optional path to store image feauture mapping output to, defaults to inter_dir/label/image_features.txt')
-    parser.add_argument('-config_file', action='store', default = os.path.dirname( __file__ ) + '../../resources/projects/video_download/config_ffmpeg.ini' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/projects/video_download/config_ffmpeg.ini')
+    parser.add_argument('-config_file', action='store', default = os.path.dirname( __file__ ) + '/../../resources/projects/video_download/config_ffmpeg.ini' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/projects/video_download/config_ffmpeg.ini')
 
     results = parser.parse_args()
 
