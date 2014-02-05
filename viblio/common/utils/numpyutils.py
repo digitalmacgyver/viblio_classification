@@ -64,7 +64,7 @@ class NumpyUtil():
              
          return (file_ids, x, labels)
 
-    def load_features( self, intput_file, rootname ):
+    def load_features( self, input_file, rootname ):
          with open( input_file ) as f:
              content = f.readlines()
          # Load the features in 'features' and class labels in 'labels' 
