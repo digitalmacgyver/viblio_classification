@@ -79,8 +79,14 @@ class SKLearnSMV(SVMClassifier):
         self.training_data = temp.training_data
         input_file.close()
 
-    def cross_validate(self, features, labels, n_fold):
+    def cross_validate(self, features, labels, n_fold, Cs):
         kernel = self.kernel.compute(features, features)
-        scores = cross_validation.cross_val_score(self.clf, kernel, labels, cv=n_fold)
+
+        scores = []
+        for c in Cs:
+            # initialize svm SKLearnSVM object
+            self.clf.C = c
+            cv_scores = cross_validation.cross_val_score(self.clf, kernel, labels, cv=n_fold)
+            scores.append(np.mean(cv_scores))
 
         return scores

@@ -45,13 +45,11 @@ if __name__ == '__main__':
         #cross validation
         Cs = map(float, svm_params['Cs'])
 
-        scores = []
-        for c in Cs:
-            # initialize svm SKLearnSVM object
-            sk_svm = viblio_svm.SKLearnSMV(c, kernel)
+        # initialize svm SKLearnSVM object
+        c_init = 1
+        sk_svm = viblio_svm.SKLearnSMV(c_init, kernel)
 
-            score = sk_svm.cross_validate(x, labels, 5)
-            scores.append(numpy.mean(score))
+        scores = sk_svm.cross_validate(x, labels, 5, Cs)
 
         best_c_ind = numpy.argmax(scores)
         print "cross validation is done"
