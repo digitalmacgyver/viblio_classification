@@ -23,7 +23,7 @@ Command usage:
 2) Set up the Python environment:
 
 cd classification
-export PYTHONPATH=`pwd`
+export PYTHONPATH=\`pwd\`
 
 run_video_download_pipeline.py 
   -label baseball
