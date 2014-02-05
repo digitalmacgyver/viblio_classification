@@ -13,6 +13,7 @@ from PIL import Image
 import urllib2 as urllib
 import cStringIO
 import h5py
+import re
 
 #usage:
 #python feature_extractor.py -i /home/rgolla/Downloads/vid4/vid4_paths.txt -o vid4 -inter_dir /home/rgolla/Downloads/vid4
@@ -112,6 +113,10 @@ if __name__ == '__main__':
     # Loop through each url and extract feature
     for index,line in enumerate(content):
         try:
+            # Skip blank lines
+            if re.match( r'^\s*$', line ):
+                print "Skipping blank line:", str( index )
+                continue
             print str(index)
             # Check whether it is a url or local file and process accordingly
             # Each line has following format: _Tf_qyL_9JE  https://viblioclassification-test.s3.amazonaws.com/_Tf_qyL_9JE/images00003.png soccer 0
