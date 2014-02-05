@@ -11,6 +11,44 @@ from configobj import ConfigObj
 from sklearn.metrics import roc_curve, auc
 import pylab as pl
 
+'''
+Create Model
+============
+
+Prior to model creation it is presumed we:
+
+1. Have identified a set of training images made up of:
+   * Positive images containing the desired subject matter
+   * Negative images without the desired subject matter
+2. Extracted features for those images using the feature_extractor.py
+2. Created a whitespace separated input file of the format:
+
+filename path_to_hdf_file training_value
+
+* filename - The path or URL to the image in question
+* path_to_hdf_file - the full OS path to the HDF file
+* training_value - 1 for a positive image, 0 for a negative image
+
+Root directory: classification/viblio/projects/
+
+Command usage:
+
+1) Add the root directory to your path
+2) Set up the Python environment:
+
+cd classification
+export PYTHONPATH=`pwd`
+
+viblio_classifier.py 
+   -i input_file.txt
+   -s learn
+   -m my_model.svm
+   [-c /path/to/svm_config.cfg]
+
+The optional -c argument defaults to
+classification/viblio/resources/ml/svm_config.cfg
+'''
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     #parser.add_argument('-d', action='store', dest='info_folder', help='Folder path that has all features stored with corresponding files')
