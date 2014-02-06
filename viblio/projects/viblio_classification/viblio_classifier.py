@@ -132,12 +132,12 @@ if __name__ == '__main__':
         fn = 0
         for i in range( len( prob ) ):
             if labels[i] == 1:
-                if predicted_labels == 1:
+                if predicted_labels[i] == 1:
                     tp += 1
                 else:
                     fp += 1
             else:
-                if predicted_labels == 0:
+                if predicted_labels[i] == 0:
                     tn += 1
                 else:
                     fn += 1
