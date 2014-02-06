@@ -131,6 +131,7 @@ if __name__ == '__main__':
         tn = 0
         fn = 0
         for i in range( len( prob ) ):
+            print label[i], prob[i], predicted_labels[i]
             if labels[i] == 1:
                 if predicted_labels[i] == 1:
                     tp += 1
