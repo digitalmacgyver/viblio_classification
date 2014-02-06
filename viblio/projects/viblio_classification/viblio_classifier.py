@@ -137,12 +137,12 @@ if __name__ == '__main__':
                 if predicted_labels[i] == 1:
                     tp += 1
                 else:
-                    fp += 1
+                    fn += 1
             else:
                 if predicted_labels[i] == -1:
                     tn += 1
                 else:
-                    fn += 1
+                    fp += 1
 
         print "For %s predictions results were: TPs=%s TNs=%s FPs=%s FNs=%s" % ( len( prob ), tp, tn, fp, fn )
 
