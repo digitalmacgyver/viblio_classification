@@ -124,6 +124,26 @@ if __name__ == '__main__':
         # classify the test data
         prob, predicted_labels = sk_svm.predict( features )
 
+        # DEBUG Here we can iterate over prob, predicted_labels, and
+        # labels for our input files and generate the TP/FP report.
+        tp = 0
+        fp = 0
+        tn = 0
+        fn = 0
+        for i in range( len( prob ) ):
+            if labels[i] == 1:
+                if predicted_labels == 1:
+                    tp += 1
+                else:
+                    fp += 1
+            else:
+                if predicted_labels == 0:
+                    tn += 1
+                else:
+                    fn += 1
+
+        print "For %s predictions results were: TPs=%s TNs=%s FPs=%s FNs=%s" % ( len( prob ), tp, tn, fp, fn )
+
         # file that will store the predicted labels
         predict_label_filename = results.prediction_file
         nmp.write_labels2file(predict_label_filename, file_ids, prob, predicted_labels)
