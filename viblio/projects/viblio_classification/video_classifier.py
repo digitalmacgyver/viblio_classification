@@ -14,8 +14,8 @@ if __name__ == '__main__':
     parser.add_argument('-m', action='store', dest='model_file', help='directory to store the results')
     results = parser.parse_args()
 
-    if not os.path.exists(results.output_directory):
-        os.makedirs(results.output_directory)
+    #if not os.path.exists(results.output_directory):
+    #    os.makedirs(results.output_directory)
     v=videoutils.VideoUtils()
     #extract frames from the video
     v.extract_frames(results.video_file,results.output_directory,0.5)
