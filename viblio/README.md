@@ -160,7 +160,3 @@ viblio_classifier.py
 
 The optional -c argument defaults to
 classification/viblio/resources/ml/svm_config.cfg
-<<<<<<< HEAD
-
-=======
->>>>>>> e2c0f361c52ebced4c58fd8138568e4e8ac0bcf9
