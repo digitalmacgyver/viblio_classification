@@ -130,15 +130,16 @@ if __name__ == '__main__':
         fp = 0
         tn = 0
         fn = 0
+        print "label, probability, prediction"
         for i in range( len( prob ) ):
-            print labels[i], prob[i], predicted_labels[i]
+            print "%s,%0.02f,%s" % ( labels[i], prob[i], predicted_labels[i] )
             if labels[i] == 1:
                 if predicted_labels[i] == 1:
                     tp += 1
                 else:
                     fp += 1
             else:
-                if predicted_labels[i] == 0:
+                if predicted_labels[i] == -1:
                     tn += 1
                 else:
                     fn += 1
@@ -146,8 +147,8 @@ if __name__ == '__main__':
         print "For %s predictions results were: TPs=%s TNs=%s FPs=%s FNs=%s" % ( len( prob ), tp, tn, fp, fn )
 
         # file that will store the predicted labels
-        predict_label_filename = results.prediction_file
-        nmp.write_labels2file(predict_label_filename, file_ids, prob, predicted_labels)
+        #predict_label_filename = results.prediction_file
+        #nmp.write_labels2file(predict_label_filename, file_ids, prob, predicted_labels)
 
     elif results.stage == 'report':
         # file that stores the predicted labels
