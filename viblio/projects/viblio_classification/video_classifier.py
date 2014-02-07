@@ -26,12 +26,12 @@ if __name__ == '__main__':
     path1= os.path.basename(os.path.normpath(results.output_directory))
     text_path = os.path.normpath(results.output_directory) + '/' +path1+'_paths.txt'
 
-    print "sent stuff to ", text_path
+    #extract features from the frames of the video
+    os.system('python feature_extractor.py -label %s -inter_dir %s'%(results.label,results.output_directory))
+    #classify the extracted frames from the video
+
     sys.exit( 0 )
 
-    #extract features from the frames of the video
-    os.system('python feature_extractor.py - %s -o %s -inter_dir %s'%(text_path,path1,results.output_directory))
-    #classify the extracted frames from the video
     os.system('python viblio_classifier.py -d %s -i %s_features.txt -c %s -s predict -m %s'%(results.output_directory,path1,results.config_file,results.model_file))
     print "starting actual prediction of frames"
     path2=os.path.normpath(results.output_directory)
