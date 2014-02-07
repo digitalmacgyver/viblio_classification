@@ -1,6 +1,9 @@
+#!/usr/bin/env python
+
 from __future__ import division
 import os
 import argparse
+import sys
 
 from viblio.common.utils import videoutils
 
@@ -8,6 +11,7 @@ from viblio.common.utils import videoutils
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument('-label', action='store', dest='label', help='Single world label used to tag these search results and build output directory structures.' ) 
     parser.add_argument('-v', action='store', dest='video_file', help='Video File that neeeds to be classified')
     parser.add_argument('-d', action='store', dest='output_directory', help='directory to store the results')
     parser.add_argument('-config', action='store', dest='config_file', help='directory to store the results')
@@ -21,8 +25,12 @@ if __name__ == '__main__':
     v.extract_frames(results.video_file,results.output_directory,0.5)
     path1= os.path.basename(os.path.normpath(results.output_directory))
     text_path = os.path.normpath(results.output_directory) + '/' +path1+'_paths.txt'
+
+    print "sent stuff to ", text_path
+    sys.exit( 0 )
+
     #extract features from the frames of the video
-    os.system('python feature_extractor.py -i %s -o %s -inter_dir %s'%(text_path,path1,results.output_directory))
+    os.system('python feature_extractor.py - %s -o %s -inter_dir %s'%(text_path,path1,results.output_directory))
     #classify the extracted frames from the video
     os.system('python viblio_classifier.py -d %s -i %s_features.txt -c %s -s predict -m %s'%(results.output_directory,path1,results.config_file,results.model_file))
     print "starting actual prediction of frames"
