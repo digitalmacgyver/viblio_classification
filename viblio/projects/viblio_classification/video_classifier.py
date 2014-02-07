@@ -22,7 +22,7 @@ if __name__ == '__main__':
         os.makedirs(results.output_directory)
     v=videoutils.VideoUtils()
     #extract frames from the video
-    v.extract_frames(results.video_file,results.output_directory,0.5)
+    v.extract_frames(results.video_file,results.output_directory,0.1)
     path1= os.path.basename(os.path.normpath(results.output_directory))
     text_path = os.path.normpath(results.output_directory) + '/' +path1+'_paths.txt'
 
