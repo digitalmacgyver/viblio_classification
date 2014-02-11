@@ -23,7 +23,6 @@ frames_dir="$working_dir"/frames_dir
 svm_model_file="$working_dir"/svm_default.model
 svm_config_file="$working_dir"/svm_config.cfg
 
-echo -d "$working_dir"
 
 # check if working directory exists
 if [ -d "$working_dir" ]; then
@@ -49,7 +48,6 @@ ffmpeg -i $video_file -r 0.5 -f image2 "$frames_dir"/"$name"_images%05d.png
 #create input for feature extractor
 path_file="$frames_dir"/"$name"_path.txt
 rm -f $path_file
-echo $path_file
 for entry in "$frames_dir"/"$name"*
 do
   echo $frames_dir $(basename "$entry") label 0 >> "$path_file"
