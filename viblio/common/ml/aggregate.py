@@ -12,7 +12,7 @@ class Aggregate(object):
 
 
 class AggregateVote(Aggregate):
-    def __init__(self, threshold=[]):
+    def __init__(self, threshold=None):
         self.threshold = threshold
 
     def compute(self, frame_output):
@@ -23,19 +23,3 @@ class AggregateVote(Aggregate):
             return 1 if ratio > self.threshold else 0
         else:
             return ratio
-
-
-if __name__ == '__main__':
-    import argparse
-    from viblio.common.utils import numpyutils
-
-    # parse arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-i', action='store', dest='file_name', help='path to the file containing prob and labels for frames')
-    results = parser.parse_args()
-
-    nmp = numpyutils.NumpyUtil()
-    file_ids, prob, predicted_labels = nmp.read_labels_from_file(results.file_name)
-
-    av = AggregateVote(0.3)
-    print av.compute(predicted_labels)
