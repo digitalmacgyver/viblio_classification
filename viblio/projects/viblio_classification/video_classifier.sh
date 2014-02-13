@@ -42,7 +42,7 @@ name=$(basename "$video_file" ".mp4")
 
 #extract frames
 rm -f "$frames_dir"/"$name"*
-ffmpeg -i $video_file -r 0.5 -f image2 "$frames_dir"/"$name"_images%05d.png
+ffmpeg -i $video_file -r 0.1 -f image2 "$frames_dir"/"$name"_images%05d.png
 
 
 #create input for feature extractor
@@ -57,13 +57,17 @@ python feature_extractor.py -i $path_file -o $name -inter_dir $feature_dir
 
 python viblio_classifier.py -d $feature_dir -i "$name"_features.txt -m $svm_model_file -p "$feature_dir"/"$name"_predict.txt -c $svm_config_file -s predict
 
-res=$(python frame_aggregate.py -i "$feature_dir"/"$name"_predict.txt -t 0.3)
+res=$(python frame_aggregate.py -i "$feature_dir"/"$name"_predict.txt)
 
+echo The confidence for the video is $res
+echo $res >"$working_dir"/result.txt
+
+:<<'COMMENT'
 if [ $res == 1 ]
 then
     echo the video $video_file is positive
 else
     echo the video $video_file is negative
 fi
-
+COMMENT
 
