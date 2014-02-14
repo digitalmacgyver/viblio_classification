@@ -40,6 +40,7 @@ else
 fi
 
 if [ -d "$model_dir" ];then
+    echo "model directory exists"
 else
     echo "model directory doesn't exist"
     exit 1
