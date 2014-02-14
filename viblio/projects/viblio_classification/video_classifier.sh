@@ -39,6 +39,11 @@ else
     exit 1
 fi
 
+if [ -d "$model_dir" ];then
+else
+    echo "model directory doesn't exist"
+    exit 1
+fi
 #extract the base name of video
 name=$(basename "$video_file" ".mp4")
 
