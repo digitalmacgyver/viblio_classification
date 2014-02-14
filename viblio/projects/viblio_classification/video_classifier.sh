@@ -1,16 +1,18 @@
 #!/bin/bash
 
-# ./video_classifier.sh ~/data/videos/vid4.mp4 ~/data/working_dir
+# ./video_classifier.sh ~/data/videos/vid4.mp4 ~/data/working_dir ~/data/model_dir
 
 
 # get path to input video
-if [ "$1" != "" ] && [ "$2" != "" ]; then
+if [ "$1" != "" ] && [ "$2" != "" ] && [ "$3" != "" ]; then
     video_file=$1
     working_dir=$2
+    model_dir=$3
 else
     echo "Use ./video_classifier.sh input_file working_dir"
     echo "input_file: path to the input video h.264 encoded"
-    echo "working_dir: path to the directory containing:"
+    echo "working_dir:path where temporary output features and files are stored"
+    echo "model_dir: path to the directory containing:"
     echo "  svm_default.model : model trained using svm"
     echo "  svm_config.cfg : svm config file"
     echo "  /frames : a directory that will be used to store frames extracted from input video."
@@ -20,8 +22,8 @@ fi
 
 feature_dir="$working_dir"/features
 frames_dir="$working_dir"/frames_dir
-svm_model_file="$working_dir"/svm_default.model
-svm_config_file="$working_dir"/svm_config.cfg
+svm_model_file="$model_dir"/svm_default.model
+svm_config_file="$model_dir"/svm_config.cfg
 
 
 # check if working directory exists
