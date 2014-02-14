@@ -57,7 +57,7 @@ python feature_extractor.py -i $path_file -o $name -inter_dir $feature_dir
 
 python viblio_classifier.py -d $feature_dir -i "$name"_features.txt -m $svm_model_file -p "$feature_dir"/"$name"_predict.txt -c $svm_config_file -s predict
 
-res=$(python frame_aggregate.py -i "$feature_dir"/"$name"_predict.txt)
+res=$(python aggregate_frame_labels.py -i "$feature_dir"/"$name"_predict.txt)
 
 echo The confidence for the video is $res
 echo $res >"$working_dir"/result.txt
