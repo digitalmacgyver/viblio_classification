@@ -20,9 +20,14 @@ class NumpyUtil():
             fd = urllib.urlopen(path)
             image_file = cStringIO.StringIO(fd.read())
             im = Image.open(image_file)
-        wpercent = (basewidth/float(im.size[0]))
-        hsize = int((float(im.size[1])*float(wpercent)))
-        im = im.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
+        if (im.size[0])>(im.size[1]):
+            wpercent = (basewidth/float(im.size[0]))
+            hsize = int((float(im.size[1])*float(wpercent)))
+            im = im.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
+        else:
+            wpercent = (basewidth/float(im.size[1]))
+            hsize = int((float(im.size[0])*float(wpercent)))
+            im = im.resize((hsize,basewidth), PIL.Image.ANTIALIAS)
         numpy_image = numpy.array(im)
 	return numpy_image
 
