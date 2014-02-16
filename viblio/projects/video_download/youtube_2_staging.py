@@ -4,6 +4,7 @@ import argparse
 import uuid
 import os
 import shutil
+import time
 
 def install_usage():
     print "Error! youtube-dl binary is not installed on your system!"
@@ -36,7 +37,10 @@ if __name__ == '__main__':
     print os.system(command)
 
     #extract video frames from the video
-    # Sending to staging
+    elapsed = 0
+    while elapsed < 300 and not os.path.isfile( video_local_filename ):
+        elapsed += 10
+        time.sleep( elapsed )
     print os.system('/home/matt/video_processor/tuspy/tuspy.py -s staging -a staging -e mjhayward+test00@gmail.com -p password -f %s' % ( video_local_filename ) )
 
     print "cleaning up"
