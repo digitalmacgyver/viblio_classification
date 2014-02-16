@@ -44,9 +44,9 @@ if __name__ == '__main__':
     # Sending to staging
     print "STARTING TUSPY"
     elapsed = 0
-    while elapsed < 300 and not os.path.isfile( video_local_filename ):
+    while elapsed < 120 and not os.path.isfile( video_local_filename ):
         elapsed += 10
-        time.sleep( elapsed )
+        time.sleep( 10 )
     print os.system('/home/matt/video_processor/tuspy/tuspy.py -s staging -a staging -e mjhayward+test00@gmail.com -p password -f %s' % ( video_local_filename ) )
 
     print "cleaning up"
