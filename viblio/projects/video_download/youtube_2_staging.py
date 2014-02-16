@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from viblio.common.utils import s3utils
 
 import argparse
@@ -33,10 +35,13 @@ if __name__ == '__main__':
     uuid_name =  str(uuid.uuid4())
     video_local_filename = uuid_name + '.flv' 
     command = 'youtube-dl -o %s %s' % (video_local_filename, results.youtube_video_url)
+    print "STARTING DOWNLOAD"
     print os.system(command)
+    print "DONE WITH DOWNLOAD"
 
     #extract video frames from the video
     # Sending to staging
+    print "STARTING TUSPY"
     print os.system('/home/matt/video_processor/tuspy/tuspy.py -s staging -a staging -e mjhayward+test00@gmail.com -p password -f %s' % ( video_local_filename ) )
 
     print "cleaning up"
