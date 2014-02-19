@@ -28,7 +28,8 @@ class TestSVM(unittest.TestCase):
 
     def test_svm(self):
         # initialize kernel object
-        kernel = viblio_svm.HIK([])
+        #kernel = viblio_svm.HIK([])
+        kernel = viblio_svm.Linear([])
 
         # initialize svm SKLearnSVM object
         sk_svm = viblio_svm.SKLearnSMV(self.C, kernel)

@@ -4,6 +4,7 @@ import os.path
 import numpy
 import numpy.random
 from viblio.common.ml import viblio_svm
+from viblio.common.ml import expand_feature
 from viblio.common.utils import numpyutils
 from configobj import ConfigObj
 from sklearn.metrics import roc_curve, auc
@@ -17,6 +18,7 @@ if __name__ == '__main__':
     parser.add_argument('-m', action='store', dest='model_file', help='Path to the SVM trained model')
     parser.add_argument('-p', action='store', dest='prediction_file', help='Path to a txt file that stores the predicted labels')
     parser.add_argument('-s', action='store', dest='stage', help="indicates the stage of algorith 'learn', 'cross-validate', 'predict', 'report'")
+    parser.add_argument('-a', action='store_true', dest='approximate', help="indicates whether to use approximate kernel or not")
     results = parser.parse_args()
 
     filename = os.path.normpath(results.info_folder) + '/' + results.file_list
@@ -37,7 +39,13 @@ if __name__ == '__main__':
         raise
 
     #set kernel type
-    kernel = viblio_svm.HIK([])
+    if results.approximate:
+        kernel = viblio_svm.Linear([])
+        ef = expand_feature.ExpandFeature()
+        x = ef.expand(x)
+        print x.shape
+    else:
+        kernel = viblio_svm.HIK([])
 
     if results.stage == 'cross-validate':
         print "starting cross validation"

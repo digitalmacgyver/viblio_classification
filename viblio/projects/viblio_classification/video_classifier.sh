@@ -2,6 +2,9 @@
 
 # ./video_classifier.sh ~/data/videos/vid4.mp4 ~/data/working_dir ~/data/model_dir
 
+cur_dir=$(pwd)
+export LD_LIBRARY_PATH="$cur_dir"/../../src/vl_feat/vlfeat-0.9.16/bin/glnxa64:$LD_LIBRARY_PATH
+
 
 # get path to input video
 if [ "$1" != "" ] && [ "$2" != "" ] && [ "$3" != "" ]; then
@@ -63,7 +66,7 @@ done
 
 python feature_extractor.py -i $path_file -o $name -inter_dir $feature_dir
 
-python viblio_classifier.py -d $feature_dir -i "$name"_features.txt -m $svm_model_file -p "$feature_dir"/"$name"_predict.txt -c $svm_config_file -s predict
+python viblio_classifier.py -d $feature_dir -i "$name"_features.txt -m $svm_model_file -p "$feature_dir"/"$name"_predict.txt -c $svm_config_file -s predict -a
 
 res=$(python aggregate_frame_labels.py -i "$feature_dir"/"$name"_predict.txt)
 
