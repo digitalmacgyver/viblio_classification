@@ -109,5 +109,5 @@ class SKLearnSMV(SVMClassifier):
             self.clf.C = c
             cv_scores = cross_validation.cross_val_score(self.clf, kernel, labels, cv=n_fold)
             scores.append(np.mean(cv_scores))
-
+            print c," score: ",np.mean(cv_scores)
         return scores

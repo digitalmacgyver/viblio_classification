@@ -9,6 +9,7 @@ from viblio.common.utils import numpyutils
 from configobj import ConfigObj
 from sklearn.metrics import roc_curve, auc
 import pylab as pl
+import time
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -21,8 +22,7 @@ if __name__ == '__main__':
     parser.add_argument('-a', action='store_true', dest='approximate', help="indicates whether to use approximate kernel or not")
     results = parser.parse_args()
 
-    filename = os.path.normpath(results.info_folder) + '/' + results.file_list
-
+    filename = os.path.normpath(results.info_folder) + '/' + results.file_list    
     # Load features and labels
     nmp = numpyutils.NumpyUtil()
     file_ids, x, labels = nmp.text2numpy_aggregate(results.info_folder, filename, 'ftr')
@@ -44,10 +44,12 @@ if __name__ == '__main__':
         ef = expand_feature.ExpandFeature()
         x = ef.expand(x)
         print x.shape
+        print "using approximate kernel"
     else:
         kernel = viblio_svm.HIK([])
 
     if results.stage == 'cross-validate':
+        start_time=time.time()
         print "starting cross validation"
 
         #cross validation
@@ -62,8 +64,10 @@ if __name__ == '__main__':
         best_c_ind = numpy.argmax(scores)
         print "cross validation is done"
         print "the best C is", Cs[best_c_ind], "with ", 100 * scores[best_c_ind], "% F1 performance."
+        print "cross validation run time ", time.time()-start_time," seconds"
 
     elif results.stage == 'learn':
+        start_time=time.time()
         best_C = float(svm_params['best_C'])
         print "start training."
         # initialize svm SKLearnSVM object
@@ -74,8 +78,9 @@ if __name__ == '__main__':
 
         # save svm model to disk in the same folder that is passed through info_folder
         model_filename = results.model_file
-        print "model saved in", model_filename
         sk_svm.save(model_filename)
+        print "model saved in", model_filename
+        print "Time to learn the model ", time.time()-start_time," seconds"
 
     elif results.stage == 'predict':
         best_C = float(svm_params['best_C'])
