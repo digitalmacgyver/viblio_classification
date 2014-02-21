@@ -16,4 +16,6 @@ if __name__ == '__main__':
 
     thr = float(results.threshold) if results.threshold else None
     av = AggregateVote(thr)
-    print av.compute(predicted_labels)
+    #print av.compute(predicted_labels)
+    # compute_maxprobability(prob,6). Here 6 is the sliding window size. It spans number of images. If frames were extracted at every 5 seconds then this would return maximum probability found in a 5x6 = 30 seconds window over the video 
+    print av.compute_maxprobability(prob,6)
