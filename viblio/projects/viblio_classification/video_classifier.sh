@@ -49,11 +49,13 @@ else
     exit 1
 fi
 #extract the base name of video
-name=$(basename "$video_file" ".mp4")
-
+filename=$(basename "$video_file" ".mp4")
+#chop the file extension
+name=${filename%.*}
 #extract frames
 rm -f "$frames_dir"/"$name"*
-ffmpeg -i $video_file -r 0.1 -f image2 "$frames_dir"/"$name"_images%05d.png
+# extract a frame every 5 seconds. -r = 1/5 =0.2
+ffmpeg -i $video_file -r 0.2 -f image2 "$frames_dir"/"$name"_images%05d.png
 
 
 #create input for feature extractor
