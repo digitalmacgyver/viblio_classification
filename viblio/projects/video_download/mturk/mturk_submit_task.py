@@ -19,12 +19,9 @@ if __name__ == '__main__':
         Total_images3_urls = [line.split()[1] for line in f]
     
     # All the urls are obtained in this Total_images3_urls
-    print str(len(Total_images3_urls))
-    No_loops=len(Total_images3_urls)/results.images_per_hit
-    print str(No_loops)
-   
+    print (len(Total_images3_urls))
     filepath=open(results.output_txt_file,"w")
-    for iter in range(0,No_loops,results.images_per_hit):
+    for iter in range(0,len(Total_images3_urls),results.images_per_hit):
         part=Total_images3_urls[iter:iter+results.images_per_hit-1]
         hitid= mt.sumbit_one(part,results.mt_params_config_filename)
         filepath.write("%s\n"%hitid.HITId)
