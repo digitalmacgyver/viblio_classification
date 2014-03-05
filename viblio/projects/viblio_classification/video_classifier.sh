@@ -2,6 +2,9 @@
 
 # ./video_classifier.sh ~/data/videos/vid4.mp4 ~/data/working_dir ~/data/model_dir
 
+cur_dir=$(pwd)
+export LD_LIBRARY_PATH="$cur_dir"/../../src/vl_feat/vlfeat-0.9.16/bin/glnxa64:$LD_LIBRARY_PATH
+
 
 # get path to input video
 if [ "$1" != "" ] && [ "$2" != "" ] && [ "$3" != "" ]; then
@@ -46,11 +49,13 @@ else
     exit 1
 fi
 #extract the base name of video
-name=$(basename "$video_file" ".mp4")
-
+filename=$(basename "$video_file" ".mp4")
+#chop the file extension
+name=${filename%.*}
 #extract frames
 rm -f "$frames_dir"/"$name"*
-ffmpeg -i $video_file -r 0.1 -f image2 "$frames_dir"/"$name"_images%05d.png
+# extract a frame every 5 seconds. -r = 1/5 =0.2
+ffmpeg -i $video_file -r 0.2 -f image2 "$frames_dir"/"$name"_images%05d.png
 
 
 #create input for feature extractor
@@ -63,7 +68,7 @@ done
 
 python feature_extractor.py -i $path_file -o $name -inter_dir $feature_dir
 
-python viblio_classifier.py -d $feature_dir -i "$name"_features.txt -m $svm_model_file -p "$feature_dir"/"$name"_predict.txt -c $svm_config_file -s predict
+python viblio_classifier.py -d $feature_dir -i "$name"_features.txt -m $svm_model_file -p "$feature_dir"/"$name"_predict.txt -c $svm_config_file -s predict -a
 
 res=$(python aggregate_frame_labels.py -i "$feature_dir"/"$name"_predict.txt)
 
