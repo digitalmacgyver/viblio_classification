@@ -12,7 +12,7 @@ import shutil
 
 def usage():
     print "=========================================="
-    print "Usage: run_video_download_pipeline.py -label my_label -keyword '\"youtube search\" -terms +desired' -inter_dir /home/me/outputdir -bucket_name s3_storage_bucket [-max_videos 200] [-max_video_duration 600] [-config_file /path/to/ffmpeg_config.ini]"
+    print "Usage: run_video_download_pipeline.py -label my_label -keyword '\"youtube search\" -terms +desired' -inter_dir /home/me/outputdir -bucket_name s3_storage_bucket [-max_videos 200] [-max_video_duration 600] [-min_video_duration 20] [-config_file /path/to/ffmpeg_config.ini]"
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -22,8 +22,11 @@ if __name__ == '__main__':
     parser.add_argument('-inter_dir', action='store', dest='inter_dir', help='Intermediate directory root, files are placed in the subdirectory of this directory named by -label')
     parser.add_argument('-config_file', action='store', default = os.path.dirname( __file__ ) + '/../../../resources/projects/video_download/config_ffmpeg.ini' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/projects/video_download/config_ffmpeg.ini')
     parser.add_argument('-max_videos', action='store', default=950, dest='max_videos', help='Maximum number of videos to download, defaults to 950. NOTE: Fewer than -max_videos may be processed if any of them exceed -max_video_duration' )
-    parser.add_argument('-max_video_duration', action='store', default=600, dest='max_video_duration', help='Exclude videos whose length is longer than -max_video_duration in seconds, defaults to 600.' )
-
+    parser.add_argument('-min_video_duration', action='store', default=20, dest='min_video_duration', help='Exclude videos whose length is lesser than -min_video_duration in seconds, defaults to 20.' )
+    parser.add_argument('-max_video_duration', action='store', default=600, dest='max_video_duration', help='Exclude videos whose length is longer than -max_video_duration in seconds, defaults to 600.')
+    
+    
+    
     results = parser.parse_args()
 
     if not results.label:
@@ -45,12 +48,13 @@ if __name__ == '__main__':
         os.makedirs( outdir )
     # search and save urls in urls.txt
     search_pointer=YouTubeSearch()
-    search_pointer.search(results.keyword, int( results.max_video_duration ), int( results.max_videos ) )
+    search_pointer.search(results.keyword, int(results.min_video_duration),int(results.max_video_duration), int(results.max_videos))
     file_path = outdir+"/urls.txt"
     search_pointer.save(file_path)
     print " Done with urls.txt"
+    
 
-    # Initialization of decoder , downloader and uploader
+    # Initialization of decoder, downloader and uploader
     downloadObj=YoutubeVideoDownLoader()
     vdecoder=video_decoder.VideoDecoder(results.config_file)
     s3conn = s3utils.S3()
@@ -92,3 +96,4 @@ if __name__ == '__main__':
     fp2.close()
     fp1.close()
         
+
