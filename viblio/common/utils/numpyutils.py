@@ -6,7 +6,7 @@ import numpy
 import tables
 import h5py
 import os
-
+import re
 
 
 
@@ -37,6 +37,21 @@ class NumpyUtil():
 	ds = f.createCArray(f.root, rootname, atom, numpyarray.shape)
         ds[:]=numpyarray
 	f.close()
+
+    def read_image_features_per_video(self, video_name, inter_dir):
+        ftr_files = [f for f in os.listdir(inter_dir) if re.match( video_name + r'_.*\.hdf', f)]
+        features = None
+        for (index, ftr_name) in enumerate(ftr_files):
+            hdf5path = inter_dir + '/' + ftr_name
+            with h5py.File(hdf5path, 'r') as f:
+                feature = f['ftr'].value
+            if index == 0:
+                features = numpy.zeros(shape=(len(ftr_files), feature.size))
+                features[index, :] = feature
+            else:
+                features[index, :] = feature
+
+        return features
     
     def text2numpy_aggregate(self,info_folder,filename,rootname):
          with open(filename) as f:

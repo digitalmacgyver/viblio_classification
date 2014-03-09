@@ -1,16 +1,8 @@
 import argparse
 import os
 from viblio.common.features import features
-from viblio.common import config
 from viblio.common.ml import feature_pooling
 from viblio.common.utils import numpyutils
-import scipy.io
-import numpy
-import PIL
-from PIL import Image
-import urllib2 as urllib
-import cStringIO
-import h5py
 
 #usage:
 #python feature_extractor.py -i /home/rgolla/Downloads/vid4/vid4_paths.txt -o vid4 -inter_dir /home/rgolla/Downloads/vid4

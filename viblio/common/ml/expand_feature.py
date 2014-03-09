@@ -14,12 +14,12 @@ class ExpandFeature():
         library_path1 = config.base_dir() + '/bin/expansion_library.so'
         try:
             open(library_path1)
+            self.lib = ctypes.CDLL(library_path1)
         except Exception as e:
             print 'run make.sh in ./viblio/src folder'
             raise(e)
 
         # load shared library and set input/output format for hog2D feature extractor
-        self.lib = ctypes.CDLL(library_path1)
         self.lib.expand.argtypes = [ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.c_int, ctypes.c_int, ctypes.POINTER(ctypes.c_char), ctypes.c_int, ctypes.c_float]
         self.lib.expand.restype = ctypes.c_int
 

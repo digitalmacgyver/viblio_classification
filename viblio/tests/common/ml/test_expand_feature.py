@@ -6,7 +6,7 @@ from viblio.common.ml import expand_feature
 
 class TestSVM(unittest.TestCase):
     def setUp(self):
-        self.expand_obj = expand_feature.ExpandFeature(kernel_type='inter', order=400)
+        self.expand_obj = expand_feature.ExpandFeature(kernel_type='inter', order=300)
         self.x = numpy.random.uniform(0, 1, (100, 20))
         print self.x.shape
         self.hik_kernel = viblio_svm.HIK([])
