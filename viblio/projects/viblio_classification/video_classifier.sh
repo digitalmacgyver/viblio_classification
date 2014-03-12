@@ -20,7 +20,7 @@ else
     echo "  svm_config.cfg : svm config file"
     echo "  /frames : a directory that will be used to store frames extracted from input video."
     echo "  /features : a directory that will be used to store features extracted from video frames."
-    exit 1
+    exit -1
 fi
 
 feature_dir="$working_dir"/features
@@ -39,14 +39,12 @@ if [ -d "$working_dir" ]; then
     fi
 else
     echo "working directory does not exist."
-    exit 1
+    exit -1
 fi
 
-if [ -d "$model_dir" ];then
-    echo "model directory exists"
-else
+if [ ! -d "$model_dir" ];then
     echo "model directory doesn't exist"
-    exit 1
+    exit -1
 fi
 #extract the base name of video
 filename=$(basename "$video_file" ".mp4")
@@ -55,32 +53,44 @@ name=${filename%.*}
 #extract frames
 rm -f "$frames_dir"/"$name"*
 # extract a frame every 5 seconds. -r = 1/5 =0.2
-ffmpeg -i $video_file -r 0.2 -f image2 "$frames_dir"/"$name"_images%05d.png
-
+ffmpeg -i $video_file -r 0.4 -f image2 "$frames_dir"/"$name"_images%05d.png > /dev/null 2>&1
+#ffmpeg -i $video_file -r 0.4 -f image2 "$frames_dir"/"$name"_images%05d.png
 
 #create input for feature extractor
 path_file="$frames_dir"/"$name"_path.txt
-rm -f $path_file
+#rm -f $path_file
 for entry in "$frames_dir"/"$name"*
 do
   echo $frames_dir $(basename "$entry") label 0 >> "$path_file"
 done
 
-python feature_extractor.py -i $path_file -o $name -inter_dir $feature_dir
-
-python viblio_classifier.py -d $feature_dir -i "$name"_features.txt -m $svm_model_file -p "$feature_dir"/"$name"_predict.txt -c $svm_config_file -s predict -a
+python feature_extractor.py -i $path_file -o $name -inter_dir $feature_dir > /dev/null 2>&1
+#python feature_extractor.py -i $path_file -o $name -inter_dir $feature_dir
+python viblio_classifier.py -d $feature_dir -i "$name"_features.txt -m $svm_model_file -p "$feature_dir"/"$name"_predict.txt -c $svm_config_file -s predict -a > /dev/null 2>&1
+#python viblio_classifier.py -d $feature_dir -i "$name"_features.txt -m $svm_model_file -p "$feature_dir"/"$name"_predict.txt -c $svm_config_file -s predict -a
 
 res=$(python aggregate_frame_labels.py -i "$feature_dir"/"$name"_predict.txt)
+detected=$(python -c "print 'yes' if $res > 0.6 else 'no'")
 
-echo The confidence for the video is $res
-echo $res >"$working_dir"/result.txt
 
-:<<'COMMENT'
-if [ $res == 1 ]
+case "$feature_dir" in 
+    /mnt*) 
+            rm -r $feature_dir > /dev/null 2>&1;;
+       
+esac
+
+case "$frames_dir" in 
+    /mnt*) 
+            rm -r $frames_dir > /dev/null 2>&1;;
+       
+esac
+
+if [ $detected == 'yes' ]
 then
-    echo the video $video_file is positive
+    echo $res
+    exit 1
 else
-    echo the video $video_file is negative
+    echo $res
+    exit 0
 fi
-COMMENT
 
