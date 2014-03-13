@@ -40,7 +40,7 @@ if __name__ == '__main__':
 	urls=f.readlines()
         
     if not os.path.exists(results.working_directory):
-        os.makedirs(directory)
+        os.makedirs(results.working_directory)
     for index,video in enumerate(urls):
         work_dir=results.working_directory+'/video'+str(index)
         if not os.path.exists(work_dir):
