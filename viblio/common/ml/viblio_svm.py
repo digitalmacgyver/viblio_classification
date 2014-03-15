@@ -23,6 +23,11 @@ class HIK(Kernel):
         return gram
 
 
+class Linear(Kernel):
+    def compute(self, a, b):
+        return np.dot(a, b.transpose())
+
+
 class SVMClassifier(object):
     def __init__(self, C, kernel):
         self.C = C
@@ -46,23 +51,38 @@ class SVMClassifier(object):
 class SKLearnSMV(SVMClassifier):
     def __init__(self, C, kernel):
         super(SKLearnSMV, self).__init__(C, kernel)
+        self.training_data = None # will be used for general kernelized version
+        self.w = None # will be used for linear version
         self.clf = svm.SVC(kernel='precomputed', C=self.C, probability=True, class_weight='auto', cache_size=500, random_state=30, verbose=False)
 
     def learn(self, features, labels):
         kernel = self.kernel.compute(features, features)
-        self.training_data = features
         self.clf.fit(kernel, labels)
 
+        # if the kernel is linear extract w explicitly
+        if isinstance(self.kernel, Linear):
+            self.w = np.dot(self.clf.dual_coef_, features[self.clf.support_, :])
+        else:
+            self.training_data = features
+
     def predict(self, test_feature):
-        kernel = self.kernel.compute(test_feature, self.training_data)
-        prob = self.clf.predict_proba(kernel)
-        prob = prob[:, self.clf._label==1].reshape(test_feature.shape[0])
+        if isinstance(self.kernel, Linear):
+            score = np.dot(test_feature, self.w.transpose()) - self.clf.intercept_
+            score = score.reshape((score.shape[0],))
+            prob = 1 / (1 + np.exp(self.clf.probB_ + self.clf.probA_ * score))
 
-        # compute labels
-        predict_label = np.zeros((prob.shape[0], ))
-        predict_label[prob >= 0.5] = 1
-        predict_label[prob < 0.5] = -1
+            if self.clf.classes_[0] != 1:
+                prob = 1 - prob
+                score = - score
 
+            predict_label = np.zeros((score.shape[0], ))
+            predict_label[score >= 0] = 1
+            predict_label[score < 0] = -1
+        else:
+            kernel = self.kernel.compute(test_feature, self.training_data)
+            prob = self.clf.predict_proba(kernel)
+            prob = prob[:, self.clf.classes_ == 1].reshape(test_feature.shape[0])
+            predict_label = self.clf.predict(kernel)
         return prob, predict_label
 
     def load(self, filename):
@@ -77,10 +97,17 @@ class SKLearnSMV(SVMClassifier):
         self.kernel = temp.kernel
         self.clf = temp.clf
         self.training_data = temp.training_data
+        self.w = temp.w
         input_file.close()
 
-    def cross_validate(self, features, labels, n_fold):
+    def cross_validate(self, features, labels, n_fold, Cs):
         kernel = self.kernel.compute(features, features)
-        scores = cross_validation.cross_val_score(self.clf, kernel, labels, cv=n_fold)
 
+        scores = []
+        for c in Cs:
+            # initialize svm SKLearnSVM object
+            self.clf.C = c
+            cv_scores = cross_validation.cross_val_score(self.clf, kernel, labels, cv=n_fold)
+            scores.append(np.mean(cv_scores))
+            print c," score: ",np.mean(cv_scores)
         return scores

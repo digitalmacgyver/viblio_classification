@@ -28,7 +28,8 @@ class TestSVM(unittest.TestCase):
 
     def test_svm(self):
         # initialize kernel object
-        kernel = viblio_svm.HIK([])
+        #kernel = viblio_svm.HIK([])
+        kernel = viblio_svm.Linear([])
 
         # initialize svm SKLearnSVM object
         sk_svm = viblio_svm.SKLearnSMV(self.C, kernel)
@@ -53,14 +54,11 @@ class TestSVM(unittest.TestCase):
         # initialize kernel object
         kernel = viblio_svm.HIK([])
 
-        scores = []
-        for c in self.Cs:
-            # initialize svm SKLearnSVM object
-            sk_svm = viblio_svm.SKLearnSMV(c, kernel)
+        # initialize svm SKLearnSVM object
+        c_init = 1
+        sk_svm = viblio_svm.SKLearnSMV(c_init, kernel)
 
-            # cross validate svm using synthetic data
-            score = sk_svm.cross_validate(self.x_train, self.y_train, 5)
-            scores.append(np.mean(score))
+        scores = sk_svm.cross_validate(self.x_train, self.y_train, 5, self.Cs)
 
         diff = np.abs(np.mean(scores) - 1)
         self.assertTrue(diff < 1e-6)

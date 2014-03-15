@@ -3,7 +3,6 @@
 import argparse
 import os
 from viblio.common.features import features
-from viblio.common import config
 from viblio.common.ml import feature_pooling
 from viblio.common.utils import numpyutils
 import scipy.io

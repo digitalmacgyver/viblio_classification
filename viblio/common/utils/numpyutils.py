@@ -6,6 +6,7 @@ import numpy
 import tables
 import h5py
 import os
+import re
 
 class NumpyUtil():
     def __init__(self):
@@ -17,9 +18,14 @@ class NumpyUtil():
             fd = urllib.urlopen(path)
             image_file = cStringIO.StringIO(fd.read())
             im = Image.open(image_file)
-        wpercent = (basewidth/float(im.size[0]))
-        hsize = int((float(im.size[1])*float(wpercent)))
-        im = im.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
+        if (im.size[0])>(im.size[1]):
+            wpercent = (basewidth/float(im.size[0]))
+            hsize = int((float(im.size[1])*float(wpercent)))
+            im = im.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
+        else:
+            wpercent = (basewidth/float(im.size[1]))
+            hsize = int((float(im.size[0])*float(wpercent)))
+            im = im.resize((hsize,basewidth), PIL.Image.ANTIALIAS)
         numpy_image = numpy.array(im)
 	return numpy_image
 
@@ -30,7 +36,21 @@ class NumpyUtil():
         ds[:]=numpyarray
 	f.close()
 
-    
+    def read_image_features_per_video(self, video_name, inter_dir):
+        ftr_files = [f for f in os.listdir(inter_dir) if re.match( video_name + r'_.*\.hdf', f)]
+        features = None
+        for (index, ftr_name) in enumerate(ftr_files):
+            hdf5path = inter_dir + '/' + ftr_name
+            with h5py.File(hdf5path, 'r') as f:
+                feature = f['ftr'].value
+            if index == 0:
+                features = numpy.zeros(shape=(len(ftr_files), feature.size))
+                features[index, :] = feature
+            else:
+                features[index, :] = feature
+
+        return features
+
     def text2numpy_aggregate(self,info_folder,filename,rootname):
          with open(filename) as f:
              content = f.readlines()
