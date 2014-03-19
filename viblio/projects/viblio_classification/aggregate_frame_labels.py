@@ -22,7 +22,7 @@ if __name__ == '__main__':
     nmp = numpyutils.NumpyUtil()
     file_ids, prob, predicted_labels = nmp.read_labels_from_file(arguments.file_name)
 
-    if frame_aggregation_strategy == 'AggragateAlphaTrimmedMean':
+    if frame_aggregation_strategy == 'AggregateAlphaTrimmedMean':
         av = AggregateAlphaTrimmedMean( frame_aggregation_count )
         print av.compute(prob)
     else:

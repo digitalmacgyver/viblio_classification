@@ -73,17 +73,19 @@ if __name__ == '__main__':
     parser.add_argument( '-v', action='store', dest='video_file', help='Video File that neeeds to be classified' )
     arguments = parser.parse_args()
 
+    if arguments.model_directory != None and os.path.isdir( arguments.model_directory ):
+        if arguments.model_file == None:
+            arguments.model_file = "%s/svm_default.model" % ( arguments.model_directory )
+        if arguments.config_file == None:
+            arguments.config_file = "%s/svm_config.cfg" % ( arguments.model_directory )
+            
     if arguments.config_file == None or not os.path.isfile( arguments.config_file ):
         print parser.print_help()
         sys.exit( 1 )
     if arguments.output_directory == None:
         print parser.print_help()
         sys.exit( 1 )
-    if arguments.model_directory != None and os.path.isfile( arguments.model_directory ):
-        if arguments.model_file == None:
-            arguments.model_file = "%s/svm_default.model" % ( arguments.model_directory )
-        if arguments.config_file == None:
-            arguments.config_file = "%s/svm_config.cfg" % ( arguments.model_directory )   
+      
     if arguments.model_file == None or not os.path.isfile( arguments.model_file ):
         print parser.print_help()
         sys.exit( 1 )
@@ -119,7 +121,7 @@ if __name__ == '__main__':
         image_confidence_threshold = float( cv_config['image_confidence_threshold'] )
         image_sampling_frequency = float( cv_config.get( 'image_sampling_frequency', 0.4 ) )
         frame_aggregation_count = int( cv_config.get( 'frame_aggregation_count', 6 ) )
-        DEBUG - spelling
+        
         frame_aggregation_strategy = cv_config.get( 'frame_aggregation_strategy', 'AggregateAlphaTrimmedMean' )
         video_detection_strategy = cv_config.get( 'video_detection_strategy', 'contiguous_positives' )
     except Exception as e:
@@ -128,7 +130,7 @@ if __name__ == '__main__':
     # Produce images from the input video at the desired rate into the
     # frame directory
     try:
-        cmd = 'ffmpeg -y -i %s -r %s -f image2 %s/%s_images%06d.png > %s/ffmpeg_sample.log 2>&1' % ( video_file, image_sampling_frequency, frames_dir, video_name, output_directory )
+        cmd = 'ffmpeg -y -i %s -r %s -f image2 %s/%s_images-%%06d.png > %s/ffmpeg_sample.log 2>&1' % ( video_file, image_sampling_frequency, frames_dir, video_name, output_directory )
         ( status, output ) = commands.getstatusoutput( cmd )
         if status != 0:
             raise Exception( "Error running command: %s, output was: %s" % ( cmd, output ) )
@@ -138,14 +140,14 @@ if __name__ == '__main__':
     # Create the input for the feature extractor program.
     #
     # /tmp/frames movie_000053.png label 0
-    image_file_paths = "%s/%s_path.txt"
+    image_file_paths = "%s/%s_path.txt"%(frames_dir,video_name)
     try:
         f = open( image_file_paths, 'w' )
         
         for image_file in sorted( os.listdir( frames_dir ) ):
-            if image_file[:-4] != '.png':
+            if image_file[-4:] != '.png':
                 continue
-            f.write( "%s %s label 0" % ( frames_dir, os.path.basename( image_file ) ) )
+            f.write( "%s %s label 0\n" % ( frames_dir, os.path.basename( image_file ) ) )
 
         f.close()
     except Exception as e:
@@ -175,7 +177,7 @@ if __name__ == '__main__':
     try:
         cmd = library_prefix + 'python aggregate_frame_labels.py -i %s/%s_predict.txt -c %s -s %s ' % ( features_dir, video_name, frame_aggregation_count, frame_aggregation_strategy )
         ( status, output ) = commands.getstatusoutput( cmd )
-        classification_result = output
+        classification_result = float( output )
         if status != 0:
             raise Exception( "Error running command: %s, output was: %s" % ( cmd, output ) )
     except Exception as e:
@@ -190,7 +192,7 @@ if __name__ == '__main__':
     # We send the classification result to standard output, and return
     # 1 if this result was greater than our threshold, and 0 otherwise
     print classification_result
-    if classification_result > image_detection_threshold:
+    if classification_result > image_confidence_threshold:
         sys.exit( 1 )
     else:
         sys.exit( 0 )
