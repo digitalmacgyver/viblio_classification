@@ -55,7 +55,7 @@ Optional configuration elements:
    aggregation (if any), defaults to 6
 
  * frame_aggregation_strategy - the manner in which frames are
-   aggregated, defaults to 'AggregateAlphaTrimmedMean'
+   aggregated, defaults to 'AggregateVote'
 
  * video_detection_strategy - the strategy whereby aggregated frames
    and image confidence are applied to determine regions of the video
@@ -124,7 +124,7 @@ if __name__ == '__main__':
         image_sampling_frequency = float( cv_config.get( 'image_sampling_frequency', 0.4 ) )
         frame_aggregation_count = int( cv_config.get( 'frame_aggregation_count', 6 ) )
         
-        frame_aggregation_strategy = cv_config.get( 'frame_aggregation_strategy', 'AggregateAlphaTrimmedMean' )
+        frame_aggregation_strategy = cv_config.get( 'frame_aggregation_strategy', 'AggregateVote' )
         video_detection_strategy = cv_config.get( 'video_detection_strategy', 'contiguous_positives' )
     except Exception as e:
         raise Exception( "Failed to process configuration file: %s, error was: %s" % ( config_file, e ) )
@@ -177,7 +177,7 @@ if __name__ == '__main__':
 
     # Aggregate the results
     try:
-        cmd = library_prefix + ' python aggregate_frame_labels.py -i %s/%s_predict.txt -c %s -s %s ' % ( features_dir, video_name, frame_aggregation_count, frame_aggregation_strategy )
+        cmd = library_prefix + ' python aggregate_frame_labels.py -i %s/%s_predict.txt -c %s -s %s -t %s ' % ( features_dir, video_name, frame_aggregation_count, frame_aggregation_strategy, image_confidence_threshold )
         ( status, output ) = commands.getstatusoutput( cmd )
         classification_result = float( output )
         if status != 0:

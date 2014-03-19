@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from viblio.common.ml.aggregate import AggregateAlphaTrimmedMean
+from viblio.common.ml.aggregate import AggregateAlphaTrimmedMean, AggregateVote
 import argparse
 from viblio.common.utils import numpyutils
 
@@ -10,6 +10,7 @@ if __name__ == '__main__':
     parser.add_argument('-i', action='store', dest='file_name', help='path to the file containing prob and labels for frames')
     parser.add_argument('-c', action='store', dest='frame_aggregation_count', help='The number of frames to aggregate over, defaults to 6')
     parser.add_argument('-s', action='store', dest='frame_aggregation_strategy', help='The frame aggregation strategy, defaults to AggregateAlphaTrimmedMean' )
+    parser.add_argument('-t', action='store', dest='image_confidence_threshold', help='the threshold used in classification')
     arguments = parser.parse_args()
 
     frame_aggregation_count = 6
@@ -24,7 +25,11 @@ if __name__ == '__main__':
 
     if frame_aggregation_strategy == 'AggregateAlphaTrimmedMean':
         av = AggregateAlphaTrimmedMean( frame_aggregation_count )
-        print av.compute(prob)
+        print av.compute( prob )
+    elif frame_aggregation_strategy == 'AggregateVote':
+        threshold = float( arguments.image_confidence_threshold )
+        votes = AggregateVote( threshold )
+        print votes.compute_maxprobability( prob, frame_aggregation_count )
     else:
         raise Exception( "Unexpected frame_aggregation_strategy of %s encountered, not a valid strategy." % ( frame_aggregation_strategy ) )
 

@@ -24,6 +24,15 @@ class AggregateVote(Aggregate):
         else:
             return ratio
 
+    def compute_maxprobability(self,prob,sliding_window_size):
+        window_size=min(prob.size,sliding_window_size)
+        if(window_size==prob.size):
+            return numpy.mean(prob)
+        else:
+            temp = numpy.zeros((len(prob),))
+            for ctr in range(len(prob)-window_size+1):
+                temp[ctr]=numpy.mean(prob[ctr:ctr+window_size])
+            return numpy.max(temp)
 
 class AggregateMax(Aggregate):
     def __init__(self, window_size, threshold=None):
