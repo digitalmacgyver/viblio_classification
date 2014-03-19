@@ -6,10 +6,12 @@ import commands
 from configobj import ConfigObj
 import os
 import argparse
+import shutil
 
 import sys
 script_directory = os.path.dirname( os.path.realpath( __file__ ) )
-sys.path.append( script_directory + '/../../../' )
+python_path = script_directory + '/../../../'
+sys.path.append( python_path )
 from viblio.common.utils import videoutils
 
 '''
@@ -153,11 +155,11 @@ if __name__ == '__main__':
     except Exception as e:
         raise Exception( "Failed to prepare input file for feature extractor, error was: %s" % ( e ) )
 
-    library_prefix = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%s " % ( library_path )
+    library_prefix = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%s PYTHONPATH=$PYTHONPATH:%s " % ( library_path, python_path )
 
     # Run the feature extractor
     try:
-        cmd = library_prefix + 'python feature_extractor.py -i %s -o %s -inter_dir %s > %s/feature_extractor.log 2>&1' % ( image_file_paths, video_name, features_dir, output_directory )
+        cmd = library_prefix + ' python feature_extractor.py -i %s -o %s -inter_dir %s > %s/feature_extractor.log 2>&1' % ( image_file_paths, video_name, features_dir, output_directory )
         ( status, output ) = commands.getstatusoutput( cmd )
         if status != 0:
             raise Exception( "Error running command: %s, output was: %s" % ( cmd, output ) )
@@ -166,7 +168,7 @@ if __name__ == '__main__':
 
     # Run the viblio_classifier
     try:
-        cmd = library_prefix + 'python viblio_classifier.py -d %s -i %s_features.txt -m %s -p %s/%s_predict.txt -c %s -s predict -a > %s/viblio_classifier.log 2>&1' % ( features_dir, video_name, model_file, features_dir, video_name, config_file, output_directory )
+        cmd = library_prefix + ' python viblio_classifier.py -d %s -i %s_features.txt -m %s -p %s/%s_predict.txt -c %s -s predict -a > %s/viblio_classifier.log 2>&1' % ( features_dir, video_name, model_file, features_dir, video_name, config_file, output_directory )
         ( status, output ) = commands.getstatusoutput( cmd )
         if status != 0:
             raise Exception( "Error running command: %s, output was: %s" % ( cmd, output ) )
@@ -175,7 +177,7 @@ if __name__ == '__main__':
 
     # Aggregate the results
     try:
-        cmd = library_prefix + 'python aggregate_frame_labels.py -i %s/%s_predict.txt -c %s -s %s ' % ( features_dir, video_name, frame_aggregation_count, frame_aggregation_strategy )
+        cmd = library_prefix + ' python aggregate_frame_labels.py -i %s/%s_predict.txt -c %s -s %s ' % ( features_dir, video_name, frame_aggregation_count, frame_aggregation_strategy )
         ( status, output ) = commands.getstatusoutput( cmd )
         classification_result = float( output )
         if status != 0:
