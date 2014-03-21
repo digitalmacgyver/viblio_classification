@@ -78,7 +78,7 @@ def activity_present(video_file,working_dir,model_dir):
     python_path = os.path.dirname(os.path.abspath(__file__))+ '/../../../../../../classification/'
     curr =os.getcwd()
     framerate=float(2)
-    ( status, output ) = commands.getstatusoutput("cd %s; PYTHONPATH=$PYTHONPATH:%s ./video_classifier.sh %s %s %s %f" % (path,python_path,video_file,working_dir,model_dir,framerate) )
+    ( status, output ) = commands.getstatusoutput("cd %s; PYTHONPATH=$PYTHONPATH:%s python video_classifier.py -v %s -t %s -d %s" % (path,python_path,video_file,working_dir,model_dir) )
     os.chdir(curr)
     print 'status',status
     print 'output: \n',output
@@ -114,7 +114,7 @@ def activity_present(video_file,working_dir,model_dir):
         segment = x[start:stop]
         if (stop-start)>1:
             timestamp_file.write('%s %s\n'%(timestamps[start],timestamps[stop-1]))
-            print timestamps[start], timestamps[stop-1]
+            #print timestamps[start], timestamps[stop-1]
     print "done with timestamps"
     timestamp_file.close()
     output_filename=working_dir+'/concat.txt'
@@ -129,15 +129,15 @@ def activity_present(video_file,working_dir,model_dir):
 	duration=float(each.split()[1])/1000.0-start_second+0.5
 	print start_second , duration
         vid_path=working_dir+'/'+str(index)
-	command='ffmpeg -i %s -ss %f -t %f %s'%(video_file,start_second,duration,vid_path)+'.mp4'
+	command='ffmpeg -i %s -ss %f -t %f %s'%(video_file,start_second,duration,vid_path)+'.mp4' + ' > /dev/null 2>&1'
 	print command
 	p = subprocess.Popen(command, shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 	output = p.communicate()[0]
-        print output
+        #print output
 	out_file.write('file'+' '+str(index)+'.mp4'+'\n')
     out_file.close()
     
-    command2='ffmpeg -f concat -i %s %s'%(output_filename,working_dir+'/'+'vid_summary.mp4')
+    command2='ffmpeg -f concat -i %s %s'%(output_filename,working_dir+'/'+'vid_summary.mp4')+ ' > /dev/null 2>&1'
     print command2
     p = subprocess.Popen(command2, shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     output = p.communicate()[0]

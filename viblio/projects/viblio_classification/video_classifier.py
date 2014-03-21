@@ -139,14 +139,48 @@ if __name__ == '__main__':
     except Exception as e:
         raise
 
+    # rename all image files to have the millisecond information
     # Create the input for the feature extractor program.
     #
     # /tmp/frames movie_000053.png label 0
     image_file_paths = "%s/%s_path.txt"%(frames_dir,video_name)
+    start=0
+    print image_sampling_frequency
+    #each frame increment in milliseconds
+    increment=int((1.0/float(image_sampling_frequency))*1000)
+    #rename the image files
+    
+    #print all_files
+    try:
+        f=open(image_file_paths,'w')
+        all_files= os.listdir(frames_dir)
+        all_files.sort()
+        for image_file in all_files:
+            if image_file[-4:] != '.png':
+                continue
+            else:
+                filename,imageno_withpng=image_file.rsplit('-',1)
+                imageno=int(imageno_withpng.split('.')[0])
+                src_file=frames_dir+'/'+image_file
+                dest_file=frames_dir+'/'+filename+'-'+str(start)+'.png'
+                if imageno==2 or imageno==3 or imageno==4:
+                    os.remove(src_file)
+                else:
+                    os.rename(src_file,dest_file)
+                    f.write( "%s %s label 0\n" % ( frames_dir, os.path.basename( dest_file ) ) )
+                    start=start+increment
+                #print start
+    except Exception as e:
+        raise Exception( "Failed to prepare input file for feature extractor, error was: %s" % ( e ) )
+            
+
+    """
     try:
         f = open( image_file_paths, 'w' )
-        
-        for image_file in sorted( os.listdir( frames_dir ) ):
+        all_files=os.listdir(frames_dir)
+        all_files.sort()
+        for image_file in all_files:
+            print image_file
             if image_file[-4:] != '.png':
                 continue
             f.write( "%s %s label 0\n" % ( frames_dir, os.path.basename( image_file ) ) )
@@ -154,7 +188,7 @@ if __name__ == '__main__':
         f.close()
     except Exception as e:
         raise Exception( "Failed to prepare input file for feature extractor, error was: %s" % ( e ) )
-
+    """
     library_prefix = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%s PYTHONPATH=$PYTHONPATH:%s " % ( library_path, python_path )
 
     # Run the feature extractor
