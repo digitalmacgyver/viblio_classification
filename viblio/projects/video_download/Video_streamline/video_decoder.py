@@ -14,7 +14,7 @@ class VideoDecoder():
             os.makedirs(inter_dir)
         #os.system(cmd)
         path=inter_dir+"/"+'images%05d.png'
-        p = Popen(['ffmpeg','-i',video_local_path,'-s',self.size,'-r', \
+        p = Popen(['ffmpeg','-i',video_local_path,'-r', \
                    self.video_frame_rate,'-f','image2',path], stdout=PIPE, stderr=PIPE)
         out,error = p.communicate()
         
