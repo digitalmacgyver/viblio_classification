@@ -40,10 +40,20 @@ prior existing images which are negatives of A.
 
 ### Setup
 
-* Check out code by doing ...
-* Set up Python environment by doing ...
+* Check out code by doing:
 
-### Step 1 - 
+```
+git clone git@github.com:viblio/classification
+```
+
+* Set up Python environment by doing:
+
+```
+cd classification
+export PYTHONPATH=`pwd`
+```
+
+### Step 1 - Collect YouTube Images of Activity A
 
 NOTE: Here we set a sampling rate that controls things down through
 the pipeline.
