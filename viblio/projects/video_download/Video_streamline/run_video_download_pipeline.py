@@ -13,17 +13,21 @@ import shutil
 def usage():
     print "=========================================="
     print "Usage: run_video_download_pipeline.py -label my_label -keyword '\"youtube search\" -terms +desired' -inter_dir /home/me/outputdir -bucket_name s3_storage_bucket [-max_videos 200] [-max_video_duration 600] [-min_video_duration 20] [-config_file /path/to/ffmpeg_config.ini]"
-    
+    print "Usage example : python run_video_download_pipeline.py -label camping -keyword 'camping' -inter_dir /home/rgolla/Desktop/ffmpeg_testing/testing_vids/camp_test/ -bucket_name viblioclassification-test -max_videos 30 -max_video_duration 600 -min_video_duration 10  -config_file /home/rgolla/Desktop/classification_changes/viblio/resources/projects/video_download/config_ffmpeg.ini "
+
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-label', action='store', dest='label', help='Single world label used to tag these search results and build output directory structures.' ) 
     parser.add_argument('-keyword', action='store', dest='keyword', help='youtube search string' )
     parser.add_argument('-bucket_name', action='store',default='viblioclassification-test', dest='bucket_name', help='Bucket Name')
     parser.add_argument('-inter_dir', action='store', dest='inter_dir', help='Intermediate directory root, files are placed in the subdirectory of this directory named by -label')
-    parser.add_argument('-config_file', action='store', default = os.path.dirname( __file__ ) + '/../../../resources/projects/video_download/config_ffmpeg.ini' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/projects/video_download/config_ffmpeg.ini')
+    parser.add_argument('-config_file', action='store' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/projects/video_download/config_ffmpeg.ini')
     parser.add_argument('-max_videos', action='store', default=950, dest='max_videos', help='Maximum number of videos to download, defaults to 950. NOTE: Fewer than -max_videos may be processed if any of them exceed -max_video_duration' )
     parser.add_argument('-min_video_duration', action='store', default=20, dest='min_video_duration', help='Exclude videos whose length is lesser than -min_video_duration in seconds, defaults to 20.' )
     parser.add_argument('-max_video_duration', action='store', default=600, dest='max_video_duration', help='Exclude videos whose length is longer than -max_video_duration in seconds, defaults to 600.')
+    
     
     
     
@@ -41,6 +45,12 @@ if __name__ == '__main__':
         print "Error! No directory name to store text files is provided."
         usage()
         exit(-1)
+    if not results.config_file:
+        if os.path.dirname(__file__) =="":
+            results.config_file='.'+'/../../../resources/projects/video_download/config_ffmpeg.ini'
+        else:
+            results.config_file=os.path.dirname(__file__)+'/../../../resources/projects/video_download/config_ffmpeg.ini'
+            
 
     outdir = results.inter_dir + '/' + results.label
     
