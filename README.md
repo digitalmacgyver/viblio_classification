@@ -103,14 +103,14 @@ create_hit.py -q create_hittype_04-01-2014__11-33-42.txt -pos pos.txt -neg neg.t
 ```
 The arguments and explained here - 
 * "-q" - textfile that contains the hittypeid. This is generated in step2 above using create_hittypeid.py
-* "-pos" - contains the text file that has the positive known answer urls that we mix with the unknown urls to classify for mturkers. Example of the text file content - 
+* "-pos" - contains the text file that has the positive known answer urls that we mix with the unknown urls to classify for mturkers. Right now this is a manual step where we choose 40-50 positive urls for a category from the mturk filtered urls. Example of the text file content - 
 
 ```
 0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00018.png
 0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00034.png
 ...............
 ```
-* "-neg" - contains the text file that has the negative known answer urls that we mix with the unknown urls to classify for mturkers. Example of the text file content - 
+* "-neg" - contains the text file that has the negative known answer urls that we mix with the unknown urls to classify for mturkers.Right now this is a manual step where we choose 40-50 negative urls for a category from the mturk filtered urls. Example of the text file content - 
 ```
 jLFOgGkZ03E https://viblioclassification-test.s3.amazonaws.com/jLFOgGkZ03E/images00104.png
 jLFOgGkZ03E https://viblioclassification-test.s3.amazonaws.com/jLFOgGkZ03E/images00021.png
@@ -122,4 +122,14 @@ http://farm4.static.flickr.com/3330/3279002373_b37ca33fb8.jpg
 http://farm4.static.flickr.com/3442/3223094807_e83da32e45.jpg
 
 ```
+* "-urls" - contains mturk filtered urls in a text file. The total urls are split into batches of 20 each , mixed with 3 known positives and 3 known negatives and posted for a mturk job. Example of the text file content -
+
+```
+0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00018.png
+0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00034.png
+0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00022.png
+0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00003.png
+
+```
+
 * The part of posting to production and retrieval of filtered mturk results is yet to be documented. Will be updated soon.
