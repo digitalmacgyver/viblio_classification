@@ -47,7 +47,7 @@ def _get_contact_row_html( contacts,start_idx,cell_count):
         contact = contacts[i]
         #contact_uuid = contact.uuid
         
-        html += '<td><img src="%s" height="200" width="200" alt="Img. %s" /></td>' % ( contact, start_idx + i )
+        html += '<td><img src="%s" height="150" alt="Img. %s" /></td>' % ( contact, start_idx + i )
 
     for i in range( contact_count, cell_count ):
         html += '<td></td>'
@@ -80,7 +80,7 @@ def get_example_images(example_imagelist):
         contact = example_imagelist[i]
         #contact_uuid = contact.uuid
 
-        html += '<td><img src="%s" height="200" width="200" alt="Img. %s" /></td>' % ( contact,i )
+        html += '<td><img src="%s" height="150" alt="Img. %s" /></td>' % ( contact,i )
 
     html += '</tr>'
     html += '</table>'
@@ -92,13 +92,7 @@ def get_question(tracks,ex_images):
     html= html+'<p>'+desc['description']+'</p>'
     html = html+get_example_images(ex_images)
     #server = config.ImageServer
-    """
-    # Create a table of the person we're recognizing
-    html += '<table><tr>'
-    for face in person_tracks[0]['faces']:
-        html += '<td><img src="%s%s" height="128" width="128" alt="An Image" /></td>' % ( server, face['s3_key'] )
-    html += '</tr></table>'
-    """
+
     html += form_front
     html += '<h3> Check mark the following images according to the instructions given above </h3>'
     #html += '<input type="hidden" name="recognize_id" value="%s" />' % ( recognize_id )
@@ -122,7 +116,7 @@ def get_question(tracks,ex_images):
     html += '<td>'
 
     html += '<table>'
-    col_faces = 5
+    col_faces = 4
 
     for idx in range( 0, len( tracks ), col_faces ):
         html += _get_contact_row_html( tracks[idx:idx+col_faces],idx,col_faces)
