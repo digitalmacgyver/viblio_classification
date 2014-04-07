@@ -3,7 +3,8 @@ import os
 from viblio.common.features import features
 from viblio.common.ml import feature_pooling
 from viblio.common.utils import numpyutils
-
+import multiprocessing
+import time
 #usage:
 #python feature_extractor.py -i /home/rgolla/Downloads/vid4/vid4_paths.txt -o vid4 -inter_dir /home/rgolla/Downloads/vid4
 #Input text file has one of the following format (Top for url bottom one for local files):
@@ -43,8 +44,14 @@ if __name__ == '__main__':
     #file pointer for output text file that stores correspondence
     filepointer=open(results.inter_dir+'/'+results.output_filename+'_features.txt','w')
    
+    # no of cpus in the machine
+    cpus=multiprocessing.cpu_count()
+    #print 'cpus: ',cpus
     # Loop through each url and extract feature
-    for index,line in enumerate(content):
+    #for index,line in enumerate(content):
+       #extract_ftr(index,line)
+        
+    def extract_ftr((index,line)):    
         try:
             print str(index)
             # Check whether it is a url or local file and process accordingly
@@ -72,19 +79,49 @@ if __name__ == '__main__':
                 #ftr_name results in _Tf_qyL_9JE_images00003.hdf
                 ftr_name=unique_videoid+'_'+imagename+'.hdf'
                 ftr_filename=results.inter_dir+'/'+ftr_name
-                filepointer.write('%s %s %s\n'%(filename,ftr_name,label))
+                #filepointer.write('%s %s %s\n'%(filename,ftr_name,label))
             else:
                 ftr_name =filename.split('.')[0]+'.hdf'
                 ftr_filename=results.inter_dir+'/'+ftr_name
-                filepointer.write('%s %s %s\n'%(filename,ftr_name,label))
+                #filepointer.write('%s %s %s\n'%(filename,ftr_name,label))
             nmp.numpy2hdf(ftr_filename,spatial_ftr,'ftr')
             #Stored feature filename and its label are stored in a text file
             
         except:
             pass
+    
+    pool=multiprocessing.Pool(processes=cpus)
+    start=time.time()
+    # Non parallel feature extraction
+    #for index,line in enumerate(content):
+        #extract_ftr((index,line))
+    #Parallel feature extraction
+    
+    pool.map(extract_ftr,zip(range(len(content)),content))
+    end=time.time()
+
+    for index,line in enumerate(content):
+        filename= line.split()[1]
+        unique_videoid=line.split()[0]
+        label = line.split()[3]
+        
+        if filename.startswith('http'):    
+            imagename = line.split()[1].split('/')[4].split('.')[0]
+            #ftr_name results in _Tf_qyL_9JE_images00003.hdf                                                         
+            ftr_name=unique_videoid+'_'+imagename+'.hdf'
+            ftr_filename=results.inter_dir+'/'+ftr_name
+            if os.path.isfile(ftr_filename):
+                filepointer.write('%s %s %s\n'%(filename,ftr_name,label))                                               
+        else:
+            ftr_name =filename.split('.')[0]+'.hdf'
+            ftr_filename=results.inter_dir+'/'+ftr_name
+            if os.path.isfile(ftr_filename):
+                filepointer.write('%s %s %s\n'%(filename,ftr_name,label))  
+
 
     filepointer.close()
-
+ 
+    print 'time taken: ',(end-start)
         
 """
    #Loading stored hdf5 files again into a numpy array
