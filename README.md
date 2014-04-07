@@ -135,6 +135,21 @@ http://farm4.static.flickr.com/3442/3223094807_e83da32e45.jpg
 * The part of posting to production and retrieval of filtered mturk results is yet to be documented. Will be updated soon.
 
 ### Step-4 Extract features of training images from mturk
+The script for feature extraction is located at :
 ```
-python feature_extractor.py -i /home/rgolla/classification/shots/video_shots.txt -o vid_shots -inter_dir /home/rgolla/classification/shots/ -c /home/rgolla/classification/viblio/resources/ml/svm_config.cfg
+viblio/projects/viblio_classification/feature_extractor.py
 ```
+Running the code:
+```
+$python feature_extractor.py -i /home/rgolla/classification/shots/video_shots.txt -o vid_shots -inter_dir /home/rgolla/classification/shots/ -c /home/rgolla/classification/viblio/resources/ml/svm_config.cfg
+```
+The arguments are explained here:
+* "-i" -  Path to text file with guid(or local label) ,"urls of images" or "local paths of images" and labels. Example of sample text file:
+```
+shots 0098.png bballshots 1
+shots 0223.png bballshots 1
+shots 0370.png bballshots 1
+```
+* "-o" - output filename that stores the feature names. Only the filename must be provided eg: -o vid_shots.  This stores a file named vid_shots_features.txt under the directory specified by the parameter "inter_dir"
+* "-inter_dir" - The directory where the file with "-i" is located. This is the directory where the extracted features reside according to the relative path provided in the text file given in "-i"
+* "-c" - The path to the configuration file which has feature extraction configuration parameters.
