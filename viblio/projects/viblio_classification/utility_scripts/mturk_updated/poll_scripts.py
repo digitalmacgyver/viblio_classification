@@ -17,6 +17,8 @@ def check_results():
     filename = open('hitids_results.txt','w')
     for each in hits:
         hitid_one = each.split()[0]
+        known_pos=each.split()[1:3]
+
         print hitid_one
         res=a.get_answer_dict_for_hit(hitid_one)
         if res is not None:
@@ -26,9 +28,10 @@ def check_results():
             if not isinstance( answer_list, list):
                 answer_list = [ answer_list ]
             for answer in answer_list:
-                value = answer['FreeText']
-                filename.write(value.split('/')[-2]+" "+value+'\n')
-            
+                if len(answer_list) !=2:
+                    value = answer['FreeText']
+                    filename.write(value.split('/')[-2]+" "+value+'\n')
+
     print "Jobs finished : ",finished,'out of',len(hits)
     if finished != len(hits):
         return -1
