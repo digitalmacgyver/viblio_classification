@@ -90,11 +90,13 @@ class MturkAPI():
 
         return result
 
-    def get_answer_dict_for_hit(self,cls, hit_id ):
-        assignment = cls.get_assignment_for_hit( hit_id )
+    def get_answer_dict_for_hit(self, hit_id ):
+        assignment = self.get_assignment_for_hit( hit_id )
         answer = self.mt.get_response_element( 'Answer', assignment )
-        answer_dict = xmltodict.parse( answer )
-
+        if answer is not None:
+            answer_dict = xmltodict.parse( answer )
+        else:
+            answer_dict = None
         return answer_dict
 
     def delete_hit(self,hit_id):

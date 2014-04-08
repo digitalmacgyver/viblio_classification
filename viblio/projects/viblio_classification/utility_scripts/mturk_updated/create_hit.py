@@ -58,7 +58,7 @@ uuid_str=uuid.uuid1()
 filename=open('all_hits'+'.txt','w')
 all_urls=[each.split()[1] for each in all]
 #print len(all_urls)
-sub=all_urls
+sub=all_urls[0:30]
 #print sub
 for iter in range(0,len(sub),images_per_hit):
     print (iter,iter+images_per_hit-1)
