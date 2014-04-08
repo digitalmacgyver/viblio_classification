@@ -134,6 +134,25 @@ http://farm4.static.flickr.com/3442/3223094807_e83da32e45.jpg
 
 * The part of posting to production and retrieval of filtered mturk results is yet to be documented. Will be updated soon.
 
+
+### Step 3 - Splitting mturk results to training and testing
+The script for feature extraction is located at :
+```
+viblio/projects/viblio_classification/utility_scripts/generate_training_and_test.py
+```
+Running the code:
+```
+$python generate_training_and_test.py -i /home/rgolla/classification/image_s3urls.txt
+```
+The arguments are explained here:
+* "-i" -  Path to text file with guid(or local label) and mturk filtered "urls of images" . Example of sample text file:
+```
+0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00018.png
+0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00034.png
+0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00022.png
+```
+The output consists of two files - image_s3urls_train.txt and  image_s3urls_test.txt with the image_s3urls.txt content split into 80% and 20% respectively.
+
 ### Step-4 Extract features of training images from mturk
 The script for feature extraction is located at :
 ```
