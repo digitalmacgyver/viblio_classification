@@ -193,3 +193,31 @@ shots 0098.png bballshots 1
 shots 0223.png bballshots 1
 shots 0370.png bballshots 1
 ```
+### Step-6 Finding the regularization parameter C 
+The script to execute is located at :
+```
+viblio/projects/viblio_classification/viblio_classifier.py
+```
+Running the code:
+``` 
+$python viblio_classifier.py -d /home/rgolla/classification/christmas_vids/video0/features/ -i christmas1_features.txt  -c /home/rgolla/classification/christmas_concatenated/svm_config.cfg -s cross-validate -a 
+
+```
+The arguments are explained here:
+* "-d" - The folder where the text file mentioned with "-i" argument is present. This folder also contains all the extracted feature files at the relative paths mentioned in the "-i" file.
+* "-i" - The text file path( relative path to "-d" folder argument) which contains the extracted features and the image files. Example of text file
+```
+0098.png 0098.hdf 1
+0223.png 0223.hdf 1
+0370.png 0370.hdf 1
+0343.png 0343.hdf 1
+0288.png 0288.hdf 1
+```
+* "-c" - The path for configuration file that has the range of C values to use when doing cross validation. Example configuration file is located at viblio/resources/ml/svm_config.cfg
+
+* "-s" - The stage parameter which has four options - cross-validate , learn ,predict , report. We use cross validate here.
+
+* "-a" - This parameter says to use the approximate kernel that speeds up the kernel computation. Always recommended to use this.
+
+Output :  The output that is printed on to the screen has the C parameter used and the cross validation accuracy. Choose the highest cross validation accuracy and use its corresponding C value to change the "best_C" value  in the configuration file we passed in "-c" argument.  We then use this modified C to learn the model in the next step.
+
