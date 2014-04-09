@@ -172,3 +172,24 @@ shots 0370.png bballshots 1
 * "-o" - output filename that stores the feature names. Only the filename must be provided eg: -o vid_shots.  This stores a file named vid_shots_features.txt under the directory specified by the parameter "inter_dir"
 * "-inter_dir" - The directory where the file with "-i" is located. This is the directory where the extracted features reside according to the relative path provided in the text file given in "-i"
 * "-c" - The path to the configuration file which has feature extraction configuration parameters.
+
+
+### Step-5 Prepare training data using positive and negative features
+The script for feature extraction is located at :
+```
+viblio/projects/viblio_classification/utility_scripts/prepare_training_set.py
+```
+Running the code:
+```
+$python prepare_training_set.py -o christmas_training_data.txt -pos_ftrs 3000 -neg_ftrs 500
+```
+
+The code assumes that the features are extracted and kept in their corresponding folders.  For now the positive folder paths (which has positive training set features) and negative folder paths (which have the negative training set features) are given in the list "positives" and "negatives" within the code. The code looks for the .hdf files within these folders for training.
+
+The arguments are explained here:
+* "-i" -  Path to text file with guid(or local label) ,"urls of images" or "local paths of images" and labels. Example of sample text file:
+```
+shots 0098.png bballshots 1
+shots 0223.png bballshots 1
+shots 0370.png bballshots 1
+```
