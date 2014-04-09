@@ -17,7 +17,7 @@ take multiple days for the MTurk results to complete.
 3. Partition the MTurk positives into two sets based on the source
 video, one for training, and one for testing.
 
-4. Generate features for positive images of A.
+4. Generate features for positive mturk training images from step 3.
 
 5. Prepare complete training set from positive training images of A and
 prior existing images which are negatives for A.
