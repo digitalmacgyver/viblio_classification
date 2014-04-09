@@ -254,4 +254,10 @@ The arguments are explained here:
 
 Output :  The model is saved at the path mentioned through "-m" parameter
 
+### Step-9 After testing, review images of the:
+  
+   * False positives with high confidence
+   * True negatives with low confidencemodel
+   
+* No code yet. Needs to be implemented.
 
