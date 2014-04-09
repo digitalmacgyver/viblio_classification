@@ -221,3 +221,37 @@ The arguments are explained here:
 
 Output :  The output that is printed on to the screen has the C parameter used and the cross validation accuracy. Choose the highest cross validation accuracy and use its corresponding C value to change the "best_C" value  in the configuration file we passed in "-c" argument.  We then use this modified C to learn the model in the next step.
 
+### Step-7 Training the model
+
+Update the configuration file we used in Step-6 with the "best_C" value we got during cross-validation. Then proceed with the following steps.
+
+The script to execute is located at :
+```
+viblio/projects/viblio_classification/viblio_classifier.py
+```
+Running the code:
+``` 
+$python viblio_classifier.py -d /home/rgolla/classification/christmas_vids/video0/features/ -i christmas1_features.txt  -m /home/rgolla/classification/christmas_concatenated/svm_default.model -c /home/rgolla/classification/christmas_concatenated/svm_config.cfg -s learn -a 
+
+```
+The arguments are explained here:
+* "-d" - The folder where the text file mentioned with "-i" argument is present. This folder also contains all the extracted feature files at the relative paths mentioned in the "-i" file.
+* "-i" - The text file path( relative path to "-d" folder argument) which contains the extracted features and the image files. Example of text file
+```
+0098.png 0098.hdf 1
+0223.png 0223.hdf 1
+0370.png 0370.hdf 1
+0343.png 0343.hdf 1
+0288.png 0288.hdf 1
+```
+* "-c" - The path for configuration file that has the best C value to use when learning the model. Example configuration file is located at viblio/resources/ml/svm_config.cfg
+
+* "-s" - The stage parameter which has four options - cross-validate , learn ,predict , report. We use "learn" here.
+
+* "-a" - This parameter says to use the approximate kernel that speeds up the kernel computation. Always recommended to use this.
+
+* "-m" - The path name where the model needs to be stored after the training is done 
+
+Output :  The model is saved at the path mentioned through "-m" parameter
+
+
