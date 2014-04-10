@@ -254,6 +254,43 @@ The arguments are explained here:
 
 Output :  The model is saved at the path mentioned through "-m" parameter
 
+
+### Step-8 Test the data saved from mturk results.
+
+Use step4 and generate features for positive mturk test data. The test data is generated in step3.
+
+The script to execute is located at :
+```
+viblio/projects/viblio_classification/viblio_classifier.py
+```
+Running the code:
+``` 
+python viblio_classifier.py -d /home/rgolla/classification/christmas_vids/video0/features/ -i christmas1_features.txt -m /home/rgolla/classification/christmas_concatenated/svm_default.model -p /home/rgolla/classification/christmas_concatenated/christmas1_predict.txt -c /home/rgolla/classification/christmas_concatenated/svm_config.cfg -s predict -a  
+
+```
+
+The arguments are explained here:
+* "-d" - The folder where the text file mentioned with "-i" argument is present. This folder also contains all the extracted feature files at the relative paths mentioned in the "-i" file.
+* "-i" - The text file path( relative path to "-d" folder argument) which contains the extracted features and the image files. Example of text file
+```
+0098.png 0098.hdf 1
+0223.png 0223.hdf 1
+0370.png 0370.hdf 1
+0343.png 0343.hdf 1
+0288.png 0288.hdf 1
+```
+* "-c" - The path for configuration file that has the best C value to use when learning the model. Example configuration file is located at viblio/resources/ml/svm_config.cfg
+
+* "-s" - The stage parameter which has four options - cross-validate , learn ,predict , report. We use "predict" here.
+
+* "-a" - This parameter says to use the approximate kernel that speeds up the kernel computation. Always recommended to use this.
+
+* "-m" - The model path name whihc is used to predict the confidence value of each feature (hdf) file 
+* "-p" - The filepath that stores the features and their corresponding prediction values.
+
+Output :  The features and their corresponding confidence values are stored in the text file passed using "-p" parameter 
+
+
 ### Step-9 After testing, review images of the:
   
    * False positives with high confidence
