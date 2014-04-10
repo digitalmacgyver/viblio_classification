@@ -288,7 +288,12 @@ The arguments are explained here:
 * "-m" - The model path name whihc is used to predict the confidence value of each feature (hdf) file 
 * "-p" - The filepath that stores the features and their corresponding prediction values.
 
-Output :  The features and their corresponding confidence values are stored in the text file passed using "-p" parameter 
+Output :  The features and their corresponding confidence values are stored in the text file passed using "-p" parameter.  Example output file
+```
+0098.hdf 0.693178 1
+0223.hdf 0.758260 1
+
+```
 
 
 ### Step-9 After testing, review images of the:
