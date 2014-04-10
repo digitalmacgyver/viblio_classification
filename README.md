@@ -285,7 +285,7 @@ The arguments are explained here:
 
 * "-a" - This parameter says to use the approximate kernel that speeds up the kernel computation. Always recommended to use this.
 
-* "-m" - The model path name whihc is used to predict the confidence value of each feature (hdf) file 
+* "-m" - The model path name which is used to predict the confidence value of each feature (hdf) file 
 * "-p" - The filepath that stores the features and their corresponding prediction values.
 
 Output :  The features and their corresponding confidence values are stored in the text file passed using "-p" parameter.  Example output file
@@ -302,4 +302,33 @@ Output :  The features and their corresponding confidence values are stored in t
    * True negatives with low confidencemodel
    
 * No code yet. Needs to be implemented.
+
+
+### Step-10 Generate ROC curves:
+The script to execute is located at :
+```
+viblio/projects/viblio_classification/utility_scripts/generate_roc_histograms.py
+```
+Running the code:
+``` 
+python analyze_results.py -pos vid2_shot.txt -neg vid2_nonshots.txt -output results.pdf
+```
+
+The arguments are explained here:
+* "-pos" - The text file containing the positive test example file names and their corresponding scores.
+Example test file - (Note that the labels 1 and -1 in the text file are not of importance here).
+```
+bball00099.hdf 0.833266 1
+bball00139.hdf 0.204379 -1
+bball00210.hdf 0.353972 -1
+```
+* "-neg" - The text file containing the negative test example file names and their corresponding scores. 
+Example test file - (Note that the labels 1 and -1 in the text file are not of importance here).
+```
+bball00215.hdf 0.813184 1
+bball00201.hdf 0.186575 -1
+bball00241.hdf 0.108679 -1
+
+```
+* "-output" - The pdf filename that stores the generated histograms and ROC curves.
 
