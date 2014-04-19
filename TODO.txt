@@ -3,7 +3,10 @@ TODO:
 1. Make a lower resolution (~150 pixels wide or so) version of each
 frame, and store it for MTurk use.
 
-2. Integrate the MTurk code into master.
+2. Edit create_hittype to support command line parameters instead of
+manual editing to switch between sandbox and production.
+
+3. Document step 2.5.
 
 4. Build a library of HDF / text file for negative set training.
    * Assign a video unique key to each video here so we can avoid training and testing on the same video
