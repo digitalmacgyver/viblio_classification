@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import mturk_utils as mturk_utils
 from random import shuffle
 import argparse
