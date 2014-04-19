@@ -1,0 +1,17 @@
+TODO:
+
+1. Make a lower resolution (~150 pixels wide or so) version of each
+frame, and store it for MTurk use.
+
+2. Integrate the MTurk code into master.
+
+4. Build a library of HDF / text file for negative set training.
+   * Assign a video unique key to each video here so we can avoid training and testing on the same video
+
+5. Add partitioning of 80/20 MTurk videos for the activity A into a
+training set and a testing set.
+
+6. Generate a report that shows false positives with high confidence,
+and true negatives with low confidence.
+
+7. Detail how exactly we can get the ROC curves and histograms.

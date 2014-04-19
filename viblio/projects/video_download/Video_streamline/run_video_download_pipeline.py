@@ -11,11 +11,16 @@ from viblio.projects.video_download.Video_streamline import video_decoder
 import shutil
 
 def usage():
-    print "=========================================="
-    print "Usage: run_video_download_pipeline.py -label my_label -keyword '\"youtube search\" -terms +desired' -inter_dir /home/me/outputdir -bucket_name s3_storage_bucket [-max_videos 200] [-max_video_duration 600] [-min_video_duration 20] [-config_file /path/to/ffmpeg_config.ini]"
-    print "Usage example : python run_video_download_pipeline.py -label camping -keyword 'camping' -inter_dir /home/rgolla/Desktop/ffmpeg_testing/testing_vids/camp_test/ -bucket_name viblioclassification-test -max_videos 30 -max_video_duration 600 -min_video_duration 10  -config_file /home/rgolla/Desktop/classification_changes/viblio/resources/projects/video_download/config_ffmpeg.ini "
-
-
+    usage =  "==========================================\n"
+    usage += '''Usage: run_video_download_pipeline.py \\
+    -label my_label \\
+    -keyword '\"youtube search\" \-terms +desired' \\
+    -inter_dir /home/me/outputdir \\
+     -bucket_name s3_storage_bucket \\
+    [-h] \\
+    [-max_videos 200] [-max_video_duration 600] [-min_video_duration 20] \\
+    [-config_file /path/to/ffmpeg_config.ini]\n'''
+    print usage
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -27,10 +32,7 @@ if __name__ == '__main__':
     parser.add_argument('-max_videos', action='store', default=950, dest='max_videos', help='Maximum number of videos to download, defaults to 950. NOTE: Fewer than -max_videos may be processed if any of them exceed -max_video_duration' )
     parser.add_argument('-min_video_duration', action='store', default=20, dest='min_video_duration', help='Exclude videos whose length is lesser than -min_video_duration in seconds, defaults to 20.' )
     parser.add_argument('-max_video_duration', action='store', default=600, dest='max_video_duration', help='Exclude videos whose length is longer than -max_video_duration in seconds, defaults to 600.')
-    
-    
-    
-    
+
     results = parser.parse_args()
 
     if not results.label:
@@ -65,8 +67,8 @@ if __name__ == '__main__':
     
 
     # Initialization of decoder, downloader and uploader
-    downloadObj=YoutubeVideoDownLoader()
-    vdecoder=video_decoder.VideoDecoder(results.config_file)
+    downloadObj = YoutubeVideoDownLoader()
+    vdecoder = video_decoder.VideoDecoder( results.config_file )
     s3conn = s3utils.S3()
 
     #Loop through each url
@@ -76,9 +78,9 @@ if __name__ == '__main__':
     lines=fp.readlines()
     textfile = outdir+"/image_s3urls.txt"
     fp2 = open(textfile,"w")
-    max = len(lines)-1
-    print "Total no of videos: "+str(max)
-    for iterator in range(0,max):
+    maximum = len(lines)-1
+    print "Total no of videos: " + str( maximum )
+    for iterator in range( 0, maximum ):
         try:
             #uuid_name =  str(uuid.uuid4())
             uuid_name=lines[iterator].split('?')[0].split('/')[4]
@@ -91,7 +93,7 @@ if __name__ == '__main__':
             if os.path.exists(video_local_filename):
                 fp1.write("%s %s\n" %(lines[iterator],video_local_filename))
                 print "decoding the video : "+str(iterator)
-                vdecoder.run(video_local_filename,local_path)
+                vdecoder.run( video_local_filename, local_path )
                 print "uploading images : "+str(iterator)
                 for f in os.listdir(local_path):
                     image_path=os.path.join(local_path,f)

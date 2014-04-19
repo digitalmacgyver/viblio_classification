@@ -72,7 +72,11 @@ video_uuid s3_URL_of_image
   Navigate to /viblio/projects/video_download/Video_streamline in the cloned repository and execute run_video_download_pipeline.py with the following example command replacing it with appropriate directories and files in the system you are working. 
 
 ```
-$ python run_video_download_pipeline.py -label camping -keyword 'camping' -inter_dir /home/rgolla/Desktop/ffmpeg_testing/testing_vids/camp_test/ -bucket_name viblioclassification-test -max_videos 30 -max_video_duration 600 -min_video_duration 10 -config_file /home/rgolla/Desktop/classification_changes/viblio/resources/projects/video_download/config_ffmpeg.ini
+$ python run_video_download_pipeline.py -label camping -keyword 'camping -bears +"national parks"' \
+ -inter_dir /home/rgolla/Desktop/ffmpeg_testing/testing_vids/camp_test/ \
+ -bucket_name viblioclassification-test \
+ -max_videos 30 -max_video_duration 600 -min_video_duration 10 \
+ -config_file /home/rgolla/Desktop/classification_changes/viblio/resources/projects/video_download/config_ffmpeg.ini
 ````
 
 Explanation of parameters used : 
@@ -86,20 +90,31 @@ Explanation of parameters used :
 
 ### Step 2 - Post images to Mturk for classification
 
-  * Inputs: The text file produced by step 1
-  * Outputs: A white space separated text file containing only those images from the input which belong to category A. eg: Camping
-  The python scripts for mturk are located at:
+* Inputs: The text file produced by step 1 located in:
+  * [inter_dir]/[label]/image_s3urls.txt
+* Outputs: A white space separated text file containing only those images from the input which belong to category A. eg: Camping
 
-  ```
-  viblio/projects/viblio_classification/utility_scripts/mturk_updated
-  ```
-  Substeps:
-Create a hittype to get started with the classification of a certain category( eg: camping). The objective of hittype is to set the amount, title and several other parameters in boto.config accordingly for the category. Note that sandbox parameters in boto.config and production parameters are different. We intially create hittype and hits in sandbox and see if everything is as expected and then go ahead with creation of hittype and hits in production.
+The python scripts for mturk are located at:
+
+```
+viblio/projects/viblio_classification/utility_scripts/mturk_updated
+```
+
+Substeps: 
+
+1. Create a hittype to get started with the classification of a
+certain category( eg: camping). 
+  * Set the payment amount, title, description, and any other desired parameters in boto.config accordingly for the category. Note that sandbox parameters in boto.config and production parameters are different. We intially create hittype and hits in sandbox and see if everything is as expected and then go ahead
+with creation of hittype and hits in production.
+
 1. Edit boto.config parameters and description to the category we want eg:camping.
 2. Run create_hittype.py which generates a hittype id stored in create_hittype_(timestamp).txt. Note that we are creating hittype in sandbox by default.
 3. Run the script create_hit.py with arguments to create hits in the mturk sandbox.
-  ```
-create_hit.py -q create_hittype_04-01-2014__11-33-42.txt -pos pos.txt -neg neg.txt -demo demo.txt -urls image_s3urls.txt
+
+```
+create_hit.py -q create_hittype_04-01-2014__11-33-42.txt \
+   -pos pos.txt -neg neg.txt -demo demo.txt \
+   -urls image_s3urls.txt
 ```
 The arguments and explained here - 
 * "-q" - textfile that contains the hittypeid. This is generated in step2 above using create_hittypeid.py
