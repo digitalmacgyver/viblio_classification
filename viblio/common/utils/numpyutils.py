@@ -8,34 +8,35 @@ import h5py
 import os
 import re
 
-
-
 class NumpyUtil():
     def __init__(self):
         pass
-    def imagefile2numpy(self,path,basewidth,local_file=False):
+
+    def imagefile2numpy( self, path, basewidth, local_file=False ):
         if local_file:
-            im = Image.open(path)
+            im = Image.open( path )
         else:
-            fd = urllib.urlopen(path)
-            image_file = cStringIO.StringIO(fd.read())
-            im = Image.open(image_file)
-        if (im.size[0])>(im.size[1]):
-            wpercent = (basewidth/float(im.size[0]))
-            hsize = int((float(im.size[1])*float(wpercent)))
-            im = im.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
+            fd = urllib.urlopen( path )
+            image_file = cStringIO.StringIO( fd.read() )
+            im = Image.open( image_file )
+
+        if im.size[0] > im.size[1]:
+            wpercent = ( basewidth / float( im.size[0] ) )
+            hsize = int( (float( im.size[1] ) * float( wpercent ) ) )
+            im = im.resize( ( basewidth, hsize ), PIL.Image.ANTIALIAS )
         else:
-            wpercent = (basewidth/float(im.size[1]))
-            hsize = int((float(im.size[0])*float(wpercent)))
-            im = im.resize((hsize,basewidth), PIL.Image.ANTIALIAS)
-        numpy_image = numpy.array(im)
+            wpercent = ( basewidth / float( im.size[1] ) )
+            hsize = int( ( float( im.size[0] ) * float( wpercent ) ) )
+            im = im.resize( ( hsize, basewidth ), PIL.Image.ANTIALIAS )
+
+        numpy_image = numpy.array( im )
 	return numpy_image
 
-    def numpy2hdf(self,filename,numpyarray,rootname):
-	f=tables.openFile(filename,'w')
-        atom=tables.Atom.from_dtype(numpyarray.dtype)
-	ds = f.createCArray(f.root, rootname, atom, numpyarray.shape)
-        ds[:]=numpyarray
+    def numpy2hdf( self, filename, numpyarray, rootname ):
+	f = tables.openFile( filename, 'w' )
+        atom = tables.Atom.from_dtype( numpyarray.dtype )
+	ds = f.createCArray( f.root, rootname, atom, numpyarray.shape )
+        ds[:] = numpyarray
 	f.close()
 
     def read_image_features_per_video(self, video_name, inter_dir):

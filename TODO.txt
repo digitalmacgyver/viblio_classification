@@ -84,6 +84,54 @@ to a location other than the default `cwd`/hitids_results.txt.
 eliminate the presence of known yes and no images from the
 hitids_results.txt output file.
 
+19. Review all code for .split(' ') statements and replace it with
+generic regexp or split() arguments that don't care how much
+whitespace seperates entries.
+
+20. Add __main__ detection and command line help to
+generate_training_and_test.py.
+
+21. Make the proportion of training and test ata from
+generate_training_and_test.py a parameter, not hard coded at 80%.
+
+22. Completely re-write the behavior of generate_training_and_test.py
+to still create 80/20% partitions, but to do so by taking into account
+the source video so as to ensure that if an image is used in training,
+no image from the same video is also used in testing, and vice-versa.
+
+23. Parametrize the output values of generate_training_and_test.py to
+allow the user to override both the filenames of training and test,
+and the output directory.
+
+24. This command (and all commands) should have a common means of
+setting the --label argument and the --inter_dir argument so that if
+one were to run through all steps using a consistent --inter_dir and
+--label the various intput and output files would be accumulated in
+the desired spot and inputs would be automatically detected from
+outputs of preceding stages.
+
+25. Change all scripts, including generate_training_and_test.py, to
+accomodate input files with blank lines, or lines starting with a #.
+Accomplish this by using common subroutine across all files that
+imports data files and returns some data structure based on the
+whitespace seperated content of these files.
+
+26. Change generate_training_and_test.py output file name generation
+to be controlled by command line arguments, or defaults, not the
+current behavior of trying to infer the correct name by mangling the
+input filename and adding some stuff to the end of it.
+
+27. Reorganize the directory structure of the repository to be more concise and regular:
+
+i. Eliminate stray capital letters from filenames
+
+ii. Elimiante the "Ramsri" directory - merge it's contents with other
+directories if they should be retained.
+
+ii. Eliminate needlessly complex heirarchy.  Today there are 12
+directories under viblio/common and viblio/projects to hold 51 Python
+source files.
+
 4. Build a library of HDF / text file for negative set training.
    * Assign a video unique key to each video here so we can avoid training and testing on the same video
 

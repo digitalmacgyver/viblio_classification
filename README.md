@@ -73,7 +73,7 @@ video_uuid s3_URL_of_image
 
 ```
 $ python run_video_download_pipeline.py -label camping -keyword 'camping -bears +"national parks"' \
- -inter_dir /home/rgolla/Desktop/ffmpeg_testing/testing_vids/camp_test/ \
+ -inter_dir /home/rgolla/activities/ \
  -bucket_name viblioclassification-test \
  -max_videos 30 -max_video_duration 600 -min_video_duration 10 \
  -config_file /home/rgolla/Desktop/classification_changes/viblio/resources/projects/video_download/config_ffmpeg.ini
@@ -224,40 +224,55 @@ viblio/projects/viblio_classification/utility_scripts/generate_training_and_test
 
 Running the code:
 ```
-$python generate_training_and_test.py -i /home/rgolla/classification/image_s3urls.txt
+./generate_training_and_test.py -i /home/rgolla/classification/image_s3urls.txt
 ```
 
 The arguments are explained here:
-* "-i" -  Path to text file with guid(or local label) and mturk filtered "urls of images" . Example of sample text file:
-```
-0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00018.png
-0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00034.png
-0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00022.png
-```
-The output consists of two files - image_s3urls_train.txt and  image_s3urls_test.txt with the image_s3urls.txt content split into 80% and 20% respectively.
+* "-i" -  Path to text file with guid (or local label) and URLs of known positive images. Example of sample text file:
 
-### Step-4 Extract features of training images from mturk
-The script for feature extraction is located at :
+  ```
+  0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00018.png
+  0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00034.png
+  0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00022.png
+  ```
+
+  The output consists of two files - image_s3urls_train.txt and  image_s3urls_test.txt with the image_s3urls.txt content split into 80% and 20% respectively.
+
+### Step - 4 Extract features for training and testing
+
+The script for feature extraction is located at:
+
 ```
 viblio/projects/viblio_classification/feature_extractor.py
 ```
+
+It takes as input a list of files to create features from, and
+produces features suitable for machine learning, and an output file
+that maps the input images to the corresponding output feature files.
+
 Running the code:
+
 ```
-$python feature_extractor.py -i /home/rgolla/classification/shots/video_shots.txt -o vid_shots -inter_dir /home/rgolla/classification/shots/ -c /home/rgolla/classification/viblio/resources/ml/svm_config.cfg
+./feature_extractor.py -label camping -inter_dir /home/user/activities
 ```
-The arguments are explained here:
-* "-i" -  Path to text file with guid(or local label) ,"urls of images" or "local paths of images" and labels. Example of sample text file:
-```
-shots 0098.png bballshots 1
-shots 0223.png bballshots 1
-shots 0370.png bballshots 1
-```
-* "-o" - output filename that stores the feature names. Only the filename must be provided eg: -o vid_shots.  This stores a file named vid_shots_features.txt under the directory specified by the parameter "inter_dir"
-* "-inter_dir" - The directory where the file with "-i" is located. This is the directory where the extracted features reside according to the relative path provided in the text file given in "-i"
-* "-c" - The path to the configuration file which has feature extraction configuration parameters.
+
+The arguments are:
+* "-label" - The label for this activity, corresponds to the label used in run_video_download_pipeline, practically this configures default paths below to terminate in the value of the label argument
+
+* "-inter_dir" - The root directory where files are being stored and processed, by default the -label subdirectory of this directory is used to store outputs
+
+* "-i" -  Path to text file with the video source identifier, and image resourse location. Defaults to inter_dir/label/image_s3urls.txt.  Example file format:
+  ```
+  vid001 /tmp/images/vids/0098.png bballshots 1
+  vid001 http://server.com/0223.png bballshots 1
+  vid002 http://server.com/0234.png bballshots 1
+  ```
+If the location of the image file is specified with a path, it must be the full path to the file.  Additional fields beyond the first field are ignored, but copied from the input file to the output file.
+
+* "-o" - output filename that stores the feature names. Defaults to inter_dir/label/image_features.txt
 
 
-### Step-5 Prepare training data using positive and negative features
+### Step - 5 Prepare training data using positive and negative features
 The script for feature extraction is located at :
 ```
 viblio/projects/viblio_classification/utility_scripts/prepare_training_set.py
