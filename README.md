@@ -145,17 +145,18 @@ different. We intially create hittype and hits in sandbox and see if
 everything is as expected and then go ahead with creation of hittype
 and hits in production.
 
-2. Edit boto.config parameters and description to the category we want
-eg:camping.
+3. Edit boto.config parameters and description to the category we want
+eg: camping.
 
-3. Run create_hittype.py which generates a hittype id stored in
+4. Run create_hittype.py which generates a hittype id stored in
 create_hittype_[timestamp].txt. Note that we are creating hittype in
 the sandbox by default. To change this edit the hittype_config
 assignment line of create_hittype.py
 
-4. Run the script create_hit.py with the output of the
+5. Run the script create_hit.py with the output of the
 create_hittype.py script and the positive and negative example files
-created in step 1.
+created in step 1.  This produces an output file called
+```all_hits.txt``` in the current working directory.
 
   ```
   create_hit.py -q create_hittype_04-01-2014__11-33-42.txt \
@@ -167,32 +168,50 @@ created in step 1.
   * "-q" - textfile that contains the hittypeid. This is generated in step2 above using create_hittypeid.py
   * "-pos" - contains the text file that has the positive known answer urls that we mix with the unknown urls to classify for mturkers. Right now this is a manual step where we choose 40-50 positive urls for a category from the mturk filtered urls. Example of the text file content - 
 
-  ```
-  0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00018.png
-  0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00034.png
-  ...
-  ```
+    ```
+    0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00018.png
+    0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00034.png
+    ...
+    ```
   * "-neg" - contains the text file that has the negative known answer urls that we mix with the unknown urls to classify for mturkers.Right now this is a manual step where we choose 40-50 negative urls for a category from the mturk filtered urls. Example of the text file content - 
-  ```
-  jLFOgGkZ03E https://viblioclassification-test.s3.amazonaws.com/jLFOgGkZ03E/images00104.png
-  jLFOgGkZ03E https://viblioclassification-test.s3.amazonaws.com/jLFOgGkZ03E/images00021.png
-  ...
-  ```
+    ```
+    jLFOgGkZ03E https://viblioclassification-test.s3.amazonaws.com/jLFOgGkZ03E/images00104.png
+    jLFOgGkZ03E https://viblioclassification-test.s3.amazonaws.com/jLFOgGkZ03E/images00021.png
+    ...
+    ```
   * "-demo" - contains just two urls in a text file. First is a positive example image and second is a negative example image. We show a positive example image and negative example image at the top of each mturk post to explain the mturker what we are looking for. Example of the text file content -
-  ```
-  http://farm4.static.flickr.com/3330/3279002373_b37ca33fb8.jpg
-  http://farm4.static.flickr.com/3442/3223094807_e83da32e45.jpg
-  ```
+    ```
+    http://farm4.static.flickr.com/3330/3279002373_b37ca33fb8.jpg
+    http://farm4.static.flickr.com/3442/3223094807_e83da32e45.jpg
+    ```
   * "-urls" - is of the format produced by run_video_download_pipeline.py and contains reference the image to be classified by MTurkers. The total urls are split into batches of 20 each, mixed with 3 known positives and 3 known negatives and posted for a MTurk job. Example of the text file content:
+    ```
+    0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00018.png
+    0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00034.png
+    0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00022.png
+    0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00003.png
+    ```
+
+6. Run the ```viblio/projects/viblio_classification/utility_scripts/mturk_updated/poll_scripts.py``` script with an input argument ```-i``` of the output of ste 5's call to ```create_hit.py``` which was the ```all_hits.txt``` file:
 
   ```
-  0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00018.png
-  0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00034.png
-  0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00022.png
-  0gUF5-LzWTk https://viblioclassification-test.s3.amazonaws.com/0gUF5-LzWTk/images00003.png
+  ./poll_scripts.py -i all_hits.txt
   ```
 
-5. The part of posting to production and retrieval of filtered MTurk results is yet to be documented.
+   *NOTE:* By default poll_scripts.py will poll the MTurk sandbox servers, you must edit the file to make it poll production.
+
+   Once all HITs mentioned in all_hits.txt are completed, poll_scripts
+   will produce the file called ```hitids_results.txt``` of the
+   format:
+
+   ```
+   arbitrary_text image_url
+   ```
+
+   For which the user classified the images positively.
+
+6. The remaining steps to to produce and retrieve of filtered MTurk
+results are yet to be documented.
 
 
 ### Step 3 - Splitting mturk results to training and testing

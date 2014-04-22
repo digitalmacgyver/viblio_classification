@@ -6,7 +6,83 @@ frame, and store it for MTurk use.
 2. Edit create_hittype to support command line parameters instead of
 manual editing to switch between sandbox and production.
 
-3. Document step 2.5.
+3. Document step 2.6.
+
+4. Fix create_hit.py to handle blank lines and comment lines in the
+input for positive and negative files.
+
+5. Change create_hit to parametrize the number of positive and
+negative values per HIT, and the number of images to test per HIT.
+
+6. Change create_hit to have an output file argument which overrides
+the optional `cwd`/all_hits.txt output file location.
+
+7. Change create_hit to use the low resolution versions of images in
+the forms so that MTurkers don't have to download large images which
+are then presented to them in thumbnail sizes.
+
+7. Clean up mturk_utils.py to rename create_merge_hit (copied from
+elsewhere, and change the misleading parameter name of "media_uuid" to
+be something more reasonable for this use case.
+
+8. Add __main__ detection and command line help to create_hit.py.
+
+9. Pass information in the output of create_hit.py to specify if the
+hit in question is in production or sandbox, and use this information
+in poll_scripts.py to get the correct data.
+
+10. Add __main__ detection and command line help to poll_scripts.py.
+
+11. poll_scripts.py hard codes that there are exactly 3 positive
+images which are known.  Change it so that it the paremetrized value
+of positive images sent to create_hit.py is passed along through
+all_hits.txt and interpreted correctly in poll_scripts.py.
+
+12. Make the timing between polls in poll_scripts.py configurable by
+command line.
+
+13. Make the output file location of poll_scripts.py configurable by
+command line.
+
+14. Fix serious bug in poll_scripts.py whereby it is assumed on this line:
+                    filename.write( value.split('/')[-2] + " " + value + '\n' )
+
+That the first field of output for the output is somehow encoded
+between the 3rd to last and 2nd to last /'s of the URL to the image.
+What is being attempted here is to produce an output which is like
+this:
+
+video_source image_url
+
+Where video_source is the unique key assigned to the image.  When the
+rest of this pipeline is used and the video source is YouTube and S3
+URLs are currently formed as they are, this ends up being true.
+
+15. poll_scripts.py should be updated to perform the following
+additional logic:
+
+i. Command line parameters indicating:
+   a. The minimum percent correct of specified answers in order to accept the hit for the worker - default 66%
+   b. The minimum percent correct of specified answers in order to accept the results - default 90%
+
+Note: a <= b
+
+ii. Whenever a hit has less than i.a % correct, reject the hit.  This should trigger the hit automatically becoming available to work on again, and deducting the count of completed hits.
+
+iii. Whenever a hit has less than i.b correct, accept the hit, however also add an additional assignment to the hit and ignore the results of this hit.
+
+iv. Whenever a hit has >= i.b correct, accept the hit, incorporate it's results, and mark it as complete.
+
+16. Make poll_scripts.py restartable, so that if the machine crashes
+or the program is terminated, it can be initiated again and resume
+it's state.
+
+17. The output of poll_scripts.py should be command line configuration
+to a location other than the default `cwd`/hitids_results.txt.
+
+18. Once the auto grading feature is added to poll_scripts.py,
+eliminate the presence of known yes and no images from the
+hitids_results.txt output file.
 
 4. Build a library of HDF / text file for negative set training.
    * Assign a video unique key to each video here so we can avoid training and testing on the same video
