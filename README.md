@@ -273,25 +273,50 @@ If the location of the image file is specified with a path, it must be the full 
 
 
 ### Step - 5 Prepare training data using positive and negative features
-The script for feature extraction is located at :
+
+This script simply takes some directories positive and negative
+feature files, and creates an input file suitable for the next stage.
+Any other means of producing an adequately formed input file with
+positive and negative values would work as well.
+
+The operation of this step presupposes the existence of one or more
+directories with features that can be used as negative images.
+
+1. Copy the desired positive training features files (for example the
+feature files for those images defined in step 3 as the training set)
+into a directory with path P.
+
+2. Change the source of the script to make the positives array have
+one element, which is the fill path to P.
+
+3. Change the source of the script to make the negatives array have
+one or more element, which are the full paths to directories
+containing feature files of negative images.
+
+
+The script for feature extraction is located at:
 ```
 viblio/projects/viblio_classification/utility_scripts/prepare_training_set.py
 ```
+
 Running the code:
+
 ```
-$python prepare_training_set.py -o christmas_training_data.txt -pos_ftrs 3000 -neg_ftrs 500
+./prepare_training_set.py -o camping_training_data.txt -pos_ftrs 3000 -neg_ftrs 500
 ```
 
-The code assumes that the features are extracted and kept in their corresponding folders.  For now the positive folder paths (which has positive training set features) and negative folder paths (which have the negative training set features) are given in the list "positives" and "negatives" within the code. The code looks for the .hdf files within these folders for training.
+The arguments are:
+* "-o" - Where the output file will be stored, defaults to training.txt
+* "-pos_count" - The number of positive features to be included
+* "-neg_count" - The number of negative features to be included
 
-The arguments are explained here:
-* "-i" -  Path to text file with guid(or local label) ,"urls of images" or "local paths of images" and labels. Example of sample text file:
+The output file has the following format:
 ```
-shots 0098.png bballshots 1
-shots 0223.png bballshots 1
-shots 0370.png bballshots 1
+directory_name full_file_path_to_feature value
 ```
-### Step-6 Finding the regularization parameter C 
+The value is 1 for positive features, and -1 for negative features.
+
+### Step - 6 Finding the regularization parameter C 
 The script to execute is located at :
 ```
 viblio/projects/viblio_classification/viblio_classifier.py

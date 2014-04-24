@@ -34,7 +34,7 @@ in poll_scripts.py to get the correct data.
 10. Add __main__ detection and command line help to poll_scripts.py.
 
 11. poll_scripts.py hard codes that there are exactly 3 positive
-images which are known.  Change it so that it the paremetrized value
+images which are known.  Change it so that it the parametrized value
 of positive images sent to create_hit.py is passed along through
 all_hits.txt and interpreted correctly in poll_scripts.py.
 
@@ -86,12 +86,12 @@ hitids_results.txt output file.
 
 19. Review all code for .split(' ') statements and replace it with
 generic regexp or split() arguments that don't care how much
-whitespace seperates entries.
+whitespace separated entries.
 
 20. Add __main__ detection and command line help to
 generate_training_and_test.py.
 
-21. Make the proportion of training and test ata from
+21. Make the proportion of training and test data from
 generate_training_and_test.py a parameter, not hard coded at 80%.
 
 22. Completely re-write the behavior of generate_training_and_test.py
@@ -111,10 +111,10 @@ the desired spot and inputs would be automatically detected from
 outputs of preceding stages.
 
 25. Change all scripts, including generate_training_and_test.py, to
-accomodate input files with blank lines, or lines starting with a #.
+accommodate input files with blank lines, or lines starting with a #.
 Accomplish this by using common subroutine across all files that
 imports data files and returns some data structure based on the
-whitespace seperated content of these files.
+whitespace separated content of these files.
 
 26. Change generate_training_and_test.py output file name generation
 to be controlled by command line arguments, or defaults, not the
@@ -125,18 +125,22 @@ input filename and adding some stuff to the end of it.
 
 i. Eliminate stray capital letters from filenames
 
-ii. Elimiante the "Ramsri" directory - merge it's contents with other
+ii. Eliminate the "Ramsri" directory - merge it's contents with other
 directories if they should be retained.
 
-ii. Eliminate needlessly complex heirarchy.  Today there are 12
+ii. Eliminate needlessly complex hierarchy.  Today there are 12
 directories under viblio/common and viblio/projects to hold 51 Python
 source files.
 
-4. Build a library of HDF / text file for negative set training.
-   * Assign a video unique key to each video here so we can avoid training and testing on the same video
+28. Refactor prepare_training_set.py to:
 
-5. Add partitioning of 80/20 MTurk videos for the activity A into a
-training set and a testing set.
+i. Use directly the inputs of prior steps in determining the training
+set (rather than simply reading the first N lines of the positives
+directory listing).
+
+ii. Interacts with some TO BE DEVELOPED database of other features,
+today it assumes there are a bunch of directories in the array made by
+the negatives variable that hold feature files.
 
 6. Generate a report that shows false positives with high confidence,
 and true negatives with low confidence.
