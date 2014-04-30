@@ -1,3 +1,4 @@
+#!/bin/bash
 
 #other tools
 echo "Installing algorithm dependencies"
@@ -63,11 +64,11 @@ echo "Installing sqlalchemy"
 sudo apt-get -y install python-sqlalchemy
 
 echo "Installing You Tube downloader"
-sudo apt-get install youtube-dl
+sudo apt-get -y install youtube-dl
 
-sudo apt-get install ipython
-sudo apt-get install python-gdata
-sudo apt-get install python-beautifulsoup
+sudo apt-get -y install ipython
+sudo apt-get -y install python-gdata
+sudo apt-get -y install python-beautifulsoup
 sudo easy_install selenium
 
 #Installation for PyTables(Hdf5 storage for features)
@@ -81,7 +82,7 @@ sudo python setup.py install
 cd ..
 
 #sub dependencies - 2) HDF5
-sudo apt-get install libhdf5-serial-dev
+sudo apt-get -y install libhdf5-serial-dev
 
 #sub dependencies - 3) Cython
 wget http://www.cython.org/release/Cython-0.20.tar.gz
