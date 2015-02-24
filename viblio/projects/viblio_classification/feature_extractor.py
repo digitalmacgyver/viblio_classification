@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
 import argparse
+import multiprocessing
 import os
+import re
+import time
+
 from viblio.common.features import features
 from viblio.common.ml import feature_pooling
 from viblio.common.utils import numpyutils
@@ -14,11 +18,41 @@ import cStringIO
 import h5py
 import re
 
-#usage:
-#python feature_extractor.py -i /home/rgolla/Downloads/vid4/vid4_paths.txt -o vid4 -inter_dir /home/rgolla/Downloads/vid4
-#Input text file has one of the following format (Top for url bottom one for local files):
-#_Tf_qyL_9JE  https://viblioclassification-test.s3.amazonaws.com/_Tf_qyL_9JE/images00003.png soccer 0
-#image0001 image0001.png soccer 0
+def usage():
+    print '''
+feature_extractor.py
+	-inter_dir /tmp/test
+	-label my_label
+	[-i /tmp/test/label/images_s3urls.txt]
+	[-o /tmp/test/label/image_features.txt]
+
+By default if provided with the same -inter_dir and -label as
+run_video_download_pipeline.py extracts features for all images found
+in the image_s3urls.txt file in the inter_dir/label created by that
+program.
+
+The input file of features to build images with can be overridden with
+the -i argument, this file must have a format of:
+
+video_uid url_to_image_from_video
+
+The output file defaults to inter_dir/label/image_features.txt, it can
+be overridden with the -o argument, the output has a format of:
+
+filename feature_file optional extra fields
+
+The first whitespace separated field is the image filename, which can
+be a local filesystem path or a URL.
+
+The second is the local filesystem path to the feature file for that
+image.
+
+The optional third and subsequent whitespace separated fields are those
+same fields extracted from the input file -i in the third and
+subsequent fields - this can be used to store, for example, MTurk
+classifications of 1 or 0 as to whether this image contains the
+feature for the current label.
+'''
 
 def usage():
     print '''
@@ -98,84 +132,97 @@ if __name__ == '__main__':
     hog2D_descriptor = features.Hog2x2FeatureDescriptor()
 
     # initialize quantization object
-    vq = feature_pooling.SoftKernelQuantization('hog2x2')
+    vq = feature_pooling.SoftKernelQuantization( 'hog2x2' )
 
     #initialize spatial pyramid object
-    sp_pyramid = feature_pooling.SpatialPyramid('hog2x2')
+    sp_pyramid = feature_pooling.SpatialPyramid( 'hog2x2' )
 
     #numpy utils object
     nmp = numpyutils.NumpyUtil()
     
-    #file pointer for output text file that stores correspondence
-    filepointer = open( output_file,'w')
+    def get_feature_names( line ):
+        unique_videoid = line.split()[0]
+        filename = line.split()[1]
+        optional_fields = line.split()[2:]
+
+        if filename.startswith( 'http' ):
+            #imagename results in fetching 'images00003' from 'https://viblioclassification-test.s3.amazonaws.com/_Tf_qyL_9JE/images00003.png'
+            imagename = line.split()[1].split( '/' )[4].split( '.' )[0]
+            
+            ftr_name = unique_videoid + '_' + imagename + '.hdf'
+        else:
+            ftr_name = unique_videoid + '_' +  os.path.basename( filename ).split('.')[0] + '.hdf'
+            
+        ftr_filename = output_dir + '/' + ftr_name
+            
+        return ( ftr_name, ftr_filename )
     
-    # Loop through each url and extract feature
-    for index,line in enumerate(content):
+    def extract_feature( ( index, line ) ):
         try:
             # Skip blank lines
             if re.match( r'^\s*$', line ):
                 print "Skipping blank line:", str( index )
-                continue
-            print str(index)
-            # Check whether it is a url or local file and process accordingly
-            # Each line has following format: _Tf_qyL_9JE  https://viblioclassification-test.s3.amazonaws.com/_Tf_qyL_9JE/images00003.png soccer 0
-            #filename has  https://viblioclassification-test.s3.amazonaws.com/_Tf_qyL_9JE/images00003.png after line.split()[1] if it is a url
-            #if it is a local file filename has image0001.png 
-            unique_videoid=line.split()[0]
-            filename= line.split()[1]
-            optional_fields = line.split()[2:]
+                return
 
-            if not filename.startswith('http'):
-                path =os.path.dirname(os.path.realpath(results.info_filename))+'/'+filename
-                pix = nmp.imagefile2numpy(path,640,local_file=True)
+            filename = line.split()[1]
+
+            print str( index )
+
+            if not filename.startswith( 'http' ):
+                path = filename
+                pix = nmp.imagefile2numpy( path, 640, local_file=True )
             else:
-                pix = nmp.imagefile2numpy(filename,640)
-            floc, fdesc = hog2D_descriptor.run(pix)
+                pix = nmp.imagefile2numpy( filename, 640 )
+            floc, fdesc = hog2D_descriptor.run( pix )
             # quantize feature
-            quantized_ftr = vq.project(fdesc.transpose())
+            quantized_ftr = vq.project( fdesc.transpose() )
             # create spatial pyramid
-            (h, w, nc) = pix.shape
-            spatial_ftr = sp_pyramid.create(quantized_ftr, floc, (h, w))
-            #storing each feature as a single hdf file
-            if filename.startswith('http'):
-                #imagename results in fetching 'images00003' from 'https://viblioclassification-test.s3.amazonaws.com/_Tf_qyL_9JE/images00003.png'
-                imagename = line.split()[1].split('/')[4].split('.')[0]
-                #ftr_name results in _Tf_qyL_9JE_images00003.hdf
-                ftr_name=unique_videoid+'_'+imagename+'.hdf'
-                ftr_filename=output_dir+'/'+ftr_name
-                output_line = "%s %s" % ( filename, ftr_filename )
-                if len( optional_fields ):
-                    output_line += ' ' + ' '.join( optional_fields )
-                output_line += "\n"
-                filepointer.write( output_line )
-            #if line.split()[1].startswith('http'):
-            #    filename=results.inter_dir+'/'+line.split()[0]+'_'+line.split()[1].split('/')[4].split('.')[0]+'.hdf'
-            #    #filepointer.write('%s %s %s\n'%(line.split()[1],filename.split('/')[1],line.split()[3]))
-            #    filepointer.write('%s %s %s\n'%(line.split()[1],filename.split('/')[-1],line.split()[2]))
-            else:
-                ftr_name =filename.split('.')[0]+'.hdf'
-                ftr_filename=results.inter_dir+'/'+ftr_name
-                output_line = "%s %s" % ( filename, ftr_name )
-                if len( optional_fields ):
-                    output_line += ' ' + ' '.join( optional_fields )
-                output_line += "\n"
-                filepointer.write( output_line )
-            nmp.numpy2hdf(ftr_filename,spatial_ftr,'ftr')
-            #Stored feature filename and its label are stored in a text file
+
+            ( h, w, nc ) = pix.shape
+            spatial_ftr = sp_pyramid.create( quantized_ftr, floc, ( h, w ) )
+            
+            ( feature_name, feature_filename ) = get_feature_names( line )
+
+            nmp.numpy2hdf( feature_filename, spatial_ftr, 'ftr' )
             
         except Exception as e:
             print "There was an exception: %s" % e
             pass
 
-    filepointer.close()
+    # no of cpus in the machine
+    cpus = multiprocessing.cpu_count()
 
+    pool = multiprocessing.Pool( processes=cpus )
+
+    print "Starting feature extraction for %s items." % ( len( content ) )
+
+    #Parallel feature extraction
+    start = time.time()
+    pool.map( extract_feature, zip( range( len( content ) ), content ) )
+    end = time.time()
+
+    print 'Time taken: ', ( end - start )
+
+    #file pointer for output text file that stores correspondence
+    output_file = open( output_file, 'w' )
+
+    for index,line in enumerate( content ):
+        unique_videoid = line.split()[0]
+        filename = line.split()[1]
+        optional_fields = line.split()[2:]
         
-"""
-   #Loading stored hdf5 files again into a numpy array
-    with h5py.File(filename1,'r')as f:
-        x =f['ftr'].value
-    print x.shape
-"""
+        ( feature_name, feature_filename ) = get_feature_names( line )
+
+        output_line = "%s %s" % ( filename, feature_filename )
+        if len( optional_fields ):
+            output_line += ' ' + ' '.join( optional_fields )
+        output_line += "\n"
+
+        if os.path.isfile( feature_filename ):
+            output_file.write( output_line )
+
+    output_file.close()
+
 
 
 
