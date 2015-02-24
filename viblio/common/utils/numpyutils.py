@@ -8,8 +8,6 @@ import h5py
 import os
 import re
 
-
-
 class NumpyUtil():
     def __init__(self):
         pass
@@ -52,7 +50,7 @@ class NumpyUtil():
                 features[index, :] = feature
 
         return features
-    
+
     def text2numpy_aggregate(self,info_folder,filename,rootname):
          with open(filename) as f:
              content = f.readlines()
@@ -85,6 +83,39 @@ class NumpyUtil():
                  pass
              
          return (file_ids, x, labels)
+
+    def load_features( self, input_file, rootname ):
+         with open( input_file ) as f:
+             content = f.readlines()
+         # Load the features in 'features' and class labels in 'labels' 
+         features = []
+         labels   = numpy.zeros( shape=len( content ) )
+         file_ids = []
+         for index, line in enumerate( content ):
+             try:
+                 hdf5file = line.split()[1]
+		 print int( line.split()[2] )
+                 if ( int( line.split()[2] ) ) > 0:
+			label=1
+		 else:
+			label=-1
+                 if os.path.isfile( hdf5file ):
+                     with h5py.File( hdf5file, 'r' ) as f:
+                         feature = f[rootname].value
+
+                     file_ids.append( hdf5file )
+                     labels[index] = label
+                     if index == 0:
+                         features = numpy.zeros( shape=( len( content ), feature.size ) )
+                         features[index] = feature
+                     else:
+                         features[index] = feature
+
+             except Exception as e:
+                 print "There was an exception: %s" % e
+                 pass
+             
+         return (file_ids, features, labels)
 
     def write_labels2file(self, filename, file_ids, prob, labels):
         filepointer=open(filename,'w')

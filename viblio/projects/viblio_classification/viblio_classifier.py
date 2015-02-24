@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import os
 import os.path
@@ -11,21 +13,60 @@ from sklearn.metrics import roc_curve, auc
 import pylab as pl
 import time
 
+'''
+Create Model
+============
+
+Prior to model creation it is presumed we:
+
+1. Have identified a set of training images made up of:
+   * Positive images containing the desired subject matter
+   * Negative images without the desired subject matter
+2. Extracted features for those images using the feature_extractor.py
+2. Created a whitespace separated input file of the format:
+
+filename path_to_hdf_file training_value
+
+* filename - The path or URL to the image in question
+* path_to_hdf_file - the full OS path to the HDF file
+* training_value - 1 for a positive image, 0 for a negative image
+
+Root directory: classification/viblio/projects/
+
+Command usage:
+
+1) Add the root directory to your path
+2) Set up the Python environment:
+
+cd classification
+export PYTHONPATH=`pwd`
+
+viblio_classifier.py 
+   -i input_file.txt
+   -s learn
+   -m my_model.svm
+   [-c /path/to/svm_config.cfg]
+
+The optional -c argument defaults to
+classification/viblio/resources/ml/svm_config.cfg
+'''
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', action='store', dest='info_folder', help='Folder path that has all features stored with corresponding files')
+    #parser.add_argument('-d', action='store', dest='info_folder', help='Folder path that has all features stored with corresponding files')
     parser.add_argument('-i', action='store', dest='file_list', help='the file containing the list of image files and their labels')
-    parser.add_argument('-c', action='store', dest='config_file', help='Path to the config file which contains the parameters of SVM model')
+    parser.add_argument('-c', action='store', default = os.path.dirname( __file__ ) + '/../../resources/ml/svm_config.cfg' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/mp/svm_config.cfg')
     parser.add_argument('-m', action='store', dest='model_file', help='Path to the SVM trained model')
     parser.add_argument('-p', action='store', dest='prediction_file', help='Path to a txt file that stores the predicted labels')
     parser.add_argument('-s', action='store', dest='stage', help="indicates the stage of algorith 'learn', 'cross-validate', 'predict', 'report'")
     parser.add_argument('-a', action='store_true', dest='approximate', help="indicates whether to use approximate kernel or not")
     results = parser.parse_args()
 
-    filename = os.path.normpath(results.info_folder) + '/' + results.file_list    
+    input_file = results.file_list
+
     # Load features and labels
     nmp = numpyutils.NumpyUtil()
-    file_ids, x, labels = nmp.text2numpy_aggregate(results.info_folder, filename, 'ftr')
+    file_ids, features, labels = nmp.load_features( input_file, 'ftr' )
     print "loading data is complete."
     print "# positive =", numpy.sum(labels == 1)
     print "# negative =", numpy.sum(labels == -1)
@@ -74,7 +115,7 @@ if __name__ == '__main__':
         sk_svm = viblio_svm.SKLearnSMV(best_C, kernel)
 
         # train svm using the data extracted
-        sk_svm.learn(x, labels)
+        sk_svm.learn(features, labels)
 
         # save svm model to disk in the same folder that is passed through info_folder
         model_filename = results.model_file
@@ -93,11 +134,33 @@ if __name__ == '__main__':
         sk_svm.load(model_filename)
 
         # classify the test data
-        prob, predicted_labels = sk_svm.predict(x)
+        prob, predicted_labels = sk_svm.predict( features )
+
+        # DEBUG Here we can iterate over prob, predicted_labels, and
+        # labels for our input files and generate the TP/FP report.
+        tp = 0
+        fp = 0
+        tn = 0
+        fn = 0
+        print "label, probability, prediction"
+        for i in range( len( prob ) ):
+            print "%s,%0.02f,%s" % ( labels[i], prob[i], predicted_labels[i] )
+            if labels[i] == 1:
+                if predicted_labels[i] == 1:
+                    tp += 1
+                else:
+                    fn += 1
+            else:
+                if predicted_labels[i] == -1:
+                    tn += 1
+                else:
+                    fp += 1
+
+        print "For %s predictions results were: TPs=%s TNs=%s FPs=%s FNs=%s" % ( len( prob ), tp, tn, fp, fn )
 
         # file that will store the predicted labels
-        predict_label_filename = results.prediction_file
-        nmp.write_labels2file(predict_label_filename, file_ids, prob, predicted_labels)
+        #predict_label_filename = results.prediction_file
+        #nmp.write_labels2file(predict_label_filename, file_ids, prob, predicted_labels)
 
     elif results.stage == 'report':
         # file that stores the predicted labels
