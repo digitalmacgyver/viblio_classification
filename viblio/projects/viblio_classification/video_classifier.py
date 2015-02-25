@@ -228,9 +228,11 @@ if __name__ == '__main__':
 
     # Cleanup our temporary files.
     if features_dir[:5] == '/mnt/' and os.path.isdir( features_dir ):
-        shutil.rmtree( features_dir )
+        #shutil.rmtree( features_dir )
+        pass
     if frames_dir[:5] == '/mnt/' and os.path.isdir( frames_dir ):
-        shutil.rmtree( frames_dir )
+        #shutil.rmtree( frames_dir )
+        pass
 
     # We send the classification result to standard output, and return
     # 1 if this result was greater than our threshold, and 0 otherwise
