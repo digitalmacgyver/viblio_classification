@@ -154,7 +154,7 @@ if __name__ == '__main__':
     print image_sampling_frequency
     #each frame increment in milliseconds
     increment = int( ( 1.0 / float( image_sampling_frequency ) ) * 1000 )
-    start = increment / 2
+    start = int( increment / 2 )
 
     #print all_files
     try:
