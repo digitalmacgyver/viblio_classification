@@ -6,13 +6,9 @@ import commands
 from configobj import ConfigObj
 import os
 import argparse
-<<<<<<< HEAD
 import shutil
-=======
 import sys
->>>>>>> 5755f08b89406d4f858492cbfff34ee6f72cc8d4
 
-import sys
 script_directory = os.path.dirname( os.path.realpath( __file__ ) )
 python_path = script_directory + '/../../../'
 sys.path.append( python_path )
@@ -72,11 +68,10 @@ Optional configuration elements:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-<<<<<<< HEAD
-    parser.add_argument( '-c', action='store', dest='config_file', help='directory to store the results' )
-    parser.add_argument( '-t', action='store', dest='output_directory', help='directory to store the results' )
-    parser.add_argument( '-d', action='store', dest='model_directory', help='model directory' )
-    parser.add_argument( '-m', action='store', dest='model_file', help='directory to store the results' )
+    parser.add_argument( '-t', action='store', dest='output_directory', help='Directory to store the results' )
+    parser.add_argument( '-d', action='store', dest='model_directory', help='Directory of the SVM configuration and model.' )
+    parser.add_argument( '-c', action='store', dest='config_file', help='Name of the model configuration file.' )
+    parser.add_argument( '-m', action='store', dest='model_file', help='Name of the model file.' )
     parser.add_argument( '-v', action='store', dest='video_file', help='Video File that neeeds to be classified' )
     arguments = parser.parse_args()
 
@@ -92,43 +87,6 @@ if __name__ == '__main__':
     if arguments.output_directory == None:
         print parser.print_help()
         sys.exit( 1 )
-=======
-    parser.add_argument('-label', action='store', dest='label', help='Single world label used to tag these search results and build output directory structures.' ) 
-    parser.add_argument('-v', action='store', dest='video_file', help='Video File that neeeds to be classified')
-    parser.add_argument('-d', action='store', dest='output_directory', help='directory to store the results')
-    parser.add_argument('-config', action='store', dest='config_file', help='directory to store the results')
-    parser.add_argument('-m', action='store', dest='model_file', help='directory to store the results')
-    results = parser.parse_args()
-
-    #if not os.path.exists(results.output_directory):
-    #    os.makedirs(results.output_directory)
-    v=videoutils.VideoUtils()
-    #extract frames from the video
-    v.extract_frames(results.video_file,results.output_directory,0.1)
-    path1= os.path.basename(os.path.normpath(results.output_directory))
-    text_path = os.path.normpath(results.output_directory) + '/' +path1+'_paths.txt'
-
-    #extract features from the frames of the video
-    os.system('python feature_extractor.py -label %s -inter_dir %s'%(results.label,results.output_directory))
-    #classify the extracted frames from the video
-
-    sys.exit( 0 )
-
-    os.system('python viblio_classifier.py -d %s -i %s_features.txt -c %s -s predict -m %s'%(results.output_directory,path1,results.config_file,results.model_file))
-    print "starting actual prediction of frames"
-    path2=os.path.normpath(results.output_directory)
-    with open('%s/prediction.txt'%path2) as f:
-        content=f.readlines()
-        positive = 0
-        negative = 0
-        for line in content:
-            if(int(line.split()[2])>0):
-                positive = positive+1
-            else:
-                negative = negative+1
-        print "Total positive predicted labels:",positive, " Percentage positive video labels",str(positive/(positive+negative)*100.0)
-        print "Total negative predicted labesl",negative,"Percentage negative video labels",str(negative/(positive+negative)*100.0)
->>>>>>> 5755f08b89406d4f858492cbfff34ee6f72cc8d4
       
     if arguments.model_file == None or not os.path.isfile( arguments.model_file ):
         print parser.print_help()
@@ -185,36 +143,40 @@ if __name__ == '__main__':
     # Create the input for the feature extractor program.
     #
     # /tmp/frames movie_000053.png label 0
-    image_file_paths = "%s/%s_path.txt"%(frames_dir,video_name)
-    start=0
+    image_file_paths = "%s/%s_path.txt" % ( frames_dir, video_name )
+    start = 0
     print image_sampling_frequency
     #each frame increment in milliseconds
-    increment=int((1.0/float(image_sampling_frequency))*1000)
+    increment = int( ( 1.0 / float( image_sampling_frequency ) ) * 1000 )
     #rename the image files
     
     #print all_files
     try:
-        f=open(image_file_paths,'w')
-        all_files= os.listdir(frames_dir)
+        f = open( image_file_paths, 'w' )
+        all_files = os.listdir( frames_dir )
         all_files.sort()
+
         for image_file in all_files:
             if image_file[-4:] != '.png':
                 continue
             else:
-                filename,imageno_withpng=image_file.rsplit('-',1)
-                imageno=int(imageno_withpng.split('.')[0])
-                src_file=frames_dir+'/'+image_file
-                dest_file=frames_dir+'/'+filename+'-'+str(start)+'.png'
-                if imageno==2 or imageno==3 or imageno==4:
-                    os.remove(src_file)
+                filename, imageno_withpng = image_file.rsplit( '-' , 1 )
+                imageno = int( imageno_withpng.split( '.' )[0] )
+                src_file = frames_dir + '/' + image_file
+                dest_file = frames_dir + '/' + filename + '-' + str( start ) + '.png'
+                if imageno == 2 or imageno == 3 or imageno == 4:
+                    # Work around some goofy stuff FFMPEG does by
+                    # throwing away a few garbage frames.
+                    #
+                    # DEBUG - review my other code to see how I handle
+                    # this elsewhere.
+                    os.remove( src_file )
                 else:
-                    os.rename(src_file,dest_file)
-                    f.write( "%s %s label 0\n" % ( frames_dir, os.path.basename( dest_file ) ) )
-                    start=start+increment
-                #print start
+                    os.rename( src_file, dest_file )
+                    f.write( "%s %s label 0\n" % ( video_name, dest_file ) )
+                    start = start + increment
     except Exception as e:
         raise Exception( "Failed to prepare input file for feature extractor, error was: %s" % ( e ) )
-            
 
     """
     try:
@@ -235,7 +197,8 @@ if __name__ == '__main__':
 
     # Run the feature extractor
     try:
-        cmd = library_prefix + ' python feature_extractor.py -i %s -o %s -inter_dir %s > %s/feature_extractor.log 2>&1' % ( image_file_paths, video_name, features_dir, output_directory )
+        cmd = library_prefix + ' python feature_extractor.py -i %s -label %s -inter_dir %s> %s/feature_extractor.log 2>&1' % ( image_file_paths, video_name, features_dir, output_directory )
+        print "Running Feature Extractor:\n%s" % ( cmd )
         ( status, output ) = commands.getstatusoutput( cmd )
         if status != 0:
             raise Exception( "Error running command: %s, output was: %s" % ( cmd, output ) )
@@ -244,7 +207,8 @@ if __name__ == '__main__':
 
     # Run the viblio_classifier
     try:
-        cmd = library_prefix + ' python viblio_classifier.py -d %s -i %s_features.txt -m %s -p %s/%s_predict.txt -c %s -s predict -a > %s/viblio_classifier.log 2>&1' % ( features_dir, video_name, model_file, features_dir, video_name, config_file, output_directory )
+        cmd = library_prefix + ' python viblio_classifier.py -i %s/image_features.txt -m %s -p %s/%s_predict.txt -c %s -s predict -a > %s/viblio_classifier.log 2>&1' % ( "%s/%s" % ( features_dir, video_name ), model_file, features_dir, video_name, config_file, output_directory )
+        print "Running Classifier:\n%s" % ( cmd )
         ( status, output ) = commands.getstatusoutput( cmd )
         if status != 0:
             raise Exception( "Error running command: %s, output was: %s" % ( cmd, output ) )
@@ -254,6 +218,7 @@ if __name__ == '__main__':
     # Aggregate the results
     try:
         cmd = library_prefix + ' python aggregate_frame_labels.py -i %s/%s_predict.txt -c %s -s %s -t %s ' % ( features_dir, video_name, frame_aggregation_count, frame_aggregation_strategy, image_confidence_threshold )
+        print "Aggregating Results:\n%s" % ( cmd )
         ( status, output ) = commands.getstatusoutput( cmd )
         classification_result = float( output )
         if status != 0:

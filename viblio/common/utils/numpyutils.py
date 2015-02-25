@@ -97,8 +97,8 @@ class NumpyUtil():
          for index, line in enumerate( content ):
              try:
                  hdf5file = line.split()[1]
-		 print int( line.split()[2] )
-                 if ( int( line.split()[2] ) ) > 0:
+		 print int( line.split()[3] )
+                 if ( int( line.split()[3] ) ) > 0:
 			label=1
 		 else:
 			label=-1

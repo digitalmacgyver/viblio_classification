@@ -92,12 +92,23 @@ feature for the current label.
 '''
 
 if __name__ == '__main__':
+
+    # DEBUG - remove
+    #import pdb
+    #pdb.set_trace()
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('-label', action='store', dest='label', help='Single world label used to tag these search results and build output directory structures.' ) 
-    parser.add_argument('-inter_dir', action='store',dest='inter_dir',help='directory path where the trained model,labels and extracted features are stored')
-    parser.add_argument('-i', action='store', dest='info_filename', help='Optional input file, defaults to inter_dir/label/image_s3urls.txt')
-    parser.add_argument('-o',action='store',dest='output_filename',help='Optional path to store image feauture mapping output to, defaults to inter_dir/label/image_features.txt')
-    parser.add_argument('-config_file', action='store', default = os.path.dirname( __file__ ) + '/../../resources/projects/video_download/config_ffmpeg.ini' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/projects/video_download/config_ffmpeg.ini')
+    parser.add_argument('-label', action='store', dest='label', 
+                        help='Single world label used to tag these search results and build output directory structures.' ) 
+    parser.add_argument('-inter_dir', action='store',dest='inter_dir',
+                        help='directory path where the trained model, labels and extracted features are stored')
+    parser.add_argument('-i', action='store', dest='info_filename', 
+                        help='Optional input file, defaults to inter_dir/label/image_s3urls.txt')
+    parser.add_argument('-o',action='store',dest='output_filename',
+                        help='Optional path to store image feauture mapping output to, defaults to inter_dir/label/image_features.txt')
+    parser.add_argument('-config_file', action='store', 
+                        default = os.path.dirname( __file__ ) + '/../../resources/projects/video_download/config_ffmpeg.ini' , dest='config_file', 
+                        help='Optional configuration file path, defaults to classification/resources/projects/video_download/config_ffmpeg.ini')
 
     results = parser.parse_args()
 
@@ -166,12 +177,15 @@ if __name__ == '__main__':
 
             filename = line.split()[1]
 
+            print line
+            print filename
+
             print str( index )
 
             if not filename.startswith( 'http' ):
-                path = filename
-                pix = nmp.imagefile2numpy( path, 640, local_file=True )
+                pix = nmp.imagefile2numpy( filename, 640, local_file=True )
             else:
+                # In this case filename is a URL.
                 pix = nmp.imagefile2numpy( filename, 640 )
             floc, fdesc = hog2D_descriptor.run( pix )
             # quantize feature
@@ -182,6 +196,9 @@ if __name__ == '__main__':
             spatial_ftr = sp_pyramid.create( quantized_ftr, floc, ( h, w ) )
             
             ( feature_name, feature_filename ) = get_feature_names( line )
+
+            print "Feature name:", feature_name
+            print "Feature filename:", feature_filename
 
             nmp.numpy2hdf( feature_filename, spatial_ftr, 'ftr' )
             

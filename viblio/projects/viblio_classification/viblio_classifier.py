@@ -53,13 +53,19 @@ classification/viblio/resources/ml/svm_config.cfg
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    #parser.add_argument('-d', action='store', dest='info_folder', help='Folder path that has all features stored with corresponding files')
-    parser.add_argument('-i', action='store', dest='file_list', help='the file containing the list of image files and their labels')
-    parser.add_argument('-c', action='store', default = os.path.dirname( __file__ ) + '/../../resources/ml/svm_config.cfg' , dest='config_file', help='Optional configuration file path, defaults to classification/resources/mp/svm_config.cfg')
-    parser.add_argument('-m', action='store', dest='model_file', help='Path to the SVM trained model')
-    parser.add_argument('-p', action='store', dest='prediction_file', help='Path to a txt file that stores the predicted labels')
-    parser.add_argument('-s', action='store', dest='stage', help="indicates the stage of algorith 'learn', 'cross-validate', 'predict', 'report'")
-    parser.add_argument('-a', action='store_true', dest='approximate', help="indicates whether to use approximate kernel or not")
+    parser.add_argument('-i', action='store', dest='file_list', 
+                        help='The file containing the list of image files, their feature files, and their labels')
+    parser.add_argument('-c', action='store', 
+                        default = os.path.dirname( __file__ ) + '/../../resources/ml/svm_config.cfg' , dest='config_file', 
+                        help='Optional configuration file path, defaults to classification/resources/mp/svm_config.cfg')
+    parser.add_argument('-m', action='store', dest='model_file', 
+                        help='Path to the SVM trained model')
+    parser.add_argument('-p', action='store', dest='prediction_file', 
+                        help='Path to a txt file that stores the predicted labels')
+    parser.add_argument('-s', action='store', dest='stage', 
+                        help="Indicates the stage of algorith 'learn', 'cross-validate', 'predict', 'report'")
+    parser.add_argument('-a', action='store_true', dest='approximate', 
+                        help="Indicates whether to use approximate kernel or not")
     results = parser.parse_args()
 
     input_file = results.file_list
@@ -83,8 +89,8 @@ if __name__ == '__main__':
     if results.approximate:
         kernel = viblio_svm.Linear([])
         ef = expand_feature.ExpandFeature()
-        x = ef.expand(x)
-        print x.shape
+        features = ef.expand( features )
+        print features.shape
         print "using approximate kernel"
     else:
         kernel = viblio_svm.HIK([])
@@ -100,7 +106,7 @@ if __name__ == '__main__':
         c_init = 1
         sk_svm = viblio_svm.SKLearnSMV(c_init, kernel)
 
-        scores = sk_svm.cross_validate(x, labels, 5, Cs)
+        scores = sk_svm.cross_validate( features , labels, 5, Cs)
 
         best_c_ind = numpy.argmax(scores)
         print "cross validation is done"
@@ -126,12 +132,10 @@ if __name__ == '__main__':
     elif results.stage == 'predict':
         best_C = float(svm_params['best_C'])
 
-        # load svm model from the same folder that is passed through info_folder
-        model_filename = results.model_file
-
         # load model from disk
-        sk_svm = viblio_svm.SKLearnSMV(best_C, kernel=kernel)
-        sk_svm.load(model_filename)
+        model_filename = results.model_file
+        sk_svm = viblio_svm.SKLearnSMV( best_C, kernel=kernel )
+        sk_svm.load( model_filename )
 
         # classify the test data
         prob, predicted_labels = sk_svm.predict( features )
@@ -159,8 +163,8 @@ if __name__ == '__main__':
         print "For %s predictions results were: TPs=%s TNs=%s FPs=%s FNs=%s" % ( len( prob ), tp, tn, fp, fn )
 
         # file that will store the predicted labels
-        #predict_label_filename = results.prediction_file
-        #nmp.write_labels2file(predict_label_filename, file_ids, prob, predicted_labels)
+        predict_label_filename = results.prediction_file
+        nmp.write_labels2file(predict_label_filename, file_ids, prob, predicted_labels)
 
     elif results.stage == 'report':
         # file that stores the predicted labels

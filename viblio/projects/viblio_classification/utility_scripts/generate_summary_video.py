@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from __future__ import division
 import os
 import shutil
@@ -71,11 +73,9 @@ def smoothListGaussian(list,degree=5):
         smoothed[i]=sum(numpy.array(list[i:i+window])*weight)/sum(weight)  
     return smoothed  
 
-
-
 def activity_present(video_file,working_dir,model_dir):
-    path= os.path.dirname(os.path.abspath(__file__)) + '/../../../../projects/viblio_classification/'
-    python_path = os.path.dirname(os.path.abspath(__file__))+ '/../../../../../../classification/'
+    path = os.path.dirname(os.path.abspath(__file__)) + '/../../../projects/viblio_classification/'
+    python_path = os.path.dirname(os.path.abspath(__file__))+ '/../../../../../classification/'
     curr =os.getcwd()
     framerate=float(2)
     ( status, output ) = commands.getstatusoutput("cd %s; PYTHONPATH=$PYTHONPATH:%s python video_classifier.py -v %s -t %s -d %s" % (path,python_path,video_file,working_dir,model_dir) )
@@ -87,18 +87,24 @@ def activity_present(video_file,working_dir,model_dir):
     
     if status != 0 and status != 256:
         raise Exception( "Error, unexpected return status from viblio_classifier.sh, return value was %s output was: %s" % ( status, output ) )
-    base=os.path.basename(video_file)
-    vid_file_extension=os.path.splitext(base)[0]
-    filepath=working_dir+'/features/'+vid_file_extension+'_predict.txt'
+
+    base = os.path.basename( video_file )
+    vid_file_extension = os.path.splitext( base )[0]
+    filepath = working_dir + '/features/' + vid_file_extension + '_predict.txt'
     print filepath
-    x,y = numpy.loadtxt(filepath, delimiter=' ', usecols=(1,2), unpack=True)
-    with open(filepath) as f:
-        all=f.readlines()
-    timestamps=[int(each.split('-')[1].split('.')[0]) for each in all]
+    x, y = numpy.loadtxt( filepath, delimiter=' ', usecols=( 1, 2 ), unpack=True )
+
+    with open( filepath ) as f:
+        all_lines = f.readlines()
+
+    timestamps = [ int( each.split( '-' )[1].split( '.' )[0] ) for each in all_lines ]
+
     print timestamps
-   #print x
-    threshold=0.7
-    condition=numpy.abs(x)>threshold
+    #print x
+
+    threshold = 0.7
+
+    condition = numpy.abs( x ) > threshold
     #smoothened=smooth(x,3,'hanning')
     #smoothened=smoothListGaussian(x,2)
     #print smoothened
@@ -154,12 +160,15 @@ def activity_present(video_file,working_dir,model_dir):
 
      
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', action='store', dest='info_filename', help='Text containing list of video file names to test against')
-    parser.add_argument('-w', action='store', dest='working_directory', help='The directory to store the intermediate files generated')
-    parser.add_argument('-m', action='store', dest='model_directory', help='Folder where model and svm_config.cfg file is present. Note that model should be named as svm_default.model')
-    parser.add_argument('-o',action='store',dest='output_filename',help='Text file name to store the output results')
+    parser.add_argument('-i', action='store', dest='info_filename', 
+                        help='Text containing list of video file names to test against')
+    parser.add_argument('-w', action='store', dest='working_directory', 
+                        help='The directory to store the intermediate files generated')
+    parser.add_argument('-m', action='store', dest='model_directory', 
+                        help='Folder where model and svm_config.cfg file is present. Note that model should be named as svm_default.model')
+    parser.add_argument('-o',action='store',dest='output_filename',
+                        help='Text file name to store the output results')
     results = parser.parse_args()
 
     vid_results= open(results.output_filename,'w')
@@ -176,7 +185,7 @@ if __name__ == '__main__':
         else:
             shutil.rmtree(work_dir)
             os.makedirs(work_dir)
-        print 'processing video : ',index,' of',len(urls)
+        print 'processing video :', index, ' of', len( urls )
         (stat,conf)=activity_present(video.split()[0],work_dir,results.model_directory)
         vid_results.write('%s %s %s\n'%(video.split()[0],conf,stat))
 
