@@ -7,10 +7,14 @@ from viblio.common.utils import numpyutils
 if __name__ == '__main__':
     # parse arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', action='store', dest='file_name', help='path to the file containing prob and labels for frames')
-    parser.add_argument('-c', action='store', dest='frame_aggregation_count', help='The number of frames to aggregate over, defaults to 6')
-    parser.add_argument('-s', action='store', dest='frame_aggregation_strategy', help='The frame aggregation strategy, defaults to AggregateAlphaTrimmedMean' )
-    parser.add_argument('-t', action='store', dest='image_confidence_threshold', help='the threshold used in classification')
+    parser.add_argument('-i', action='store', dest='file_name', 
+                        help='path to the file containing prob and labels for frames')
+    parser.add_argument('-c', action='store', dest='frame_aggregation_count', 
+                        help='The number of frames to aggregate over, defaults to 6')
+    parser.add_argument('-s', action='store', dest='frame_aggregation_strategy', 
+                        help='The frame aggregation strategy, defaults to AggregateAlphaTrimmedMean' )
+    parser.add_argument('-t', action='store', dest='image_confidence_threshold', 
+                        help='the threshold used in classification')
     arguments = parser.parse_args()
 
     frame_aggregation_count = 6
