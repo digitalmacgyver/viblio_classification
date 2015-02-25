@@ -109,7 +109,7 @@ def activity_present(video_file,working_dir,model_dir):
     #smoothened=smoothListGaussian(x,2)
     #print smoothened
     #y=numpy.arange(0,len(x),1)
-    plt.plot(x)
+    #plt.plot(x)
     #plt.plot(smoothened)
     #plt.show()
     #plot(x)
