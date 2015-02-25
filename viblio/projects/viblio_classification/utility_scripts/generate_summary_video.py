@@ -131,8 +131,14 @@ def activity_present(video_file,working_dir,model_dir):
         
         out_file=open(output_filename,'w')
     for index,each in enumerate(all):
-	start_second=float(each.split()[0])/1000.0-0.5
-	duration=float(each.split()[1])/1000.0-start_second+0.5
+        # Move the start back a second earlier.
+	#start_second=float(each.split()[0])/1000.0-1
+	start_second=float(each.split()[0])/1000.0
+        if start_second < 0:
+            start_second = 0
+        # Move the duration out 1.5 seconds.
+        #duration=float(each.split()[1])/1000.0-start_second+1.5
+	duration=float(each.split()[1])/1000.0-start_second
 	print start_second , duration
         vid_path=working_dir+'/'+str(index)
 	command='ffmpeg -i %s -ss %f -t %f %s'%(video_file,start_second,duration,vid_path)+'.mp4' + ' > /dev/null 2>&1'

@@ -132,24 +132,30 @@ if __name__ == '__main__':
     # Produce images from the input video at the desired rate into the
     # frame directory
     try:
-        cmd = 'ffmpeg -y -i %s -r %s -f image2 %s/%s_images-%%06d.png > %s/ffmpeg_sample.log 2>&1' % ( video_file, image_sampling_frequency, frames_dir, video_name, output_directory )
+        cmd = 'ffmpeg -y -i %s -vf fps=%s -f image2 %s/%s_images-%%06d.png > %s/ffmpeg_sample.log 2>&1' % ( video_file, image_sampling_frequency, frames_dir, video_name, output_directory )
         ( status, output ) = commands.getstatusoutput( cmd )
         if status != 0:
             raise Exception( "Error running command: %s, output was: %s" % ( cmd, output ) )
     except Exception as e:
         raise
 
+    # Calculate the timecode metric.
+    #
+    # FFMPEG for some reason generates a garbage first frame, and
+    # then starts making frames every FPS at FPS/2 in video when
+    # the -vf fps=X option is used (different, crazier behavior
+    # results from usage of -r).
+    #
     # rename all image files to have the millisecond information
     # Create the input for the feature extractor program.
     #
     # /tmp/frames movie_000053.png label 0
     image_file_paths = "%s/%s_path.txt" % ( frames_dir, video_name )
-    start = 0
     print image_sampling_frequency
     #each frame increment in milliseconds
     increment = int( ( 1.0 / float( image_sampling_frequency ) ) * 1000 )
-    #rename the image files
-    
+    start = increment / 2
+
     #print all_files
     try:
         f = open( image_file_paths, 'w' )
@@ -164,12 +170,9 @@ if __name__ == '__main__':
                 imageno = int( imageno_withpng.split( '.' )[0] )
                 src_file = frames_dir + '/' + image_file
                 dest_file = frames_dir + '/' + filename + '-' + str( start ) + '.png'
-                if imageno == 2 or imageno == 3 or imageno == 4:
+                if imageno == 1:
                     # Work around some goofy stuff FFMPEG does by
-                    # throwing away a few garbage frames.
-                    #
-                    # DEBUG - review my other code to see how I handle
-                    # this elsewhere.
+                    # throwing away garbage frames.
                     os.remove( src_file )
                 else:
                     os.rename( src_file, dest_file )
