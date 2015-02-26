@@ -78,10 +78,10 @@ def activity_present(video_file,working_dir,model_dir):
     python_path = os.path.dirname(os.path.abspath(__file__))+ '/../../../../../classification/'
     curr =os.getcwd()
     framerate=float(2)
-    #( status, output ) = commands.getstatusoutput("cd %s; PYTHONPATH=$PYTHONPATH:%s python video_classifier.py -v %s -t %s -d %s" % (path,python_path,video_file,working_dir,model_dir) )
+    ( status, output ) = ( 0, 0 ) 
+    ( status, output ) = commands.getstatusoutput("cd %s; PYTHONPATH=$PYTHONPATH:%s python video_classifier.py -v %s -t %s -d %s" % (path,python_path,video_file,working_dir,model_dir) )
     os.chdir(curr)
 
-    ( status, output ) = ( 0, 0 ) 
     print 'status',status
     print 'output: \n',output
     
