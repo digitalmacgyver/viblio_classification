@@ -131,16 +131,22 @@ def activity_present(video_file,working_dir,model_dir):
         
         out_file=open(output_filename,'w')
 
+    min_time = 0
+
     for index,each in enumerate( all ):
         # Move the start back a second earlier.
 	#start_second=float(each.split()[0])/1000.0-1
-	start_second = float( each.split()[0] ) / 1000.0 - 1
+	start_second = float( each.split()[0] ) / 1000.0 - 1.5
         if start_second < 0:
             start_second = 0
+        if start_second < min_time:
+            start_second = min_time
+
+        min_time = start_second
 
         # Move the duration out 1.5 seconds.
         #duration=float(each.split()[1])/1000.0-start_second+1.5
-	duration = float( each.split()[1] ) / 1000.0 - start_second + 1.5
+	duration = float( each.split()[1] ) / 1000.0 - start_second + 2
 
 	print start_second , duration
         vid_path=working_dir+'/'+str(index)
