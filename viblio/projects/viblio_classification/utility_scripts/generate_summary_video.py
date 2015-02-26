@@ -154,9 +154,10 @@ def activity_present(video_file,working_dir,model_dir):
 
                 min_time = start_second + duration
 
-                print start_second , duration
-                vid_path=working_dir+'/'+str(index)
-                command='ffmpeg -i %s -ss %f -t %f %s'%(video_file,start_second,duration,vid_path)+'.mp4' + ' > /dev/null 2>&1'
+                print start_second, duration
+
+                vid_path = working_dir + '/' +str( index )
+                command='ffmpeg -y -i %s -ss %f -t %f %s'%(video_file,start_second,duration,vid_path)+'.mp4' + ' > /dev/null 2>&1'
                 print command
                 p = subprocess.Popen(command, shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 output = p.communicate()[0]
@@ -164,7 +165,7 @@ def activity_present(video_file,working_dir,model_dir):
                 out_file.write('file'+' '+str(index)+'.mp4'+'\n')
             out_file.close()
     
-            command2 = 'ffmpeg -f concat -i %s %s > /dev/null 2>&1' % ( output_filename, working_dir + '/' + '%d_%s' % ( idx, threshold ) + 'vid_summary.mp4' )
+            command2 = 'ffmpeg -y -f concat -i %s %s > /dev/null 2>&1' % ( output_filename, working_dir + '/' + '%d_%s' % ( idx, threshold ) + 'vid_summary.mp4' )
             print command2
             p = subprocess.Popen(command2, shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             output = p.communicate()[0]
