@@ -78,8 +78,10 @@ def activity_present(video_file,working_dir,model_dir):
     python_path = os.path.dirname(os.path.abspath(__file__))+ '/../../../../../classification/'
     curr =os.getcwd()
     framerate=float(2)
-    ( status, output ) = commands.getstatusoutput("cd %s; PYTHONPATH=$PYTHONPATH:%s python video_classifier.py -v %s -t %s -d %s" % (path,python_path,video_file,working_dir,model_dir) )
+    #( status, output ) = commands.getstatusoutput("cd %s; PYTHONPATH=$PYTHONPATH:%s python video_classifier.py -v %s -t %s -d %s" % (path,python_path,video_file,working_dir,model_dir) )
     os.chdir(curr)
+
+    ( status, output ) = ( 0, 0 ) 
     print 'status',status
     print 'output: \n',output
     
@@ -93,8 +95,8 @@ def activity_present(video_file,working_dir,model_dir):
     filepath = working_dir + '/features/' + vid_file_extension + '_predict.txt'
     print filepath
     x1, y = numpy.loadtxt( filepath, delimiter=' ', usecols=( 1, 2 ), unpack=True )
-    x2 = smooth( x, 3, 'hanning' )
-    x3 = smoothListGaussian( x, 2 )
+    x2 = smooth( x1, 3, 'hanning' )
+    x3 = smoothListGaussian( x1, 2 )
 
     thresholds = [ 0.35, 0.7, 0.9 ]
 
