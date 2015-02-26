@@ -92,7 +92,12 @@ def activity_present(video_file,working_dir,model_dir):
     vid_file_extension = os.path.splitext( base )[0]
     filepath = working_dir + '/features/' + vid_file_extension + '_predict.txt'
     print filepath
-    x, y = numpy.loadtxt( filepath, delimiter=' ', usecols=( 1, 2 ), unpack=True )
+    x1, y = numpy.loadtxt( filepath, delimiter=' ', usecols=( 1, 2 ), unpack=True )
+    x2 = smooth( x, 3, 'hanning' )
+    x3 = smoothListGaussian( x, 2 )
+
+    thresholds = [ 0.35, 0.7, 0.9 ]
+
 
     with open( filepath ) as f:
         all_lines = f.readlines()
@@ -100,68 +105,67 @@ def activity_present(video_file,working_dir,model_dir):
     timestamps = [ int( each.split( '-' )[1].split( '.' )[0] ) for each in all_lines ]
 
     print timestamps
-    #print x
 
-    threshold = 0.7
+    for idx, x in enumerate( [ x1, x2, x3] ):
+        for threshold in thresholds:
 
-    condition = numpy.abs( x ) > threshold
-    #smoothened=smooth(x,3,'hanning')
-    #smoothened=smoothListGaussian(x,2)
-    #print smoothened
-    #y=numpy.arange(0,len(x),1)
-    #plt.plot(x)
-    #plt.plot(smoothened)
-    #plt.show()
-    #plot(x)
-    #plot(smoothened)
-    time_stamp=working_dir+'/timestamps.txt'
-    timestamp_file=open(time_stamp,'w')
-    for start, stop in contiguous_regions(condition):
-        segment = x[start:stop]
-        if (stop-start)>1:
-            timestamp_file.write('%s %s\n'%(timestamps[start],timestamps[stop-1]))
-            #print timestamps[start], timestamps[stop-1]
-    print "done with timestamps"
-    timestamp_file.close()
-    output_filename=working_dir+'/concat.txt'
-    with open(time_stamp) as f:
-	all = f.readlines()
-        print all
-        #video_file='short.mp4'
+            condition = numpy.abs( x ) > threshold
+            #print smoothened
+            #y=numpy.arange(0,len(x),1)
+            #plt.plot(x)
+            #plt.plot(smoothened)
+            #plt.show()
+            #plot(x)
+            #plot(smoothened)
+            time_stamp=working_dir+'/timestamps.txt'
+            timestamp_file=open(time_stamp,'w')
+            for start, stop in contiguous_regions(condition):
+                segment = x[start:stop]
+                if (stop-start)>1:
+                    timestamp_file.write('%s %s\n'%(timestamps[start],timestamps[stop-1]))
+                    #print timestamps[start], timestamps[stop-1]
+
+            print "done with timestamps"
+            timestamp_file.close()
+            output_filename=working_dir+'/concat.txt'
+            with open(time_stamp) as f:
+                all = f.readlines()
+                print all
+                #video_file='short.mp4'
         
-        out_file=open(output_filename,'w')
+                out_file=open(output_filename,'w')
 
-    min_time = 0
+            min_time = 0
 
-    for index,each in enumerate( all ):
-        # Move the start back a second earlier.
-	#start_second=float(each.split()[0])/1000.0-1
-	start_second = float( each.split()[0] ) / 1000.0 - 1.5
-        if start_second < 0:
-            start_second = 0
-        if start_second < min_time:
-            start_second = min_time
+            for index,each in enumerate( all ):
+                # Move the start back a second earlier.
+                #start_second=float(each.split()[0])/1000.0-1
+                start_second = float( each.split()[0] ) / 1000.0 - 1.5
+                if start_second < 0:
+                    start_second = 0
+                if start_second < min_time:
+                    start_second = min_time
 
-        # Move the duration out 1.5 seconds.
-        #duration=float(each.split()[1])/1000.0-start_second+1.5
-	duration = float( each.split()[1] ) / 1000.0 - start_second + 2
+                # Move the duration out 1.5 seconds.
+                #duration=float(each.split()[1])/1000.0-start_second+1.5
+                duration = float( each.split()[1] ) / 1000.0 - start_second + 2
 
-        min_time = start_second + duration
+                min_time = start_second + duration
 
-	print start_second , duration
-        vid_path=working_dir+'/'+str(index)
-	command='ffmpeg -i %s -ss %f -t %f %s'%(video_file,start_second,duration,vid_path)+'.mp4' + ' > /dev/null 2>&1'
-	print command
-	p = subprocess.Popen(command, shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-	output = p.communicate()[0]
-        #print output
-	out_file.write('file'+' '+str(index)+'.mp4'+'\n')
-    out_file.close()
+                print start_second , duration
+                vid_path=working_dir+'/'+str(index)
+                command='ffmpeg -i %s -ss %f -t %f %s'%(video_file,start_second,duration,vid_path)+'.mp4' + ' > /dev/null 2>&1'
+                print command
+                p = subprocess.Popen(command, shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                output = p.communicate()[0]
+                #print output
+                out_file.write('file'+' '+str(index)+'.mp4'+'\n')
+            out_file.close()
     
-    command2='ffmpeg -f concat -i %s %s'%(output_filename,working_dir+'/'+'vid_summary.mp4')+ ' > /dev/null 2>&1'
-    print command2
-    p = subprocess.Popen(command2, shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    output = p.communicate()[0]
+            command2 = 'ffmpeg -f concat -i %s %s > /dev/null 2>&1' % ( output_filename, working_dir + '/' + '%d_%s' % ( idx, threshold ) + 'vid_summary.mp4' )
+            print command2
+            p = subprocess.Popen(command2, shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            output = p.communicate()[0]
     
     return (status, confidence )
 """
