@@ -142,11 +142,11 @@ def activity_present(video_file,working_dir,model_dir):
         if start_second < min_time:
             start_second = min_time
 
-        min_time = start_second
-
         # Move the duration out 1.5 seconds.
         #duration=float(each.split()[1])/1000.0-start_second+1.5
 	duration = float( each.split()[1] ) / 1000.0 - start_second + 2
+
+        min_time = start_second + duration
 
 	print start_second , duration
         vid_path=working_dir+'/'+str(index)
