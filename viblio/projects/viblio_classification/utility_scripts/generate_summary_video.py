@@ -206,9 +206,6 @@ if __name__ == '__main__':
 
     arguments = parser.parse_args()
 
-    import pdb
-    pdb.set_trace()
-
     reuse = False
     if arguments.reuse_existing:
         resue = True
