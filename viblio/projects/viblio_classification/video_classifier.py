@@ -75,7 +75,6 @@ if __name__ == '__main__':
     parser.add_argument( '-c', action='store', dest='config_file', help='Name of the model configuration file.' )
     parser.add_argument( '-m', action='store', dest='model_file', help='Name of the model file.' )
     parser.add_argument( '-v', action='store', dest='video_file', help='Video File that neeeds to be classified.' )
-    parser.add_argument( '-v', action='store', dest='force', help='Force regeneration of all data.' )
     arguments = parser.parse_args()
 
     if arguments.model_directory != None and os.path.isdir( arguments.model_directory ):
