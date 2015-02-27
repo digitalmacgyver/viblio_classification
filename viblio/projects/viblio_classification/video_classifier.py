@@ -97,10 +97,6 @@ if __name__ == '__main__':
         print parser.print_help()
         sys.exit( 1 )
    
-    force = False
-    if arguments.force:
-        force = True
-     
     config_file = arguments.config_file
     model_file = arguments.model_file
     output_directory = arguments.output_directory
