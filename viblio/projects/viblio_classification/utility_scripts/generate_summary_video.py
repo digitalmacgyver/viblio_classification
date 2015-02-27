@@ -12,13 +12,13 @@ import scipy
 import matplotlib.pyplot as plt
 import subprocess
 
-def contiguous_regions(condition):
+def contiguous_regions( condition ):
     """Finds contiguous True regions of the boolean array "condition". Returns
     a 2D array where the first column is the start index of the region and the
     second column is the end index."""
 
     # Find the indicies of changes in "condition"
-    d = numpy.diff(condition)
+    d = numpy.diff( condition )
     idx, = d.nonzero() 
 
     # We need to start things after the change in "condition". Therefore, 
@@ -34,11 +34,11 @@ def contiguous_regions(condition):
         idx = numpy.r_[idx, condition.size] # Edit
 
     # Reshape the result into two columns
-    idx.shape = (-1,2)
+    idx.shape = ( -1, 2 )
     return idx
 
 
-def smooth(x,window_len=3,window='hanning'):
+def smooth( x, window_len=3, window='hanning' ):
     if x.ndim != 1:
         raise ValueError, "smooth only accepts 1 dimension arrays."
   
@@ -46,31 +46,38 @@ def smooth(x,window_len=3,window='hanning'):
         raise ValueError, "Input vector needs to be bigger than window size."
    
    
-    if window_len<3:
+    if window_len < 3:
         return x
-    if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']:
-        raise ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
-    s=numpy.r_[x[window_len-1:0:-1],x,x[-1:-window_len:-1]]
-    if window == 'flat':
-         w=numpy.ones(window_len,'d')
-    else:
-        w=eval('numpy.'+window+'(window_len)')
-    y=numpy.convolve(w/w.sum(),s,mode='valid')
-    return y[(window_len/2-1):-(window_len/2)-1]
 
-def smoothListGaussian(list,degree=5):  
-    window=degree*2-1  
-    weight=numpy.array([1.0]*window)  
-    weightGauss=[]  
-    for i in range(window):  
-        i=i-degree+1  
-        frac=i/float(window)  
-        gauss=1/(numpy.exp((4*(frac))**2))  
-        weightGauss.append(gauss)  
-    weight=numpy.array(weightGauss)*weight  
-    smoothed=[0.0]*(len(list)-window)  
-    for i in range(len(smoothed)):  
-        smoothed[i]=sum(numpy.array(list[i:i+window])*weight)/sum(weight)  
+    if not window in [ 'flat', 'hanning', 'hamming', 'bartlett', 'blackman' ]:
+        raise ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
+
+    s = numpy.r_[ x[window_len-1:0:-1], x, x[-1:-window_len:-1] ]
+    if window == 'flat':
+         w = numpy.ones( window_len, 'd' )
+    else:
+        w = eval( 'numpy.' + window + '(window_len)' )
+
+    y = numpy.convolve( w / w.sum(), s, mode='valid' )
+
+    return y[ ( window_len / 2 - 1 ) : -( window_len / 2 ) - 1 ]
+
+def smoothListGaussian( list, degree=5 ):  
+    window = degree * 2 - 1  
+    weight = numpy.array( [1.0] * window )  
+    weightGauss = []  
+
+    for i in range( window ):  
+        i = i - degree + 1  
+        frac = i / float( window )  
+        gauss = 1 / ( numpy.exp( ( 4 * ( frac ) ) ** 2 ) )  
+        weightGauss.append( gauss )  
+
+    weight = numpy.array( weightGauss ) * weight  
+    smoothed = [0.0] * ( len( list ) - window )  
+
+    for i in range( len( smoothed ) ):  
+        smoothed[i] = sum( numpy.array( list[i:i+window] ) * weight ) / sum( weight )  
     return smoothed  
 
 def activity_present( video_file, working_dir, model_dir, reuse=False ):

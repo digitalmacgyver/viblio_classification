@@ -139,7 +139,6 @@ if __name__ == '__main__':
     # Produce images from the input video at the desired rate into the
     # frame directory
     try:
-        # DEBUG - implement not force here.
         cmd = 'ffmpeg -y -i %s -vf fps=%s -f image2 %s/%s_images-%%06d.png > %s/ffmpeg_sample.log 2>&1' % ( video_file, image_sampling_frequency, frames_dir, video_name, output_directory )
         ( status, output ) = commands.getstatusoutput( cmd )
         if status != 0:
@@ -204,6 +203,7 @@ if __name__ == '__main__':
     except Exception as e:
         raise Exception( "Failed to prepare input file for feature extractor, error was: %s" % ( e ) )
     """
+
     library_prefix = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%s PYTHONPATH=$PYTHONPATH:%s " % ( library_path, python_path )
 
     # Run the feature extractor
