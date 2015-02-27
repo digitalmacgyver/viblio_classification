@@ -22,9 +22,11 @@ video_classifier.py -v /home/rgolla/Desktop/vid4.mp4
                     [ -d /deploy/local/activity_model/ ]
                     [ -c /deploy/local/activity_model/svm_config.cfg ]
                     [ -m /deploy/local/activity_model/activity.model ]
+                    [ -f ]
 
 -v controls the video to be processed
 -t controls the temporary directory to use for intermediate contents
+-f controls whether outputs are regenerated if they already appear to be present (default is false)
 
 One of -d, or both of -c and -m must be specified.  If -d is
 specified as DIR, then -c and -m take on default values of:
@@ -68,11 +70,12 @@ Optional configuration elements:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument( '-t', action='store', dest='output_directory', help='Directory to store the results' )
+    parser.add_argument( '-t', action='store', dest='output_directory', help='Directory to store the results.' )
     parser.add_argument( '-d', action='store', dest='model_directory', help='Directory of the SVM configuration and model.' )
     parser.add_argument( '-c', action='store', dest='config_file', help='Name of the model configuration file.' )
     parser.add_argument( '-m', action='store', dest='model_file', help='Name of the model file.' )
-    parser.add_argument( '-v', action='store', dest='video_file', help='Video File that neeeds to be classified' )
+    parser.add_argument( '-v', action='store', dest='video_file', help='Video File that neeeds to be classified.' )
+    parser.add_argument( '-v', action='store', dest='force', help='Force regeneration of all data.' )
     arguments = parser.parse_args()
 
     if arguments.model_directory != None and os.path.isdir( arguments.model_directory ):
@@ -94,7 +97,11 @@ if __name__ == '__main__':
     if arguments.video_file == None or not os.path.isfile( arguments.video_file ):
         print parser.print_help()
         sys.exit( 1 )
-        
+   
+    force = False
+    if arguments.force:
+        force = True
+     
     config_file = arguments.config_file
     model_file = arguments.model_file
     output_directory = arguments.output_directory
@@ -107,7 +114,7 @@ if __name__ == '__main__':
     frames_dir = "%s/frames" % ( output_directory )
 
     try:
-        if not os.path.isdir( output_directory):
+        if not os.path.isdir( output_directory ):
             os.makedirs( output_directory )
         if not os.path.isdir( frames_dir ):
             os.makedirs( frames_dir )
@@ -132,6 +139,7 @@ if __name__ == '__main__':
     # Produce images from the input video at the desired rate into the
     # frame directory
     try:
+        # DEBUG - implement not force here.
         cmd = 'ffmpeg -y -i %s -vf fps=%s -f image2 %s/%s_images-%%06d.png > %s/ffmpeg_sample.log 2>&1' % ( video_file, image_sampling_frequency, frames_dir, video_name, output_directory )
         ( status, output ) = commands.getstatusoutput( cmd )
         if status != 0:
@@ -172,7 +180,7 @@ if __name__ == '__main__':
                 dest_file = frames_dir + '/' + filename + '-' + str( start ) + '.png'
                 if imageno == 1:
                     # Work around some goofy stuff FFMPEG does by
-                    # throwing away garbage frames.
+                    # throwing away garbage frame.
                     os.remove( src_file )
                 else:
                     os.rename( src_file, dest_file )

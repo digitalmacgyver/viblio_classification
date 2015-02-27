@@ -73,18 +73,23 @@ def smoothListGaussian(list,degree=5):
         smoothed[i]=sum(numpy.array(list[i:i+window])*weight)/sum(weight)  
     return smoothed  
 
-def activity_present(video_file,working_dir,model_dir):
-    path = os.path.dirname(os.path.abspath(__file__)) + '/../../../projects/viblio_classification/'
-    python_path = os.path.dirname(os.path.abspath(__file__))+ '/../../../../../classification/'
-    curr =os.getcwd()
-    framerate=float(2)
+def activity_present( video_file, working_dir, model_dir, reuse=False ):
+    path = os.path.dirname( os.path.abspath( __file__ ) ) + '/../../../projects/viblio_classification/'
+    python_path = os.path.dirname( os.path.abspath( __file__ ) ) +  '/../../../../../classification/'
+    curr = os.getcwd()
+    framerate = float( 2 )
     ( status, output ) = ( 0, 0 ) 
-    ( status, output ) = commands.getstatusoutput("cd %s; PYTHONPATH=$PYTHONPATH:%s python video_classifier.py -v %s -t %s -d %s" % (path,python_path,video_file,working_dir,model_dir) )
-    os.chdir(curr)
-
-    print 'status',status
-    print 'output: \n',output
     
+    if not reuse:
+        ( status, output ) = commands.getstatusoutput( "cd %s; PYTHONPATH=$PYTHONPATH:%s python video_classifier.py -v %s -t %s -d %s" % 
+                                                       ( path, python_path, video_file, working_dir, model_dir ) )
+        print 'status', status
+        print 'output: \n', output
+    else:
+        print "Reusing existing data for %s in %s" % ( video_file, working_dir )
+
+    os.chdir( curr )
+
     confidence = -1
     
     if status != 0 and status != 256:
@@ -94,24 +99,33 @@ def activity_present(video_file,working_dir,model_dir):
     vid_file_extension = os.path.splitext( base )[0]
     filepath = working_dir + '/features/' + vid_file_extension + '_predict.txt'
     print filepath
+
+    # We have a number of techniques for finding a shot, we can use
+    # the trivial confidence based on photo at a point in time, or
+    # various rolling averages.
     x1, y = numpy.loadtxt( filepath, delimiter=' ', usecols=( 1, 2 ), unpack=True )
     x2 = smooth( x1, 3, 'hanning' )
     x3 = smoothListGaussian( x1, 2 )
 
-    thresholds = [ 0.35, 0.7, 0.9 ]
-
+    thresholds = [ 0.5, 0.7 ]
 
     with open( filepath ) as f:
         all_lines = f.readlines()
 
     timestamps = [ int( each.split( '-' )[1].split( '.' )[0] ) for each in all_lines ]
 
-    print timestamps
+    print "Timestamps of data points are (read from %s):" % ( filepath ), timestamps
 
     for idx, x in enumerate( [ x1, x2, x3] ):
         for threshold in thresholds:
 
+            print "Working on confidence threshold %f" % ( threshold )
+            print "Data set index %d is: %s" % ( idx, x )
+
+            file_prefix = "%d_%s" % ( idx, threshold )
+
             condition = numpy.abs( x ) > threshold
+
             #print smoothened
             #y=numpy.arange(0,len(x),1)
             #plt.plot(x)
@@ -119,30 +133,29 @@ def activity_present(video_file,working_dir,model_dir):
             #plt.show()
             #plot(x)
             #plot(smoothened)
-            time_stamp=working_dir+'/timestamps.txt'
-            timestamp_file=open(time_stamp,'w')
-            for start, stop in contiguous_regions(condition):
+
+            time_stamp = working_dir + '/%s_timestamps.txt' % ( file_prefix )
+            timestamp_file = open( time_stamp, 'w' )
+            timestamps_of_interest = []
+            for start, stop in contiguous_regions( condition ):
                 segment = x[start:stop]
-                if (stop-start)>1:
-                    timestamp_file.write('%s %s\n'%(timestamps[start],timestamps[stop-1]))
-                    #print timestamps[start], timestamps[stop-1]
+                if ( stop - start ) > 1:
+                    timestamp_file.write( '%s %s\n' % ( timestamps[start], timestamps[stop-1] ) )
+                    print timestamps[start], timestamps[stop-1]
+                    timestamps_of_interest.append( ( timestamps[start], timestamps[stop-1] ) )
 
             print "done with timestamps"
             timestamp_file.close()
-            output_filename=working_dir+'/concat.txt'
-            with open(time_stamp) as f:
-                all = f.readlines()
-                print all
-                #video_file='short.mp4'
-        
-                out_file=open(output_filename,'w')
+
+            output_filename = working_dir + '/%s_concat.txt' % ( file_prefix )
+            out_file = open( output_filename, 'w' )
 
             min_time = 0
 
-            for index,each in enumerate( all ):
+            for index, each in enumerate( timestamps_of_interest ):
                 # Move the start back a second earlier.
                 #start_second=float(each.split()[0])/1000.0-1
-                start_second = float( each.split()[0] ) / 1000.0 - 1.5
+                start_second = float( each[0] ) / 1000.0
                 if start_second < 0:
                     start_second = 0
                 if start_second < min_time:
@@ -150,37 +163,28 @@ def activity_present(video_file,working_dir,model_dir):
 
                 # Move the duration out 1.5 seconds.
                 #duration=float(each.split()[1])/1000.0-start_second+1.5
-                duration = float( each.split()[1] ) / 1000.0 - start_second + 2
+                duration = float( each[1] ) / 1000.0 - start_second
 
                 min_time = start_second + duration
 
-                print start_second, duration
+                print "Creating clip %d starting at %f for %f seconds." % ( index, start_second, duration )
 
-                vid_path = working_dir + '/' +str( index )
-                command='ffmpeg -y -i %s -ss %f -t %f %s'%(video_file,start_second,duration,vid_path)+'.mp4' + ' > /dev/null 2>&1'
-                print command
-                p = subprocess.Popen(command, shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                vid_path = "%s/%s_%s" % ( working_dir, file_prefix, index )
+                command='ffmpeg -y -i %s -ss %f -t %f %s.mp4 > /dev/null 2>&1' % ( video_file, start_second, duration, vid_path )
+                print "Running clip generation command: %s" % ( command )
+                p = subprocess.Popen( command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
                 output = p.communicate()[0]
                 #print output
-                out_file.write('file'+' '+str(index)+'.mp4'+'\n')
+                out_file.write( "file %d.mp4\n" % ( index ) )
             out_file.close()
     
-            command2 = 'ffmpeg -y -f concat -i %s %s > /dev/null 2>&1' % ( output_filename, working_dir + '/' + '%d_%s' % ( idx, threshold ) + 'vid_summary.mp4' )
-            print command2
-            p = subprocess.Popen(command2, shell=True,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            command2 = 'ffmpeg -y -f concat -i %s %s/%s_vid_summary.mp4 > /dev/null 2>&1' % ( output_filename, working_dir, file_prefix )
+            print "Running clip concatenation command: %s" % ( command2 )
+            p = subprocess.Popen( command2, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
             output = p.communicate()[0]
     
-    return (status, confidence )
-"""
-    try:
-        confidence = float( output )
-    except:
-        raise Exception( "Error, failed to convert viblio_classifier.sh output to float, output was: %s" % ( output ) )
-"""
-    
-    #return (status, confidence )
+    return ( status, confidence )
 
-     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', action='store', dest='info_filename', 
@@ -191,25 +195,34 @@ if __name__ == '__main__':
                         help='Folder where model and svm_config.cfg file is present. Note that model should be named as svm_default.model')
     parser.add_argument('-o',action='store',dest='output_filename',
                         help='Text file name to store the output results')
-    results = parser.parse_args()
+    parser.add_argument( '-r', action='store', dest='reuse_existing', help='If specified, video_classifier.py is not run and it is assumed that the frames and features have already been extracted, defaults to False' )
 
-    vid_results= open(results.output_filename,'w')
+    arguments = parser.parse_args()
 
-    with open(results.info_filename) as f:
-	urls=f.readlines()
+    reuse = False
+    if arguments.reuse_existing:
+        resue = True
+
+    vid_results = open( arguments.output_filename, 'w' )
+
+    with open( arguments.info_filename ) as f:
+	urls = f.readlines()
         
-    if not os.path.exists(results.working_directory):
-        os.makedirs(results.working_directory)
-    for index,video in enumerate(urls):
-        work_dir=results.working_directory+'/video'+str(index)
-        if not os.path.exists(work_dir):
-            os.makedirs(work_dir)
+    if not os.path.exists( arguments.working_directory ):
+        os.makedirs( arguments.working_directory )
+
+    for index, video in enumerate( urls ):
+        work_dir = arguments.working_directory + '/video' + str( index )
+        if not os.path.exists( work_dir ):
+            os.makedirs( work_dir )
         else:
-            shutil.rmtree(work_dir)
-            os.makedirs(work_dir)
+            shutil.rmtree( work_dir )
+            os.makedirs( work_dir )
+
         print 'processing video :', index, 'of', len( urls )
-        (stat,conf)=activity_present(video.split()[0],work_dir,results.model_directory)
-        vid_results.write('%s %s %s\n'%(video.split()[0],conf,stat))
+
+        ( stat, conf ) = activity_present( video.split()[0], work_dir, arguments.model_directory, reuse )
+        vid_results.write( '%s %s %s\n' % ( video.split()[0], conf, stat ) )
 
                 
     vid_results.close()
