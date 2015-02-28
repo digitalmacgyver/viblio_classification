@@ -162,7 +162,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
             for index, each in enumerate( timestamps_of_interest ):
                 # Move the start back a second earlier.
                 #start_second=float(each.split()[0])/1000.0-1
-                start_second = float( each[0] ) / 1000.0
+                start_second = float( each[0] ) / 1000.0 - 1
                 if start_second < 0:
                     start_second = 0
                 if start_second < min_time:
@@ -170,7 +170,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
 
                 # Move the duration out 1.5 seconds.
                 #duration=float(each.split()[1])/1000.0-start_second+1.5
-                duration = float( each[1] ) / 1000.0 - start_second
+                duration = float( each[1] ) / 1000.0 - start_second + 2
 
                 min_time = start_second + duration
 
@@ -185,7 +185,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
                 out_file.write( "file %s_%d.mp4\n" % ( file_prefix, index ) )
             out_file.close()
     
-            command2 = 'ffmpeg -y -f concat -i %s %s/%s_vid_summary.mp4 > /dev/null 2>&1' % ( output_filename, working_dir, file_prefix )
+            command2 = 'ffmpeg -y -f concat -i %s %s/%s_%s_vid_summary.mp4 > /dev/null 2>&1' % ( output_filename, working_dir, vid_file_extension, file_prefix )
             print "Running clip concatenation command: %s" % ( command2 )
             p = subprocess.Popen( command2, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
             output = p.communicate()[0]
