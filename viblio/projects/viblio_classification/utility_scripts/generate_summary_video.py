@@ -182,7 +182,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
                 p = subprocess.Popen( command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
                 output = p.communicate()[0]
                 #print output
-                out_file.write( "file %d.mp4\n" % ( index ) )
+                out_file.write( "file %s_%d.mp4\n" % ( file_prefix, index ) )
             out_file.close()
     
             command2 = 'ffmpeg -y -f concat -i %s %s/%s_vid_summary.mp4 > /dev/null 2>&1' % ( output_filename, working_dir, file_prefix )
@@ -202,7 +202,7 @@ if __name__ == '__main__':
                         help='Folder where model and svm_config.cfg file is present. Note that model should be named as svm_default.model')
     parser.add_argument('-o',action='store',dest='output_filename',
                         help='Text file name to store the output results')
-    parser.add_argument( '-r', action='store', dest='reuse_existing', help='If specified, video_classifier.py is not run and it is assumed that the frames and features have already been extracted, defaults to False' )
+    parser.add_argument( '-r', action='store_true', dest='reuse_existing', help='If specified, video_classifier.py is not run and it is assumed that the frames and features have already been extracted, defaults to False' )
 
     arguments = parser.parse_args()
 
