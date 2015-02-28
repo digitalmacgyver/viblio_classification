@@ -222,7 +222,7 @@ if __name__ == '__main__':
         work_dir = arguments.working_directory + '/video' + str( index )
         if not os.path.exists( work_dir ):
             os.makedirs( work_dir )
-        else:
+        elif not reuse:
             shutil.rmtree( work_dir )
             os.makedirs( work_dir )
 
