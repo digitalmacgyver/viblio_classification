@@ -70,6 +70,9 @@ if __name__ == '__main__':
 
     input_file = results.file_list
 
+    import pdb
+    pdb.set_trace()
+
     # Load features and labels
     nmp = numpyutils.NumpyUtil()
     print "Loading data from input file: %s." % ( input_file )
@@ -132,9 +135,6 @@ if __name__ == '__main__':
 
     elif results.stage == 'predict':
         best_C = float(svm_params['best_C'])
-
-        import pdb
-        pdb.set_trace()
 
         # load model from disk
         model_filename = results.model_file
