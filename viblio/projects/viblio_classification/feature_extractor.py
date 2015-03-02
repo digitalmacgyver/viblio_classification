@@ -228,12 +228,16 @@ if __name__ == '__main__':
         filename = line.split()[1]
         optional_fields = line.split()[2:]
         
+        print "WORKING ON: %s, %s, %s" % ( unique_videoid, filename, optional_fields )
+
         ( feature_name, feature_filename ) = get_feature_names( line )
 
         output_line = "%s %s" % ( filename, feature_filename )
         if len( optional_fields ):
             output_line += ' ' + ' '.join( optional_fields )
         output_line += "\n"
+
+        print "VALUES ARE: %s %s : %s" % ( filename, feature_filename, optional_fields )
 
         if os.path.isfile( feature_filename ):
             output_file.write( output_line )
