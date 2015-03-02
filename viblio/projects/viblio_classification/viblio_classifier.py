@@ -69,9 +69,9 @@ if __name__ == '__main__':
     results = parser.parse_args()
 
     input_file = results.file_list
-
-    import pdb
-    pdb.set_trace()
+    
+    #import pdb
+    #pdb.set_trace()
 
     # Load features and labels
     nmp = numpyutils.NumpyUtil()
