@@ -133,6 +133,9 @@ if __name__ == '__main__':
     elif results.stage == 'predict':
         best_C = float(svm_params['best_C'])
 
+        import pdb
+        pdb.set_trace()
+
         # load model from disk
         model_filename = results.model_file
         sk_svm = viblio_svm.SKLearnSMV( best_C, kernel=kernel )
