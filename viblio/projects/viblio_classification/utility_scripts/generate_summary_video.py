@@ -128,6 +128,10 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     print "Timestamps of data points are (read from %s):" % ( filepath ), timestamps
 
     for idx, x in enumerate( data_points ):
+        
+        # DEBUG
+        thresholds = [ sorted( x )[3*len( x )/4] ]
+
         for threshold in thresholds:
 
             print "Working on confidence threshold %f" % ( threshold )
