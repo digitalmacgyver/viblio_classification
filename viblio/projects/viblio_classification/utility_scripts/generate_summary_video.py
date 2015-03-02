@@ -114,7 +114,11 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     x2 = smooth( x1, 3, 'hanning' )
     x3 = smoothListGaussian( x1, 2 )
 
-    thresholds = [ 0.5, 0.7 ]
+    #data_points = [ x1, x2, x3 ]
+    #thresholds = [ 0.5, 0.7 ]
+
+    data_points = [ x3 ]
+    thresholds = [ 0.7 ]
 
     with open( filepath ) as f:
         all_lines = f.readlines()
@@ -123,7 +127,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
 
     print "Timestamps of data points are (read from %s):" % ( filepath ), timestamps
 
-    for idx, x in enumerate( [ x1, x2, x3] ):
+    for idx, x in enumerate( data_points ):
         for threshold in thresholds:
 
             print "Working on confidence threshold %f" % ( threshold )

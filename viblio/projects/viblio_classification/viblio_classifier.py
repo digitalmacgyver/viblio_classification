@@ -72,8 +72,9 @@ if __name__ == '__main__':
 
     # Load features and labels
     nmp = numpyutils.NumpyUtil()
+    print "Loading data from input file: %s." % ( input_file )
     file_ids, features, labels = nmp.load_features( input_file, 'ftr' )
-    print "loading data is complete."
+    print "Loading data is complete."
     print "# positive =", numpy.sum(labels == 1)
     print "# negative =", numpy.sum(labels == -1)
 

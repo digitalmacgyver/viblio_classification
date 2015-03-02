@@ -203,7 +203,7 @@ if __name__ == '__main__':
             nmp.numpy2hdf( feature_filename, spatial_ftr, 'ftr' )
             
         except Exception as e:
-            print "There was an exception: %s" % e
+            print "There was an exception in feature_extractor.py: %s" % ( e )
             pass
 
     # no of cpus in the machine

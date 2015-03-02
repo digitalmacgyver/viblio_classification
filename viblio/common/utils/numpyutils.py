@@ -115,7 +115,7 @@ class NumpyUtil():
                          features[index] = feature
 
              except Exception as e:
-                 print "There was an exception: %s" % e
+                 print "There was an exception in numpyutils.py for line:\n'%s'\nError was: %s" % ( line, e )
                  pass
              
          return (file_ids, features, labels)
