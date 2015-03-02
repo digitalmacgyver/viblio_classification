@@ -224,10 +224,6 @@ if __name__ == '__main__':
     output_file = open( output_file, 'w' )
 
     for index, line in enumerate( content ):
-        if line == 'olympic /mnt/bbshot/test2/video0/frames/olympic_images-479750.png label 0':
-            import pdb
-            pdb.set_trace()
-
         unique_videoid = line.split()[0]
         filename = line.split()[1]
         optional_fields = line.split()[2:]
