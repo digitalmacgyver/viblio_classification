@@ -230,7 +230,7 @@ if __name__ == '__main__':
             shutil.rmtree( work_dir )
             os.makedirs( work_dir )
 
-        print 'processing video :', index, 'of', len( urls )
+        print 'processing video :', index+1, 'of', len( urls )
 
         ( stat, conf ) = activity_present( video.split()[0], work_dir, arguments.model_directory, reuse )
         vid_results.write( '%s %s %s\n' % ( video.split()[0], conf, stat ) )
