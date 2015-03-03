@@ -228,6 +228,8 @@ if __name__ == '__main__':
         filename = line.split()[1]
         optional_fields = line.split()[2:]
         
+        print "INDEX: %s, LINE: %s" % ( index, line )
+
         print "WORKING ON: %s, %s, %s" % ( unique_videoid, filename, optional_fields )
 
         ( feature_name, feature_filename ) = get_feature_names( line )
