@@ -117,8 +117,8 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     #data_points = [ x1, x2, x3 ]
     #thresholds = [ 0.5, 0.7 ]
 
-    data_points = [ x3 ]
-    thresholds = [ 0.7 ]
+    data_points = [ x1, x2, x3 ]
+    thresholds = [ 0.5, 0.7 ]
 
     with open( filepath, 'ru' ) as f:
         all_lines = f.readlines()
@@ -130,7 +130,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     for idx, x in enumerate( data_points ):
         
         # DEBUG
-        thresholds = [ sorted( x )[int( 4*len( x )/5 )] ]
+        thresholds.append( [ sorted( x )[int( 4*len( x )/5 )] ] )
 
         for threshold in thresholds:
 
