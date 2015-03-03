@@ -120,7 +120,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     data_points = [ x3 ]
     thresholds = [ 0.7 ]
 
-    with open( filepath ) as f:
+    with open( filepath, 'ru' ) as f:
         all_lines = f.readlines()
 
     timestamps = [ int( each.split( '-' )[1].split( '.' )[0] ) for each in all_lines ]

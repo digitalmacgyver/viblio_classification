@@ -180,6 +180,8 @@ if __name__ == '__main__':
                     os.rename( src_file, dest_file )
                     f.write( "%s %s label 0\n" % ( video_name, dest_file ) )
                     start = start + increment
+
+        f.close()
     except Exception as e:
         raise Exception( "Failed to prepare input file for feature extractor, error was: %s" % ( e ) )
 

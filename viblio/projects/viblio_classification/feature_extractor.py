@@ -134,10 +134,6 @@ if __name__ == '__main__':
     if not os.path.exists( output_dir ):
         os.makedirs( output_dir )
 
-    # Read the input file that contains urls
-    with open( image_path ) as f:
-        image_data = f.readlines()
-
     # setup Hog2D features
     hog2D_detector = features.Hog2x2FeatureDetector()
     hog2D_descriptor = features.Hog2x2FeatureDescriptor()
@@ -208,9 +204,9 @@ if __name__ == '__main__':
             print "There was an exception in feature_extractor.py: %s" % ( e )
             pass
 
-    # no of cpus in the machine
-    cpus = multiprocessing.cpu_count()
-    pool = multiprocessing.Pool( processes=cpus )
+    # Read the input file that contains urls
+    with open( image_path, 'ru' ) as f:
+        image_data = f.readlines()
 
     print "Starting feature extraction for %s items." % ( len( image_data ) )
 
@@ -222,13 +218,17 @@ if __name__ == '__main__':
     for i in range( 50 ):
         print "DONEDONEDONEDONEDONEDONEDONEDONEDONEDONE\n" * 10
 
-    time.sleep( 2 )
+    time.sleep( 10 )
+
+    # no of cpus in the machine
+    cpus = multiprocessing.cpu_count()
+    pool = multiprocessing.Pool( processes=cpus )
 
     start = time.time()
     pool.map( extract_feature, enumerate( image_data ) )
     end = time.time()
 
-    time.sleep( 2 )
+    time.sleep( 10 )
 
     for i in range( 50 ):
         print "DONEDONEDONEDONEDONEDONEDONEDONEDONEDONE\n" * 10
