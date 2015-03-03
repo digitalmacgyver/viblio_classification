@@ -130,7 +130,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     for idx, x in enumerate( data_points ):
         
         # DEBUG
-        thresholds = [ sorted( x )[int( 3*len( x )/4 )] ]
+        thresholds = [ sorted( x )[int( 4*len( x )/5 )] ]
 
         for threshold in thresholds:
 
