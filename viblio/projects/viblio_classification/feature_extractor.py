@@ -219,9 +219,13 @@ if __name__ == '__main__':
     for idx, line in enumerate( image_data ):
         print "OUTSIDE IDX: %d, LINE: %s" % ( idx, line )
 
+    time.sleep( 2 )
+
     start = time.time()
     pool.map( extract_feature, enumerate( image_data ) )
     end = time.time()
+
+    time.sleep( 2 )
     print 'Time taken: ', ( end - start )
 
     #file pointer for output text file that stores correspondence
