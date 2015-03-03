@@ -175,11 +175,6 @@ if __name__ == '__main__':
 
             filename = line.split()[1]
 
-            print line
-            print filename
-
-            print str( index )
-
             if not filename.startswith( 'http' ):
                 pix = nmp.imagefile2numpy( filename, 640, local_file=True )
             else:
@@ -211,15 +206,6 @@ if __name__ == '__main__':
     print "Starting feature extraction for %s items." % ( len( image_data ) )
 
     #Parallel feature extraction
-    print "OUTSIDE, WORKING ON FILE: %s" % ( image_path )
-    for idx, line in enumerate( image_data ):
-        print "OUTSIDE IDX: %d, LINE: %s" % ( idx, line )
-
-    for i in range( 50 ):
-        print "DONEDONEDONEDONEDONEDONEDONEDONEDONEDONE\n" * 10
-
-    time.sleep( 10 )
-
     # no of cpus in the machine
     cpus = multiprocessing.cpu_count()
     pool = multiprocessing.Pool( processes=cpus )
@@ -227,11 +213,6 @@ if __name__ == '__main__':
     start = time.time()
     pool.map( extract_feature, enumerate( image_data ) )
     end = time.time()
-
-    time.sleep( 10 )
-
-    for i in range( 50 ):
-        print "DONEDONEDONEDONEDONEDONEDONEDONEDONEDONE\n" * 10
     print 'Time taken: ', ( end - start )
 
     #file pointer for output text file that stores correspondence
@@ -242,17 +223,12 @@ if __name__ == '__main__':
         filename = line.split()[1]
         optional_fields = line.split()[2:]
         
-        print "INDEX: %s, LINE: %s" % ( index, line )
-        print "WORKING ON: %s, %s, %s" % ( unique_videoid, filename, optional_fields )
-
         ( feature_name, feature_filename ) = get_feature_names( line )
 
         output_line = "%s %s" % ( filename, feature_filename )
         if len( optional_fields ):
             output_line += ' ' + ' '.join( optional_fields )
         output_line += "\n"
-
-        print "VALUES ARE: %s %s : %s" % ( filename, feature_filename, optional_fields )
 
         if os.path.isfile( feature_filename ):
             features_path.write( output_line )
