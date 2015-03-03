@@ -175,6 +175,8 @@ if __name__ == '__main__':
                 print "Skipping blank line:", str( index )
                 return
 
+            print "INSIDE EXTRACT FEATURE INDEX: %s, line %s" % ( index, line )
+
             filename = line.split()[1]
 
             print line
