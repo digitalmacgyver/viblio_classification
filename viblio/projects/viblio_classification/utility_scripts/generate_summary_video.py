@@ -84,7 +84,6 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     path = os.path.dirname( os.path.abspath( __file__ ) ) + '/../../../projects/viblio_classification/'
     python_path = os.path.dirname( os.path.abspath( __file__ ) ) +  '/../../../../../classification/'
     curr = os.getcwd()
-    framerate = float( 2 )
     ( status, output ) = ( 0, 0 ) 
     
     if not reuse:
@@ -130,7 +129,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     for idx, x in enumerate( data_points ):
         
         # DEBUG
-        thresholds.append( [ sorted( x )[int( 4*len( x )/5 )] ] )
+        thresholds.append( sorted( x )[int( 4*len( x )/5 )] )
 
         for threshold in thresholds:
 
