@@ -219,7 +219,8 @@ if __name__ == '__main__':
     for idx, line in enumerate( image_data ):
         print "OUTSIDE IDX: %d, LINE: %s" % ( idx, line )
 
-    print "DONEDONEDONEDONEDONEDONEDONEDONEDONEDONE\n" * 10
+    for i in range( 50 ):
+        print "DONEDONEDONEDONEDONEDONEDONEDONEDONEDONE\n" * 10
 
     time.sleep( 2 )
 
@@ -229,7 +230,8 @@ if __name__ == '__main__':
 
     time.sleep( 2 )
 
-    print "DONEDONEDONEDONEDONEDONEDONEDONEDONEDONE\n" * 10
+    for i in range( 50 ):
+        print "DONEDONEDONEDONEDONEDONEDONEDONEDONEDONE\n" * 10
     print 'Time taken: ', ( end - start )
 
     #file pointer for output text file that stores correspondence
