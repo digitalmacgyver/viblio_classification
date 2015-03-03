@@ -102,9 +102,9 @@ if __name__ == '__main__':
                         help='Single world label used to tag these search results and build output directory structures.' ) 
     parser.add_argument('-inter_dir', action='store',dest='inter_dir',
                         help='directory path where the trained model, labels and extracted features are stored')
-    parser.add_argument('-i', action='store', dest='info_filename', 
+    parser.add_argument('-i', action='store', dest='image_path', 
                         help='Optional input file, defaults to inter_dir/label/image_s3urls.txt')
-    parser.add_argument('-o',action='store',dest='output_filename',
+    parser.add_argument('-o',action='store',dest='features_filename',
                         help='Optional path to store image feauture mapping output to, defaults to inter_dir/label/image_features.txt')
     parser.add_argument('-config_file', action='store', 
                         default = os.path.dirname( __file__ ) + '/../../resources/projects/video_download/config_ffmpeg.ini' , dest='config_file', 
@@ -117,26 +117,26 @@ if __name__ == '__main__':
         usage()
         exit(-1)        
     if not results.inter_dir:
-        print "Error! No directory name to store text files is provided."
+        print "Error! No directory name to store output is provided."
         usage()
         exit(-1)
 
     output_dir = results.inter_dir + '/' + results.label
-    output_file = results.inter_dir + '/' + results.label + '/image_features.txt'
-    if results.output_filename:
-        output_file = results.output_filename
+    features_path = results.inter_dir + '/' + results.label + '/image_features.txt'
+    if results.features_filename:
+        features_path = results.features_filename
 
-    input_file = "%s/%s/image_s3urls.txt" % ( results.inter_dir, results.label )
-    if results.info_filename:
-        input_file = results.info_filename
+    image_path = "%s/%s/image_s3urls.txt" % ( results.inter_dir, results.label )
+    if results.image_path:
+        image_path = results.image_path
 
     # Check existence of inter directory if not create it.
     if not os.path.exists( output_dir ):
         os.makedirs( output_dir )
 
     # Read the input file that contains urls
-    with open( input_file ) as f:
-        content = f.readlines()
+    with open( image_path ) as f:
+        image_data = f.readlines()
 
     # setup Hog2D features
     hog2D_detector = features.Hog2x2FeatureDetector()
@@ -210,28 +210,29 @@ if __name__ == '__main__':
 
     # no of cpus in the machine
     cpus = multiprocessing.cpu_count()
-
     pool = multiprocessing.Pool( processes=cpus )
 
-    print "Starting feature extraction for %s items." % ( len( content ) )
+    print "Starting feature extraction for %s items." % ( len( image_data ) )
 
     #Parallel feature extraction
-    start = time.time()
-    pool.map( extract_feature, enumerate( content ) )
-    end = time.time()
+    print "OUTSIDE, WORKING ON FILE: %s" % ( image_path )
+    for idx, line in enumerate( image_data ):
+        print "OUTSIDE IDX: %d, LINE: %s" % ( idx, line )
 
+    start = time.time()
+    pool.map( extract_feature, enumerate( image_data ) )
+    end = time.time()
     print 'Time taken: ', ( end - start )
 
     #file pointer for output text file that stores correspondence
-    output_file = open( output_file, 'w' )
+    features_path = open( features_path, 'w' )
 
-    for index, line in enumerate( content ):
+    for index, line in enumerate( image_data ):
         unique_videoid = line.split()[0]
         filename = line.split()[1]
         optional_fields = line.split()[2:]
         
         print "INDEX: %s, LINE: %s" % ( index, line )
-
         print "WORKING ON: %s, %s, %s" % ( unique_videoid, filename, optional_fields )
 
         ( feature_name, feature_filename ) = get_feature_names( line )
@@ -244,9 +245,9 @@ if __name__ == '__main__':
         print "VALUES ARE: %s %s : %s" % ( filename, feature_filename, optional_fields )
 
         if os.path.isfile( feature_filename ):
-            output_file.write( output_line )
+            features_path.write( output_line )
 
-    output_file.close()
+    features_path.close()
 
 
 
