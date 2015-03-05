@@ -14,16 +14,16 @@ from matplotlib.backends.backend_pdf import PdfPages
 import pylab as pl
 import argparse
 
-def get_tag_results(key):
-     with open(key) as f1:
-        lis1 = [line.split()[0] for line in f1]
+def get_tag_results( key ):
+     with open( key ) as f1:
+        lis1 = [ line.split()[0] for line in f1 ]
 
-     with open(key) as f2:
-        lis2 = [100*float(line.split()[1]) for line in f2]
+     with open( key ) as f2:
+        lis2 = [ 100 * float( line.split()[1] ) for line in f2 ]
 	
      f1.close()
      f2.close()
-     return lis1,lis2
+     return lis1, lis2
 
 parser = argparse.ArgumentParser()
 parser.add_argument( '-pos', action='store', dest='pos', help='Text file with scores for positive images' )
@@ -56,9 +56,9 @@ for key in keyword:
     plt.close()
 
 with open( pos_filename ) as f3:
-	pos = f3.readlines()
+     pos = f3.readlines()
 with open( neg_filename ) as f4:
-	neg = f4.readlines()
+     neg = f4.readlines()
 
 #roc computation
 label_true1 = [ 1 for line in pos ]
