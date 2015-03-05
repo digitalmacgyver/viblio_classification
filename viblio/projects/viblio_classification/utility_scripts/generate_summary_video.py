@@ -42,9 +42,8 @@ def smooth( x, window_len=3, window='hanning' ):
     if x.ndim != 1:
         raise ValueError, "smooth only accepts 1 dimension arrays."
   
-    if x.size < window_len:
+    if x.size <= window_len:
         raise ValueError, "Input vector needs to be bigger than window size."
-   
    
     if window_len < 3:
         return x
@@ -110,14 +109,18 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     # the trivial confidence based on photo at a point in time, or
     # various rolling averages.
     x1, y = numpy.loadtxt( filepath, delimiter=' ', usecols=( 1, 2 ), unpack=True )
-    x2 = smooth( x1, 3, 'hanning' )
-    x3 = smoothListGaussian( x1, 2 )
+    #x2 = smooth( x1, 3, 'hanning' )
+    #x3 = smoothListGaussian( x1, 2 )
 
     #data_points = [ x1, x2, x3 ]
     #thresholds = [ 0.5, 0.7 ]
 
-    data_points = [ x1, x2, x3 ]
-    thresholds = [ 0.5, 0.7 ]
+    #data_points = [ x1, x2, x3 ]
+    #thresholds = [ 0.5, 0.7 ]
+
+    data_points = [ x1 ]
+    #thresholds = [ 0.15 ]
+    thresholds = [ 0.375, .525 ]
 
     with open( filepath, 'ru' ) as f:
         all_lines = f.readlines()
@@ -129,7 +132,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     for idx, x in enumerate( data_points ):
         
         # DEBUG
-        thresholds.append( sorted( x )[int( 4*len( x )/5 )] )
+        #thresholds.append( sorted( x )[int( 4*len( x )/5 )] )
 
         for threshold in thresholds:
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 __author__ = 'rgolla'
 import commands
 import random
@@ -24,64 +26,62 @@ def get_tag_results(key):
      return lis1,lis2
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-pos', action='store', dest='pos', help='Text file with scores for positive images')
-parser.add_argument('-neg', action='store', dest='neg', help='Text file with scores for negative images')
-parser.add_argument('-output', action='store', dest='output', help='Text file name to store output')
+parser.add_argument( '-pos', action='store', dest='pos', help='Text file with scores for positive images' )
+parser.add_argument( '-neg', action='store', dest='neg', help='Text file with scores for negative images' )
+parser.add_argument( '-output', action='store', dest='output', help='PDF file name to store output' )
 results = parser.parse_args()
 
-pos_filename=results.pos
-neg_filename=results.neg
+pos_filename = results.pos
+neg_filename = results.neg
 
-pp=PdfPages(results.output)
-keyword=[pos_filename,neg_filename]
-sorted_list=[]
+pp = PdfPages( results.output )
+keyword = [ pos_filename, neg_filename ]
+sorted_list = []
+
 for key in keyword:
-    temp,data=get_tag_results(key)
-    (mu,sigma)=norm.fit(data)
+    temp, data= get_tag_results( key )
+    ( mu, sigma ) = norm.fit( data )
+
     #histogram of the data
-    n, bins, patches = plt.hist(data, 20,range=(0,100), facecolor='green', alpha=0.75)
+    n, bins, patches = plt.hist( data, 20, range=( 0, 100 ), facecolor='green', alpha=0.75 )
     # add a 'best fit' line
-    y = mlab.normpdf( bins, mu, sigma)
-    l = plt.plot(bins, y, 'r--', linewidth=2)
+    y = mlab.normpdf( bins, mu, sigma )
+    l = plt.plot( bins, y, 'r--', linewidth=2 )
     #plot
-    plt.xlabel(key.split('.')[0]+' frames confidence')
-    plt.ylabel('No_of_entries')
-    plt.title(r'$\mathrm{Histogram\ of\ IQ:}\ \mu=%.3f,\ \sigma=%.3f$' %(mu, sigma))
-    plt.grid(True)
+    plt.xlabel( key.split('.')[0] + ' frames confidence' )
+    plt.ylabel( 'No_of_entries' )
+    plt.title( r'$\mathrm{Histogram\ of\ IQ:}\ \mu=%.3f,\ \sigma=%.3f$' % ( mu, sigma ) )
+    plt.grid( True )
     pp.savefig()
     plt.close()
 
-with open(pos_filename) as f3:
-	pos=f3.readlines()
-with open(neg_filename) as f4:
-	neg=f4.readlines()
-
-
-
-
+with open( pos_filename ) as f3:
+	pos = f3.readlines()
+with open( neg_filename ) as f4:
+	neg = f4.readlines()
 
 #roc computation
-label_true1 = [1 for line in pos]
-label_true2=[0 for line in neg]
-label_true=label_true1+label_true2
-probs1=[float(line.split()[1]) for line in pos]
-probs2=[float(line.split()[1]) for line in neg]
-probs=probs1+probs2
-fpr, tpr, thresholds = metrics.roc_curve(label_true,probs)
+label_true1 = [ 1 for line in pos ]
+label_true2 = [ 0 for line in neg ]
+label_true = label_true1 + label_true2
+probs1 = [ float( line.split()[1] ) for line in pos ]
+probs2 = [ float( line.split()[1] ) for line in neg ]
+probs = probs1 + probs2
+fpr, tpr, thresholds = metrics.roc_curve( label_true, probs )
 #print label_true
 #print probs
-roc_auc = metrics.auc(fpr, tpr)
-print("Area under the ROC curve : %f" % roc_auc)
+roc_auc = metrics.auc( fpr, tpr )
+print( "Area under the ROC curve : %f" % ( roc_auc ) )
 
 # Plot ROC curve
 pl.clf()
-pl.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
-pl.plot([0, 1], [0, 1], 'k--')
-pl.xlim([0.0, 1.0])
-pl.ylim([0.0, 1.0])
-pl.xlabel('False Positive Rate')
-pl.ylabel('True Positive Rate')
-pl.title('Receiver operating characteristic example')
-pl.legend(loc="lower right")
+pl.plot( fpr, tpr, label='ROC curve (area = %0.2f)' % ( roc_auc ) )
+pl.plot( [0, 1], [0, 1], 'k--' )
+pl.xlim( [0.0, 1.0] )
+pl.ylim( [0.0, 1.0] )
+pl.xlabel( 'False Positive Rate' )
+pl.ylabel( 'True Positive Rate' )
+pl.title( 'Receiver operating characteristic example' )
+pl.legend( loc="lower right" )
 pp.savefig()
 pp.close()

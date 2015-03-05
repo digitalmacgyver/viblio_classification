@@ -119,22 +119,22 @@ if __name__ == '__main__':
 
     elif results.stage == 'learn':
         start_time=time.time()
-        best_C = float(svm_params['best_C'])
+        best_C = float( svm_params['best_C'] )
         print "start training."
         # initialize svm SKLearnSVM object
-        sk_svm = viblio_svm.SKLearnSMV(best_C, kernel)
+        sk_svm = viblio_svm.SKLearnSMV( best_C, kernel )
 
         # train svm using the data extracted
-        sk_svm.learn(features, labels)
+        sk_svm.learn( features, labels )
 
         # save svm model to disk in the same folder that is passed through info_folder
         model_filename = results.model_file
-        sk_svm.save(model_filename)
+        sk_svm.save( model_filename )
         print "model saved in", model_filename
-        print "Time to learn the model ", time.time()-start_time," seconds"
+        print "Time to learn the model ", time.time() - start_time, " seconds"
 
     elif results.stage == 'predict':
-        best_C = float(svm_params['best_C'])
+        best_C = float( svm_params['best_C'] )
 
         # load model from disk
         model_filename = results.model_file
@@ -168,7 +168,7 @@ if __name__ == '__main__':
 
         # file that will store the predicted labels
         predict_label_filename = results.prediction_file
-        nmp.write_labels2file(predict_label_filename, file_ids, prob, predicted_labels)
+        nmp.write_labels2file( predict_label_filename, file_ids, prob, predicted_labels )
 
     elif results.stage == 'report':
         # file that stores the predicted labels

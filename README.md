@@ -323,11 +323,10 @@ viblio/projects/viblio_classification/viblio_classifier.py
 ```
 Running the code:
 ``` 
-$python viblio_classifier.py -d /home/rgolla/classification/christmas_vids/video0/features/ -i christmas1_features.txt  -c /home/rgolla/classification/christmas_concatenated/svm_config.cfg -s cross-validate -a 
+$python viblio_classifier.py -i christmas1_features.txt  -c /home/rgolla/classification/christmas_concatenated/svm_config.cfg -s cross-validate -a 
 
 ```
 The arguments are explained here:
-* "-d" - The folder where the text file mentioned with "-i" argument is present. This folder also contains all the extracted feature files at the relative paths mentioned in the "-i" file.
 * "-i" - The text file path( relative path to "-d" folder argument) which contains the extracted features and the image files. Example of text file
 ```
 0098.png 0098.hdf 1
@@ -354,11 +353,10 @@ viblio/projects/viblio_classification/viblio_classifier.py
 ```
 Running the code:
 ``` 
-$python viblio_classifier.py -d /home/rgolla/classification/christmas_vids/video0/features/ -i christmas1_features.txt  -m /home/rgolla/classification/christmas_concatenated/svm_default.model -c /home/rgolla/classification/christmas_concatenated/svm_config.cfg -s learn -a 
+$python viblio_classifier.py -i christmas1_features.txt  -m /home/rgolla/classification/christmas_concatenated/svm_default.model -c /home/rgolla/classification/christmas_concatenated/svm_config.cfg -s learn -a 
 
 ```
 The arguments are explained here:
-* "-d" - The folder where the text file mentioned with "-i" argument is present. This folder also contains all the extracted feature files at the relative paths mentioned in the "-i" file.
 * "-i" - The text file path( relative path to "-d" folder argument) which contains the extracted features and the image files. Example of text file
 ```
 0098.png 0098.hdf 1
@@ -388,12 +386,11 @@ viblio/projects/viblio_classification/viblio_classifier.py
 ```
 Running the code:
 ``` 
-python viblio_classifier.py -d /home/rgolla/classification/christmas_vids/video0/features/ -i christmas1_features.txt -m /home/rgolla/classification/christmas_concatenated/svm_default.model -p /home/rgolla/classification/christmas_concatenated/christmas1_predict.txt -c /home/rgolla/classification/christmas_concatenated/svm_config.cfg -s predict -a  
+python viblio_classifier.py -i christmas1_features.txt -m /home/rgolla/classification/christmas_concatenated/svm_default.model -p /home/rgolla/classification/christmas_concatenated/christmas1_predict.txt -c /home/rgolla/classification/christmas_concatenated/svm_config.cfg -s predict -a  
 
 ```
 
 The arguments are explained here:
-* "-d" - The folder where the text file mentioned with "-i" argument is present. This folder also contains all the extracted feature files at the relative paths mentioned in the "-i" file.
 * "-i" - The text file path( relative path to "-d" folder argument) which contains the extracted features and the image files. Example of text file
 ```
 0098.png 0098.hdf 1
@@ -434,7 +431,7 @@ viblio/projects/viblio_classification/utility_scripts/generate_roc_histograms.py
 ```
 Running the code:
 ``` 
-python analyze_results.py -pos vid2_shot.txt -neg vid2_nonshots.txt -output results.pdf
+python generate_roc_histograms.py -pos vid2_shot.txt -neg vid2_nonshots.txt -output results.pdf
 ```
 
 The arguments are explained here:
