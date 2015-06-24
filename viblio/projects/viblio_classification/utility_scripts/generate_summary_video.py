@@ -61,6 +61,18 @@ def smooth( x, window_len=3, window='hanning' ):
 
     return y[ ( window_len / 2 - 1 ) : -( window_len / 2 ) - 1 ]
 
+def three_point_avg( input_array ):
+    '''First and last point are unchanged, the remaining points are the 
+    average of themselves and their prior and subsequent points.'''
+
+    result = numpy.zeros( len( input_array ) )
+    result[0] = input_array[0]
+
+    result[1:-1] = [ sum( input_array[x-1:x+2] ) / 3 for x in range( 1, len( input_array )-1 ) ]
+    result[-1] = input_array[-1]
+
+    return result
+
 def smoothListGaussian( list, degree=5 ):  
     window = degree * 2 - 1  
     weight = numpy.array( [1.0] * window )  
@@ -86,8 +98,12 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     ( status, output ) = ( 0, 0 ) 
     
     if not reuse:
-        ( status, output ) = commands.getstatusoutput( "cd %s; PYTHONPATH=$PYTHONPATH:%s python video_classifier.py -v %s -t %s -d %s" % 
-                                                       ( path, python_path, video_file, working_dir, model_dir ) )
+        
+        cmd = "cd %s; PYTHONPATH=$PYTHONPATH:%s python video_classifier.py -v %s -t %s -d %s" % ( path, python_path, video_file, working_dir, model_dir )
+        
+        print "Running command:\n%s" % ( cmd )
+        
+        ( status, output ) = commands.getstatusoutput( cmd )
         print 'status', status
         print 'output: \n', output
     else:
@@ -109,18 +125,23 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
     # the trivial confidence based on photo at a point in time, or
     # various rolling averages.
     x1, y = numpy.loadtxt( filepath, delimiter=' ', usecols=( 1, 2 ), unpack=True )
-    #x2 = smooth( x1, 3, 'hanning' )
-    #x3 = smoothListGaussian( x1, 2 )
+    x2 = three_point_avg( x1 )
+    #x3 = smooth( x1, 3, 'hanning' )
+    #x4 = smoothListGaussian( x1, 2 )
 
     #data_points = [ x1, x2, x3 ]
     #thresholds = [ 0.5, 0.7 ]
 
     #data_points = [ x1, x2, x3 ]
-    #thresholds = [ 0.5, 0.7 ]
+    thresholds = [ .15, .3 ]
+    #thresholds = [ .484016 ]
 
-    data_points = [ x1 ]
-    #thresholds = [ 0.15 ]
-    thresholds = [ 0.375, .525 ]
+    data_points = [ x1, x2 ]
+    #data_points = [ x2 ]
+    #data_points = [ x2 ]
+    #thresholds = [ 0.125 ]
+    #thresholds = [ 0.275 ]
+    #thresholds = [ 0.375, .525 ]
 
     with open( filepath, 'ru' ) as f:
         all_lines = f.readlines()
@@ -151,15 +172,23 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
             #plot(x)
             #plot(smoothened)
 
+            # Ensure clips are longer than threshold, which is measured in milliseconds.
+            minimum_clip_duration = 900
+
             time_stamp = working_dir + '/%s_timestamps.txt' % ( file_prefix )
             timestamp_file = open( time_stamp, 'w' )
             timestamps_of_interest = []
+            #print "TIMESTAMPS:", timestamps, len( timestamps )
+            #print condition, len( condition )
             for start, stop in contiguous_regions( condition ):
+                #print start, condition[start], stop-1, condition[stop-1]
                 segment = x[start:stop]
-                if ( stop - start ) > 1:
+                if ( timestamps[stop-1] - timestamps[start] ) > minimum_clip_duration:
                     timestamp_file.write( '%s %s\n' % ( timestamps[start], timestamps[stop-1] ) )
                     print timestamps[start], timestamps[stop-1]
                     timestamps_of_interest.append( ( timestamps[start], timestamps[stop-1] ) )
+                else:
+                    print "SKIPPING TOO SHORT CLIP: ", timestamps[start], timestamps[stop-1]
 
             print "done with timestamps"
             timestamp_file.close()
@@ -172,7 +201,7 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
             for index, each in enumerate( timestamps_of_interest ):
                 # Move the start back a second earlier.
                 #start_second=float(each.split()[0])/1000.0-1
-                start_second = float( each[0] ) / 1000.0 - 1
+                start_second = float( each[0] ) / 1000.0 - 0.25
                 if start_second < 0:
                     start_second = 0
                 if start_second < min_time:
@@ -180,19 +209,22 @@ def activity_present( video_file, working_dir, model_dir, reuse=False ):
 
                 # Move the duration out 1.5 seconds.
                 #duration=float(each.split()[1])/1000.0-start_second+1.5
-                duration = float( each[1] ) / 1000.0 - start_second + 2
+                duration = float( each[1] ) / 1000.0 - start_second + 0.25
 
                 min_time = start_second + duration
 
-                print "Creating clip %d starting at %f for %f seconds." % ( index, start_second, duration )
+                if (duration+0.5)*1000 > minimum_clip_duration:
+                    print "Creating clip %d starting at %f for %f seconds." % ( index, start_second, duration )
 
-                vid_path = "%s/%s_%s" % ( working_dir, file_prefix, index )
-                command='ffmpeg -y -i %s -ss %f -t %f %s.mp4 > /dev/null 2>&1' % ( video_file, start_second, duration, vid_path )
-                print "Running clip generation command: %s" % ( command )
-                p = subprocess.Popen( command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
-                output = p.communicate()[0]
-                #print output
-                out_file.write( "file %s_%d.mp4\n" % ( file_prefix, index ) )
+                    vid_path = "%s/%s_%s" % ( working_dir, file_prefix, index )
+                    command='ffmpeg -y -i %s -ss %f -t %f %s.mp4 > /dev/null 2>&1' % ( video_file, start_second, duration, vid_path )
+                    print "Running clip generation command: %s" % ( command )
+                    p = subprocess.Popen( command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+                    output = p.communicate()[0]
+                    #print output
+                    out_file.write( "file %s_%d.mp4\n" % ( file_prefix, index ) )
+                else:
+                    print "SKIPPING TOO SHORT DURATION, start, duration:", start_second, duration
             out_file.close()
     
             command2 = 'ffmpeg -y -f concat -i %s %s/%s_%s_vid_summary.mp4 > /dev/null 2>&1' % ( output_filename, working_dir, vid_file_extension, file_prefix )

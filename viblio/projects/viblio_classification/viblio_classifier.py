@@ -76,14 +76,15 @@ if __name__ == '__main__':
     # Load features and labels
     nmp = numpyutils.NumpyUtil()
     print "Loading data from input file: %s." % ( input_file )
+
     file_ids, features, labels = nmp.load_features( input_file, 'ftr' )
     print "Loading data is complete."
-    print "# positive =", numpy.sum(labels == 1)
-    print "# negative =", numpy.sum(labels == -1)
+    print "# positive =", numpy.sum( labels == 1 )
+    print "# negative =", numpy.sum( labels == -1 )
 
     #load svm configs
     try:
-        all_params = ConfigObj(results.config_file)
+        all_params = ConfigObj( results.config_file )
         svm_params = all_params['default']
     except:
         print 'error loading svm config file:', results.config_file
@@ -91,7 +92,7 @@ if __name__ == '__main__':
 
     #set kernel type
     if results.approximate:
-        kernel = viblio_svm.Linear([])
+        kernel = viblio_svm.Linear( [] )
         ef = expand_feature.ExpandFeature()
         features = ef.expand( features )
         print features.shape

@@ -327,7 +327,7 @@ $python viblio_classifier.py -i christmas1_features.txt  -c /home/rgolla/classif
 
 ```
 The arguments are explained here:
-* "-i" - The text file path( relative path to "-d" folder argument) which contains the extracted features and the image files. Example of text file
+* "-i" - The text file which contains the location information for extracted features and the image files. Example of text file
 ```
 0098.png 0098.hdf 1
 0223.png 0223.hdf 1
@@ -341,7 +341,7 @@ The arguments are explained here:
 
 * "-a" - This parameter says to use the approximate kernel that speeds up the kernel computation. Always recommended to use this.
 
-Output :  The output that is printed on to the screen has the C parameter used and the cross validation accuracy. Choose the highest cross validation accuracy and use its corresponding C value to change the "best_C" value  in the configuration file we passed in "-c" argument.  We then use this modified C to learn the model in the next step.
+Output :  The output that is printed on to the screen has the C parameter used and the cross validation accuracy. Choose the highest cross validation accuracy and use its corresponding C value to change the "best_C" value  in the configuration file we passed in "-c" argument.  We then use this modified C in training the model in the next step.
 
 ### Step-7 Training the model
 

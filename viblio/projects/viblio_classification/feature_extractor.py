@@ -158,7 +158,7 @@ if __name__ == '__main__':
             
             ftr_name = unique_videoid + '_' + imagename + '.hdf'
         else:
-            ftr_name = unique_videoid + '_' +  os.path.basename( filename ).split('.')[0] + '.hdf'
+            ftr_name = unique_videoid + '_' + os.path.basename( filename ).split('.')[0] + '.hdf'
             
         ftr_filename = output_dir + '/' + ftr_name
             
